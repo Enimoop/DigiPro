@@ -1,0 +1,29 @@
+name: Deploy INT
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "SHA to deploy"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.INT_SSH_HOST }}
+          username: ${{ secrets.INT_SSH_USER }}
+          key: ${{ secrets.INT_SSH_KEY }}
+          port: 22
+          script: |
+            cd ${{ secrets.INT_PATH }}
+            echo "IMAGE_TAG=${{ inputs.image_tag }}" > .env.tag
+            docker compose pull
+            docker compose up -d
+            docker compose exec -T backend python manage.py migrate
