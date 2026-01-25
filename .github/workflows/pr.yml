@@ -33,3 +33,16 @@ jobs:
           docker build -f infra/frontend/Dockerfile \
             -t ghcr.io/${REPO_LC}-frontend:${SHA_TAG} ./frontend
           docker push ghcr.io/${REPO_LC}-frontend:${SHA_TAG}
+
+      - name: Output image tags
+        run: |
+          echo ""
+          echo "=============================="
+          echo "🚀 Images built & pushed"
+          echo ""
+          echo "👉 Use this SHA to deploy:"
+          echo "IMAGE_TAG=${SHA_TAG}"
+          echo ""
+          echo "Backend : ghcr.io/${REPO_LC}-backend:${SHA_TAG}"
+          echo "Frontend: ghcr.io/${REPO_LC}-frontend:${SHA_TAG}"
+          echo "=============================="
