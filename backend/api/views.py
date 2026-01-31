@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, get_user_model
 from django.views.decorators.csrf import ensure_csrf_cookie
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,8 +8,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
 
-COOKIE_SECURE = False  # True en prod HTTPS
-COOKIE_SAMESITE = "Lax"  # "None" si domaines différents en prod + Secure=True
+COOKIE_SECURE = False 
+COOKIE_SAMESITE = "Lax" 
 
 
 # -------------------------------------------------
@@ -17,9 +17,9 @@ COOKIE_SAMESITE = "Lax"  # "None" si domaines différents en prod + Secure=True
 # -------------------------------------------------
 @api_view(["GET"])
 @permission_classes([AllowAny])
+@authentication_classes([])
 @ensure_csrf_cookie
 def csrf(request):
-    # Le décorateur ensure_csrf_cookie force l'envoi du cookie csrftoken
     return Response({"detail": "CSRF cookie set"})
 
 
@@ -89,6 +89,7 @@ def login_view(request):
 # -------------------------------------------------
 @api_view(["POST"])
 @permission_classes([AllowAny])
+@authentication_classes([])
 def refresh_view(request):
     refresh_token = request.COOKIES.get("refresh_token")
     if not refresh_token:
