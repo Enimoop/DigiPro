@@ -1,10 +1,18 @@
 import { useAuth } from "../auth/AuthContext";
-
+import Header from "../components/Header";
 export default function DashboardPage() {
   const { user, logout } = useAuth();
 
   return (
-    <div style={{ padding: 24, fontFamily: "system-ui" }}>
+
+    
+    <div>
+      <Header className="pb-4">
+        <Header.Body>
+          <Header.Pretitle>OVERVIEW</Header.Pretitle>
+          <Header.Title>Account</Header.Title>
+        </Header.Body>
+      </Header>
       <h1>Dashboard</h1>
 
       <p>

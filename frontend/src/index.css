@@ -2,10 +2,35 @@ html,
 body,
 #root {
   min-height: 100%;
-  background-color: #f5f5f5;
 }
 
 body {
   margin: 0;
 }
 
+.module-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.module-icon {
+  opacity: 0.9;
+}
+
+.lesson-card {
+  width: 240px;        /* ajuste: 220–280 */
+  min-height: 180px;   /* donne une vraie hauteur */
+  border-radius: 12px;
+}
+
+.section-divider {
+  position: relative;
+  margin-top: 3rem;
+}
+
+.section-divider::after {
+  content: "";
+  display: block;
+  width: 100%;
+  border-bottom: 1px solid #e3ebf6; /* couleur Dashkit */
+}
