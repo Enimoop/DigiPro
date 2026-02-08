@@ -45,6 +45,7 @@ export default function LessonCard({ stepNumber, moduleIcon, theme }: Props) {
               <div className="d-flex gap-2 mt-2 w-100 justify-content-center">
                 <Button
                   size="sm"
+                  variant="purple"
                   className="flex-grow-1"
                   onClick={() => navigate(`${theme.route}/lesson`)}
                 >

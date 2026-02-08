@@ -21,7 +21,7 @@ export default function ModuleComponent({ module }: Props) {
           </Card.Title>
         </div>
 
-        <Button size="sm" className="mt-3" onClick={() => navigate(module.route)}>
+        <Button size="sm" variant="purple" className="mt-3" onClick={() => navigate(module.route)}>
           Commencer
         </Button>
       </Card.Body>

@@ -4,6 +4,6 @@ import { emailLessonData } from "./emailLessonData";
 
 export const lessonsByTheme = {
   passwords: cyberLessonData,
-  word: bureautiqueLessonData,
+  bases: bureautiqueLessonData,
   phishing: emailLessonData,
 } as const;

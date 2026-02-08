@@ -108,7 +108,7 @@ export default function LessonContent({ lessonData, fallbackRedirectTo }: Props)
         <div className="section-divider" />
 
         <div className="position-absolute top-50 start-50 translate-middle">
-          <Button size="sm" onClick={handleNext}>
+          <Button size="sm" variant="purple" onClick={handleNext}>
             {isLast ? "Terminer" : "Suivant"}
           </Button>
         </div>

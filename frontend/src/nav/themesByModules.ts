@@ -26,10 +26,10 @@ export const themesByModules = {
 
   bureautique: [
     {
-      id: "word",
+      id: "bases",
       title: "Microsoft Word",
       description: "Créer et formater des documents",
-      route: "/modules/bureautique/word",
+      route: "/modules/bureautique/bases",
     },
   ]
 };

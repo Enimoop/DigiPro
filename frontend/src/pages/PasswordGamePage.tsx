@@ -1,11 +1,13 @@
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
-import { useMemo, useState } from "react";
-import { Container, Row, Col, Form, Card } from "react-bootstrap";
+import { useMemo, useState, useEffect } from "react";
+import { Container, Row, Col, Form, Card, Button } from "react-bootstrap"; //
+import { useNavigate } from "react-router-dom"; //
 
 import { zxcvbn } from "@zxcvbn-ts/core";
 import { dictionary, adjacencyGraphs } from "@zxcvbn-ts/language-common";
 
 export default function PasswordGamePage() {
+  const navigate = useNavigate();
   const [password, setPassword] = useState("");
 
   // règles
@@ -14,24 +16,30 @@ export default function PasswordGamePage() {
   const hasUpperAndLower = /[A-Z]/.test(password) && /[a-z]/.test(password);
   const hasSpecialChar = /[^A-Za-z0-9]/.test(password);
 
-  const scoreLabels = [
-  "Très faible",
-  "Faible",
-  "Moyen",
-  "Fort",
-  "Très fort",
-];
+  const [isValidated, setIsValidated] = useState(false);
+  const [canShowValidateButton, setCanShowValidateButton] = useState(false);
 
-const scoreColors = [
-  "text-danger",
-  "text-warning",
-  "text-secondary",
-  "text-primary",
-  "text-success",
-];
+  const allRulesValid =
+    hasMinLength && hasNumber && hasUpperAndLower && hasSpecialChar;
+
+  useEffect(() => {
+    if (allRulesValid) {
+      setCanShowValidateButton(true);
+    }
+  }, [allRulesValid]);
+
+
+  const scoreLabels = ["Très faible", "Faible", "Moyen", "Fort", "Très fort"];
+
+  const scoreColors = [
+    "text-danger",
+    "text-warning",
+    "text-secondary",
+    "text-primary",
+    "text-success",
+  ];
 
   const zxcvbnResult = useMemo(() => {
-
     (zxcvbn as any).options?.setOptions?.({
       dictionary,
       graphs: adjacencyGraphs,
@@ -43,13 +51,10 @@ const scoreColors = [
 
   const estimateLabel = useMemo(() => {
     if (!zxcvbnResult) return "—";
-
-
-    const seconds =
-      zxcvbnResult.crackTimesSeconds.offlineSlowHashing1e4PerSecond;
-
+    const seconds = zxcvbnResult.crackTimesSeconds.offlineSlowHashing1e4PerSecond;
     return formatDuration(seconds);
   }, [zxcvbnResult]);
+
   const scoreText = scoreLabels[zxcvbnResult?.score ?? 0];
 
   return (
@@ -93,6 +98,7 @@ const scoreColors = [
                       Temps estimé pour cracker le mdp
                     </h6>
                     <span className="h2 mb-0">{estimateLabel}</span>
+
                     {zxcvbnResult && (
                       <div className="text-muted mt-2" style={{ fontSize: 12 }}>
                         <span className={`h2 mb-0 ${scoreColors[zxcvbnResult.score]}`}>
@@ -101,6 +107,7 @@ const scoreColors = [
                       </div>
                     )}
                   </Col>
+
                   <Col xs="auto">
                     <FeatherIcon icon="clock" size="20" className="text-muted" />
                   </Col>
@@ -108,6 +115,24 @@ const scoreColors = [
               </Card.Body>
             </Card>
           </div>
+
+          {canShowValidateButton && (
+            <div className="d-flex justify-content-center mt-4">
+              <Button
+                size="lg"
+                className="px-5"
+                disabled={isValidated}
+                onClick={() => {
+                  if (isValidated) return;
+                  setIsValidated(true);
+                  navigate("/home");
+                }}
+              >
+                {isValidated ? "Thème validé ✓" : "Valider"}
+              </Button>
+            </div>
+          )}
+
         </Col>
       </Row>
     </Container>

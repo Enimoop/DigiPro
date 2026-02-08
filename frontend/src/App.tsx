@@ -71,7 +71,7 @@ export default function App() {
           }
         />
         <Route
-          path="/modules/:moduleId/:themeId/password-game"
+          path="/modules/:moduleId/:themeId/game"
           element={
             <ProtectedRoute>
               <PasswordGamePage />
