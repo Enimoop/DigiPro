@@ -16,7 +16,7 @@ export default function ModuleComponent({ module }: Props) {
             <FeatherIcon icon={module.icon} size={150} />
           </div>
 
-          <Card.Title as="h5" className="mb-0">
+          <Card.Title as="h2" className="mb-0">
             {module.title}
           </Card.Title>
         </div>
