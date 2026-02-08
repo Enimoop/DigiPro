@@ -5,7 +5,19 @@ import { useNavigate } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-export default function LessonCard() {
+type Props = {
+  stepNumber: number;                
+  moduleIcon: string;                
+  theme: {
+    id: string;
+    title: string;
+    description: string;
+    route: string;
+  };
+};
+
+
+export default function LessonCard({ stepNumber, moduleIcon, theme }: Props) {
   const navigate = useNavigate();
 
   return (
@@ -14,24 +26,36 @@ export default function LessonCard() {
         <Col xs={6} md={8} className="d-flex justify-content-center">
           <div className="text-center text-md-start">
             <h2 className="lesson-title mb-2">
-              <span className="lesson-title-underline">Étape 1</span>
+              <span className="lesson-title-underline">Étape {stepNumber}</span>
             </h2>
-            <p className="mb-0 text-muted">Un mot de passe sécurisé</p>
+            <p className="mb-0 text-muted">{theme.description}</p>
           </div>
         </Col>
 
         <Col xs={6} md={4} className="d-flex justify-content-center">
-          <Card className="module-card lesson-card text-center w-100" style={{ maxWidth: 190 }}>
+          <Card
+            className="module-card lesson-card text-center w-100"
+            style={{ maxWidth: 190 }}
+          >
             <Card.Body className="d-flex flex-column align-items-center p-3">
               <div className="module-icon mb-2">
-                <FeatherIcon icon="lock" size={100} />
+                <FeatherIcon icon={moduleIcon} size={100} />
               </div>
 
               <div className="d-flex gap-2 mt-2 w-100 justify-content-center">
-                <Button size="sm" className="flex-grow-1" onClick={() => navigate("/modules/cybersecurite/lesson")}>
+                <Button
+                  size="sm"
+                  className="flex-grow-1"
+                  onClick={() => navigate(`${theme.route}/lesson`)}
+                >
                   Start
                 </Button>
-                <Button variant="outline-secondary" size="sm" className="flex-grow-1">
+
+                <Button
+                  variant="outline-secondary"
+                  size="sm"
+                  className="flex-grow-1"
+                >
                   Infos
                 </Button>
               </div>

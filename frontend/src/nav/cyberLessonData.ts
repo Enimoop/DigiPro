@@ -34,6 +34,6 @@ MonChatAdoreLesCoussins!2024
     },
   ],
   end: {
-    redirectTo: "/modules/cybersecurite/quiz",
+    redirectTo: "/modules/cybersecurite/passwords/quiz",
   },
 } as const;
