@@ -34,3 +34,72 @@ body {
   width: 100%;
   border-bottom: 1px solid #e3ebf6; /* couleur Dashkit */
 }
+
+.lesson-content p {
+  margin-bottom: 0.75rem;
+}
+
+.lesson-content li {
+  margin-left: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.quiz-answers {
+  display: grid;
+  gap: 36px;
+}
+
+@media (max-width: 767px) {
+  .quiz-answers {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 768px) {
+  .quiz-answers {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.btn-purple {
+  background-color: #7C3AED !important;
+  border-color: #7C3AED !important;
+  color: #fff !important;
+
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #7C3AED;
+  --bs-btn-border-color: #7C3AED;
+
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #6D28D9;
+  --bs-btn-hover-border-color: #6D28D9;
+
+  --bs-btn-focus-shadow-rgb: 124, 58, 237;
+
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #5B21B6;
+  --bs-btn-active-border-color: #5B21B6;
+
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #C4B5FD;
+  --bs-btn-disabled-border-color: #C4B5FD;
+}
+
+.btn-purple:hover,
+.btn-purple:focus {
+  background-color: #6D28D9 !important;
+  border-color: #6D28D9 !important;
+  color: #fff !important;
+}
+
+.btn-purple:active {
+  background-color: #5B21B6 !important;
+  border-color: #5B21B6 !important;
+}
+
+.btn-purple:disabled,
+.btn-purple.disabled {
+  background-color: #C4B5FD !important;
+  border-color: #C4B5FD !important;
+  color: #fff !important;
+}

@@ -10,7 +10,7 @@ export const navData = [
     title: "Modules",
     icon: "grid",
     children: [
-      { id: "cyber", title: "Cybersécurité", url: "/modules/cyber", icon: "shield" },
+      { id: "cyber", title: "Cybersécurité", url: "/modules/cybersecurite", icon: "shield" },
       { id: "bureautique", title: "Bureautique", url: "/modules/bureautique", icon: "file-text" },
       { id: "email", title: "Email", url: "/modules/email", icon: "mail" },
     ],
