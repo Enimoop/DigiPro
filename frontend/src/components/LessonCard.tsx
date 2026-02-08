@@ -28,7 +28,7 @@ export default function LessonCard() {
               </div>
 
               <div className="d-flex gap-2 mt-2 w-100 justify-content-center">
-                <Button size="sm" className="flex-grow-1" onClick={() => navigate("/modules/cybersecurite/password-game")}>
+                <Button size="sm" className="flex-grow-1" onClick={() => navigate("/modules/cybersecurite/lesson")}>
                   Start
                 </Button>
                 <Button variant="outline-secondary" size="sm" className="flex-grow-1">

@@ -10,6 +10,7 @@ import AppLayout from "./layouts/AppLayouts";
 import UserPage from "./pages/UserPage";
 import CyberPage from "./pages/CyberPage";
 import PasswordGamePage from "./pages/PasswordGamePage";
+import LessonPage from "./pages/LessonPage";
 
 export default function App() {
   return (
@@ -49,6 +50,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <CyberPage />
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/modules/cybersecurite/lesson"
+          element={
+            <ProtectedRoute>
+              <LessonPage />
             </ProtectedRoute>
           }
         />
