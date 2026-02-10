@@ -20,8 +20,6 @@ export default function QuizComponent({ questions, onFinish, onGoToGame }: Props
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [validated, setValidated] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
-
-  // ✅ NEW
   const [finished, setFinished] = useState(false);
 
   const total = questions.length;
@@ -42,7 +40,9 @@ export default function QuizComponent({ questions, onFinish, onGoToGame }: Props
   const handleValidate = () => {
     if (selectedIndex === null || finished) return;
     setValidated(true);
-    if (selectedIndex === current.correctIndex) setCorrectCount((c) => c + 1);
+    if (selectedIndex === current.correctIndex) {
+      setCorrectCount((c) => c + 1);
+    }
   };
 
   const handleNext = () => {
@@ -69,61 +69,69 @@ export default function QuizComponent({ questions, onFinish, onGoToGame }: Props
 
   const canValidate = selectedIndex !== null && !validated && !finished;
   const canNext = validated && !finished;
-
   const scorePercent = Math.round((correctCount / total) * 100);
 
   return (
     <div className="mx-auto" style={{ maxWidth: 1100 }}>
-      <div className="d-flex align-items-center justify-content-between mb-5">
+      {/* PROGRESSION */}
+      <div className="d-flex align-items-center justify-content-between mb-4">
         <div style={{ flex: 1, marginRight: 24 }}>
-          <div className="text-muted small mb-3 fw-semibold">PROGRESSION</div>
-          <ProgressBar now={progress} style={{ height: 12, borderRadius: 999 }} />
+          <div className="text-muted small mb-2 fw-semibold">PROGRESSION</div>
+          <ProgressBar now={progress} style={{ height: 10, borderRadius: 999 }} />
         </div>
         <div className="text-muted fw-semibold fs-5">
           {finished ? `${total}/${total}` : `${qIndex + 1}/${total}`}
         </div>
       </div>
 
-      <Card className="mb-6">
-        <Card.Body className="py-5 px-5">
-          <h2 className="mb-0 fw-bold" style={{ lineHeight: 1.3 }}>
+      {/* QUESTION */}
+      <Card className="mb-4">
+        <Card.Body className="py-4 px-5">
+          <h2 className="mb-0 fw-bold" style={{ lineHeight: 1.25 }}>
             {current.question}
           </h2>
         </Card.Body>
       </Card>
 
-      <div className="quiz-answers d-grid mb-5">
+      {/* RÉPONSES */}
+      <div className="quiz-answers d-grid gap-3 mb-4">
         {current.options.map((opt, idx) => (
           <Button
             key={idx}
             variant={getVariant(idx)}
             onClick={() => handleSelect(idx)}
-            className="py-5 fw-bold"
-            style={{ minHeight: 90, borderRadius: 16, fontSize: "1.25rem" }}
+            className="py-3 fw-semibold"
+            style={{
+              minHeight: 64,
+              borderRadius: 14,
+              fontSize: "1.05rem",
+            }}
           >
             {opt}
           </Button>
         ))}
       </div>
 
+      {/* EXPLICATION */}
       {validated && (
         <div
-          className="mt-5 p-5"
+          className="mt-4 p-4"
           style={{
             background: "#EFE6FF",
             border: "1px solid #D9C7FF",
             borderRadius: 18,
           }}
         >
-          <div className="fw-bold mb-3 fs-4">Explication</div>
-          <div className="text-muted" style={{ fontSize: "1.15rem", lineHeight: 1.6 }}>
+          <div className="fw-bold mb-2 fs-5">Explication</div>
+          <div className="text-muted" style={{ fontSize: "1.05rem", lineHeight: 1.6 }}>
             {current.explanation}
           </div>
         </div>
       )}
 
+      {/* ACTIONS */}
       {!finished && (
-        <div className="d-flex justify-content-end gap-4 mt-5">
+        <div className="d-flex justify-content-end gap-3 mt-4">
           <Button
             variant="primary"
             onClick={handleValidate}
@@ -146,7 +154,7 @@ export default function QuizComponent({ questions, onFinish, onGoToGame }: Props
 
       {finished && (
         <div
-          className="mt-5 p-5"
+          className="mt-4 p-4"
           style={{
             background: "#F6F0FF",
             border: "1px solid #E3D6FF",
@@ -184,6 +192,7 @@ export default function QuizComponent({ questions, onFinish, onGoToGame }: Props
           </div>
         </div>
       )}
+      <br />
     </div>
   );
 }

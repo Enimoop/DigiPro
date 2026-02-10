@@ -103,3 +103,70 @@ body {
   border-color: #C4B5FD !important;
   color: #fff !important;
 }
+
+.module-clickable {
+  cursor: pointer;
+  border-radius: 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.module-clickable:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* focus clavier */
+.module-clickable:focus-visible {
+  outline: 3px solid rgba(124, 58, 237, 0.35);
+  outline-offset: 3px;
+}
+
+/* cercle derrière l’icône */
+.icon-circle {
+  width: 78px;
+  height: 78px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bg-purple-soft {
+  background-color: rgba(124, 58, 237, 0.12);
+}
+
+.text-purple {
+  color: #7c3aed;
+}
+
+.feather-lg svg {
+  width: 34px;
+  height: 34px;
+  stroke-width: 2;
+}
+
+.feather-xs svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
+}
+
+.module-desc {
+  max-width: 260px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-start {
+  border-radius: 10px;
+  font-weight: 500;
+  color: #7c3aed;
+  background-color: #f5f3ff;
+  border: 1px solid #ede9fe;
+}
+
+.module-clickable:hover .btn-start {
+  background-color: #ede9fe;
+  border-color: #ddd6fe;
+  color: #6d28d9;
+}

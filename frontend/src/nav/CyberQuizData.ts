@@ -9,41 +9,71 @@ export type QuizQuestion = {
 export const cyberQuizData: QuizQuestion[] = [
   {
     id: "q1",
-    question: "Quel mot de passe est le plus sécurisé ?",
+    question: "Quel mot de passe respecte le mieux les recommandations de la CNIL ?",
     options: [
-      "bonjour123",
-      "azerty",
+      "MotDePasse123",
+      "Jean1998!",
       "MonChatAdoreLesCoussins!2024",
-      "123456",
+      "azertyuiop",
     ],
     correctIndex: 2,
     explanation:
-      "Un mot de passe sécurisé est long, unique et mélange lettres, chiffres et caractères spéciaux.",
+      "La CNIL recommande un mot de passe long, unique et sans informations personnelles. Une phrase avec des caractères spéciaux est plus sûre.",
   },
+
   {
     id: "q2",
-    question: "Pourquoi faut-il éviter de réutiliser le même mot de passe ?",
+    question: "Pourquoi utiliser un mot de passe différent pour chaque site ?",
     options: [
-      "Parce que c’est interdit",
-      "Parce que c’est plus long à taper",
-      "Parce que si un site est piraté, les autres comptes sont aussi en danger",
-      "Parce que ça casse Internet",
+      "Pour éviter de les confondre",
+      "Parce que les sites l’exigent tous",
+      "Pour limiter les dégâts si un site est piraté",
+      "Pour améliorer la vitesse de connexion",
     ],
     correctIndex: 2,
     explanation:
-      "Si un site fuit ton mot de passe, un pirate peut tenter le même sur tes autres comptes.",
+      "Si un mot de passe est réutilisé et qu’un site est piraté, un attaquant peut accéder à plusieurs comptes.",
   },
+
   {
     id: "q3",
-    question: "À quoi sert la double authentification (2FA) ?",
+    question: "Dans quel cas la double authentification (2FA) est-elle la plus utile ?",
     options: [
-      "À rendre le mot de passe plus court",
-      "À ajouter une vérification supplémentaire lors de la connexion",
-      "À supprimer les virus automatiquement",
-      "À changer ton adresse e-mail",
+      "Quand le mot de passe est très long",
+      "Quand on se connecte depuis un ordinateur personnel",
+      "Quand un mot de passe est compromis",
+      "Quand on change souvent d’adresse e-mail",
+    ],
+    correctIndex: 2,
+    explanation:
+      "La 2FA protège le compte même si le mot de passe est volé, car une seconde preuve est nécessaire.",
+  },
+
+  {
+    id: "q4",
+    question: "Quel est l’avantage principal d’un gestionnaire de mots de passe ?",
+    options: [
+      "Il empêche complètement le piratage",
+      "Il mémorise et génère des mots de passe forts et uniques",
+      "Il remplace l’authentification à deux facteurs",
+      "Il supprime le besoin de mot de passe",
     ],
     correctIndex: 1,
     explanation:
-      "La 2FA demande une preuve en plus (code SMS/app) : même si le mot de passe est volé, le compte reste protégé.",
+      "Un gestionnaire de mots de passe permet de créer et stocker des mots de passe complexes sans avoir à les retenir.",
+  },
+
+  {
+    id: "q5",
+    question: "Quel comportement est le PLUS risqué pour la sécurité de tes comptes ?",
+    options: [
+      "Utiliser un gestionnaire de mots de passe",
+      "Activer la double authentification",
+      "Cliquer sur un lien et saisir son mot de passe sans vérifier le site",
+      "Utiliser une phrase longue comme mot de passe",
+    ],
+    correctIndex: 2,
+    explanation:
+      "Le phishing consiste à piéger l’utilisateur pour qu’il saisisse son mot de passe sur un faux site, même avec un bon mot de passe.",
   },
 ];
