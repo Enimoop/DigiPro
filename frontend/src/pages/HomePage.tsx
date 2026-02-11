@@ -18,7 +18,7 @@ export default function HomePage() {
         </Header>
          <Row className="g-5">
         {modulesData.map((m) => (
-          <Col key={m.id} xs={12} sm={6} md={4}>
+          <Col key={m.id} xs={12} sm={6} lg={4}>
             <ModuleComponent module={m} />
           </Col>
         ))}

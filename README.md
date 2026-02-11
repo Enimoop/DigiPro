@@ -6,8 +6,9 @@ Ce repo contient une application **Django (API + auth cookies/JWT)** + **React (
 
 ## Prérequis
 
-* **Docker Desktop** (avec Docker Compose)
-* **Node.js** (si tu lances le front hors Docker) + npm
+* **Docker Desktop** ou docker juste 
+* **Node.js** -> 22.12 
+vous pouvez installer nvm pour gérer les versions de node si vous en avez plusieurs
 
 ---
 
@@ -23,7 +24,7 @@ Ce repo contient une application **Django (API + auth cookies/JWT)** + **React (
 
 ## Variables d’environnement (.env)
 
-Créer un fichier `.env` à la racine (ou dans `backend/` selon ton compose) avec au minimum :
+Créer un fichier `.env` à la racine avec au minimum :
 
 ```env
 DB_NAME=DigiPro
@@ -38,8 +39,6 @@ DJANGO_SECRET_KEY=change-me-in-prod
 CORS_ALLOWED_ORIGINS=http://127.0.0.1:5173
 CSRF_TRUSTED_ORIGINS=http://127.0.0.1:5173
 ```
-
-> ⚠️ En dev, `DJANGO_DEBUG=1` OK. En prod, il faudra `DJANGO_DEBUG=0` + clé secrète forte.
 
 ---
 
@@ -69,6 +68,8 @@ docker compose exec backend python manage.py migrate
 
 
 ### 3) Créer un superuser (admin Django)
+
+c'est pas obligatoire ça permet juste d'accéder à l'admin de django
 
 ```bash
 docker compose exec backend python manage.py createsuperuser
@@ -120,21 +121,22 @@ Le front est dispo sur : `http://127.0.0.1:5173/`
 
 ---
 
-## Premier lancement pour quelqu’un qui reprend le projet
+## Premier lancement
 
 Checklist rapide :
 
 1. Installer Docker Desktop
 2. Cloner le repo
-3. Créer `.env`
+3. Créer `.env` et le remplir
 4. `docker compose up -d --build`
 5. `docker compose exec backend python manage.py migrate`
 6. `docker compose exec backend python manage.py createsuperuser`
 7. Lancer le front :
 
-   * `cd frontend && npm install && npm run dev`
+   * `cd frontend`
+   * `npm install`
+   * `npm run dev`
 8. Tester :
 
-   * `http://localhost:8000/admin/`
-   * `http://127.0.0.1:5173/login` + `register`
+   * `http://127.0.0.1:5173/`
 
