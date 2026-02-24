@@ -4,114 +4,96 @@ export const cyberLessonData : LessonData = {
   lessons: [
     {
       id: "1",
-      title: "Créer un mot de passe sécurisé",
+      title: "Comment créer un bon mot de passe ?", // Titre en bleu foncé (#1a237e)
       content: `
-Un mot de passe sécurisé est essentiel pour protéger vos comptes numériques.
+**Pourquoi c’est important ?** <!-- En gras et vert (#2e7d32) -->
+Un mot de passe solide protège vos comptes (e-mails, réseaux sociaux, banque) contre les pirates.
 
-Pourquoi est-ce important ?
-- Empêcher le vol de données personnelles
-- Éviter l’usurpation d’identité
-- Protéger vos e-mails, réseaux sociaux et comptes bancaires
+**Les 3 règles de base (selon la CNIL) :**
+<span style="color: #2e7d32;">✅ **Long et unique**</span> : Au moins 12 caractères, différent pour chaque site.
+<span style="color: #2e7d32;">✅ **Pas d’infos personnelles**</span> : Évitez votre nom, date de naissance, ou celui de vos enfants.
+<span style="color: #2e7d32;">✅ **Facile à retenir**</span> : Utilisez une phrase simple avec des majuscules et des symboles.
 
-Selon les recommandations de la CNIL, un bon mot de passe doit :
-- Contenir au minimum 12 caractères
-- Être unique pour chaque service
-- Ne pas contenir d’informations personnelles (nom, date de naissance, prénom des enfants, etc.)
-
-Astuce simple :
-Préférez une phrase facile à retenir plutôt qu’un mot compliqué.
-
-Exemple :
-MonChatAdoreLesCoussins!2024
-`,
+**Exemple :** <!-- Fond jaune clair (#fff9c4) pour mettre en valeur -->
+"J’adoreLesPizzasDuVendredi!2024"
+      `,
     },
 
     {
       id: "2",
-      title: "Recommandations de la CNIL",
+      title: "Les conseils de la CNIL", // Titre en bleu foncé (#1a237e)
       content: `
-La CNIL (Commission Nationale de l’Informatique et des Libertés) donne des règles simples pour sécuriser ses mots de passe.
+**À faire :** <!-- En vert (#2e7d32) -->
+<span style="color: #2e7d32;">✔ Un mot de passe différent par site.</span>
+<span style="color: #2e7d32;">✔ Le changer si vous pensez qu’il a été volé.</span>
+<span style="color: #2e7d32;">✔ Utiliser un **gestionnaire de mots de passe** (comme un coffre-fort numérique).</span>
 
-Ce qu’il faut faire :
-- Utiliser des mots de passe différents pour chaque site
-- Changer son mot de passe en cas de doute ou de fuite de données
-- Utiliser un gestionnaire de mots de passe si possible
+**À éviter :** <!-- En rouge (#c62828) -->
+<span style="color: #c62828;">❌ Le même mot de passe partout.</span>
+<span style="color: #c62828;">❌ L’écrire sur un post-it ou dans un fichier non protégé.</span>
+<span style="color: #c62828;">❌ Des mots trop simples comme "123456" ou "motdepasse".</span>
 
-Ce qu’il faut éviter :
-- Utiliser le même mot de passe partout
-- Écrire ses mots de passe sur un papier visible
-- Utiliser des mots simples comme "123456", "password" ou "azerty"
-
-Rappel important :
-Même un mot de passe long devient inutile s’il est réutilisé sur plusieurs sites.
-`,
+**Attention :** <!-- En orange (#ff8f00) -->
+Un mot de passe long mais réutilisé est **aussi dangereux** qu’un mot de passe faible !
+      `,
     },
 
     {
       id: "3",
-      title: "L’authentification à deux facteurs (2FA)",
+      title: "La double vérification (2FA)", // Titre en bleu foncé (#1a237e)
       content: `
-L’authentification à deux facteurs, aussi appelée 2FA, ajoute une couche de sécurité supplémentaire.
+**C’est quoi ?** <!-- En gras et bleu (#1565c0) -->
+Une sécurité en plus : même si un pirate devine votre mot de passe, il lui manquera un **second code** (envoyé sur votre téléphone).
 
-Comment ça fonctionne ?
-Pour se connecter, il faut :
-- Quelque chose que vous connaissez (mot de passe)
-- Quelque chose que vous possédez (téléphone, application, SMS)
+**Comment ça marche ?** <!-- En bleu (#1565c0) -->
+1. Vous entrez votre mot de passe.
+2. Le site vous demande un **code supplémentaire** (par SMS, application, ou notification).
 
-Exemples de 2FA :
-- Code reçu par SMS
-- Application d’authentification (Google Authenticator, Microsoft Authenticator…)
-- Validation via une notification sur votre téléphone
+**Pourquoi l’activer ?** <!-- En vert (#2e7d32) -->
+→ Protège contre 99% des tentatives de piratage.
+→ Indispensable pour les e-mails et comptes bancaires.
 
-Pourquoi c’est important ?
-Même si un mot de passe est volé, un pirate ne pourra pas se connecter sans le second facteur.
-
-Conseil :
-Activez le 2FA dès que c’est possible, surtout pour les e-mails et comptes importants.
-`,
+**Exemples d’applications :** <!-- Fond gris clair (#eeeeee) -->
+Google Authenticator, Microsoft Authenticator.
+      `,
     },
 
     {
       id: "4",
-      title: "Utiliser un gestionnaire de mots de passe",
+      title: "Le gestionnaire de mots de passe", // Titre en bleu foncé (#1a237e)
       content: `
-Un gestionnaire de mots de passe est un outil qui stocke et protège vos mots de passe.
+**À quoi ça sert ?** <!-- En bleu (#1565c0) -->
+C’est comme un **coffre-fort numérique** qui :
+<span style="color: #2e7d32;">✔ Crée des mots de passe ultra-sécurisés à votre place.</span>
+<span style="color: #2e7d32;">✔ Les mémorise pour vous.</span>
+<span style="color: #2e7d32;">✔ Vous évite de tous les retenir.</span>
 
-À quoi ça sert ?
-- Générer des mots de passe forts automatiquement
-- Les mémoriser à votre place
-- Éviter la réutilisation des mêmes mots de passe
+**Comment ça marche ?** <!-- En bleu (#1565c0) -->
+Vous n’avez plus qu’**un seul mot de passe à retenir** : celui du gestionnaire !
 
-Exemples de gestionnaires fiables :
-- Bitwarden
-- Dashlane
-- 1Password
+**Les plus connus :** <!-- Fond gris clair (#eeeeee) -->
+Bitwarden, Dashlane, 1Password.
 
-Comment ça marche ?
-Vous n’avez plus qu’un seul mot de passe à retenir : le mot de passe principal.
-
-Important :
-Ce mot de passe principal doit être très fort et unique.
-`,
+**⚠️ Important :** <!-- En orange (#ff8f00) -->
+Ce mot de passe principal doit être **le plus solide possible** !
+      `,
     },
 
     {
       id: "5",
-      title: "Les erreurs courantes à éviter",
+      title: "Les pièges à éviter", // Titre en bleu foncé (#1a237e)
       content: `
-Certaines habitudes rendent vos comptes vulnérables sans que vous vous en rendiez compte.
+**Erreurs fréquentes :** <!-- En rouge (#c62828) -->
+<span style="color: #c62828;">❌ **Partager son mot de passe** (même avec un proche).</span>
+<span style="color: #c62828;">❌ **Réutiliser le même mot de passe** (travail/maison).</span>
+<span style="color: #c62828;">❌ **Cliquer sur des liens suspects** (faux e-mails de banque, réseaux sociaux…).</span>
 
-Erreurs fréquentes :
-- Partager son mot de passe avec quelqu’un
-- Utiliser le même mot de passe au travail et à la maison
-- Cliquer sur des liens suspects et entrer son mot de passe
+**Attention au "phishing" :** <!-- En orange (#ff8f00) -->
+Des pirates envoient de **faux messages** pour voler vos identifiants.
 
-Attention au phishing :
-Des faux e-mails ou messages peuvent imiter des sites officiels pour voler vos identifiants.
-
-Règle d’or :
-Aucun service sérieux ne vous demandera votre mot de passe par e-mail ou téléphone.
-`,
+**Règle d’or :** <!-- En gras et vert (#2e7d32) -->
+*Aucun service sérieux ne vous demandera votre mot de passe par e-mail ou téléphone.*
+      `,
     },
   ],
   end: {
