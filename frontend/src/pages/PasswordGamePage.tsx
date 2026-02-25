@@ -1,10 +1,13 @@
 import FeatherIcon from "feather-icons-react/build/FeatherIcon";
 import { useMemo, useState, useEffect } from "react";
-import { Container, Row, Col, Form, Card, Button } from "react-bootstrap"; //
-import { useNavigate } from "react-router-dom"; //
+import { Container, Row, Col, Form, Card, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+
 
 import { zxcvbn } from "@zxcvbn-ts/core";
 import { dictionary, adjacencyGraphs } from "@zxcvbn-ts/language-common";
+
+import MaskedPasswordInput from "../components/MaskedPasswordInput";
 
 export default function PasswordGamePage() {
   const navigate = useNavigate();
@@ -65,13 +68,13 @@ export default function PasswordGamePage() {
           <p className="text-muted mb-4">En suivant les règles vues précédemment</p>
 
           <div className="d-flex justify-content-center mb-4">
-            <Form.Control
-              type="password"
-              placeholder="Mot de passe"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{ maxWidth: 360 }}
-            />
+            <div style={{ maxWidth: 360, width: "100%" }}>
+              <MaskedPasswordInput
+                placeholder="Mot de passe"
+                value={password}
+                onValueChange={setPassword}
+              />
+            </div>
           </div>
 
           <Row className="justify-content-center g-4 mb-5">
