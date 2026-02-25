@@ -30,14 +30,13 @@ Créer un fichier `.env` à la racine avec au minimum :
 DB_NAME=DigiPro
 DB_USER=admin
 DB_PASSWORD=admin
-DB_HOST=db
+DB_HOST=database
 DB_PORT=5432
 
 DJANGO_DEBUG=1
 DJANGO_SECRET_KEY=change-me-in-prod
 
-CORS_ALLOWED_ORIGINS=http://127.0.0.1:5173
-CSRF_TRUSTED_ORIGINS=http://127.0.0.1:5173
+CORS_ALLOWED_ORIGINS=http://localhost:5173
 ```
 
 ---
@@ -90,7 +89,7 @@ npm install
 npm run dev
 ```
 
-Le front est dispo sur : `http://127.0.0.1:5173/`
+Le front est dispo sur : `http://localhost:5173/`
 
 
 ---
@@ -138,5 +137,5 @@ Checklist rapide :
    * `npm run dev`
 8. Tester :
 
-   * `http://127.0.0.1:5173/`
+   * `http://localhost:5173/`
 
