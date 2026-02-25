@@ -4,6 +4,9 @@ import { Container, Row, Col, Form, Card, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 
+import Header from "../components/Header";
+import LessonQuizGameStepper from "../components/LessonQuizGameStepper";
+
 import { zxcvbn } from "@zxcvbn-ts/core";
 import { dictionary, adjacencyGraphs } from "@zxcvbn-ts/language-common";
 
@@ -61,13 +64,32 @@ export default function PasswordGamePage() {
   const scoreText = scoreLabels[zxcvbnResult?.score ?? 0];
 
   return (
-    <Container fluid className="min-vh-100 d-flex align-items-center">
-      <Row className="justify-content-center w-100">
-        <Col xs={12} md={10} lg={8} xl={6} className="text-center">
-          <h1 className="mb-2">Créer votre mot de passe</h1>
-          <p className="text-muted mb-4">En suivant les règles vues précédemment</p>
+    <>
+      <Header className="mt-md-5">
+        <Header.Body>
+          <Row className="align-items-center">
+            <Col>
+              <Header.Pretitle>Jeu</Header.Pretitle>
+              <Header.Title>Créer votre mot de passe</Header.Title>
+            </Col>
 
-          <div className="d-flex justify-content-center mb-4">
+            <Col xs="auto">
+              <LessonQuizGameStepper current="game" />
+            </Col>
+          </Row>
+        </Header.Body>
+      </Header>
+      <Container
+        fluid
+        className="d-flex align-items-center"
+        style={{ minHeight: "calc(100vh - 300px)" }}
+      >
+        <Row className="justify-content-center w-100">
+          <Col xs={12} md={10} lg={8} xl={6} className="text-center">
+            <h1 className="mb-2">Créer votre mot de passe</h1>
+            <p className="text-muted mb-4">En suivant les règles vues précédemment</p>
+
+           <div className="d-flex justify-content-center mb-4">
             <div style={{ maxWidth: 360, width: "100%" }}>
               <MaskedPasswordInput
                 placeholder="Mot de passe"
@@ -77,68 +99,69 @@ export default function PasswordGamePage() {
             </div>
           </div>
 
-          <Row className="justify-content-center g-4 mb-5">
-            <Col xs={12} md={6} className="d-flex justify-content-center">
-              <Form.Check type="switch" label="12 caractères minimum" checked={hasMinLength} disabled />
-            </Col>
-            <Col xs={12} md={6} className="d-flex justify-content-center">
-              <Form.Check type="switch" label="Contient un chiffre" checked={hasNumber} disabled />
-            </Col>
-            <Col xs={12} md={6} className="d-flex justify-content-center">
-              <Form.Check type="switch" label="Majuscule et minuscule" checked={hasUpperAndLower} disabled />
-            </Col>
-            <Col xs={12} md={6} className="d-flex justify-content-center">
-              <Form.Check type="switch" label="Caractère spécial" checked={hasSpecialChar} disabled />
-            </Col>
-          </Row>
+            <Row className="justify-content-center g-4 mb-5">
+              <Col xs={12} md={6} className="d-flex justify-content-center">
+                <Form.Check type="switch" label="12 caractères minimum" checked={hasMinLength} disabled />
+              </Col>
+              <Col xs={12} md={6} className="d-flex justify-content-center">
+                <Form.Check type="switch" label="Contient un chiffre" checked={hasNumber} disabled />
+              </Col>
+              <Col xs={12} md={6} className="d-flex justify-content-center">
+                <Form.Check type="switch" label="Majuscule et minuscule" checked={hasUpperAndLower} disabled />
+              </Col>
+              <Col xs={12} md={6} className="d-flex justify-content-center">
+                <Form.Check type="switch" label="Caractère spécial" checked={hasSpecialChar} disabled />
+              </Col>
+            </Row>
 
-          <div className="d-flex justify-content-center">
-            <Card style={{ minWidth: 320 }}>
-              <Card.Body>
-                <Row className="align-items-center">
-                  <Col className="text-start">
-                    <h6 className="text-uppercase text-muted mb-2">
-                      Temps estimé pour cracker le mdp
-                    </h6>
-                    <span className="h2 mb-0">{estimateLabel}</span>
+            <div className="d-flex justify-content-center">
+              <Card style={{ minWidth: 320 }}>
+                <Card.Body>
+                  <Row className="align-items-center">
+                    <Col className="text-start">
+                      <h6 className="text-uppercase text-muted mb-2">
+                        Temps estimé pour cracker le mdp
+                      </h6>
+                      <span className="h2 mb-0">{estimateLabel}</span>
 
-                    {zxcvbnResult && (
-                      <div className="text-muted mt-2" style={{ fontSize: 12 }}>
-                        <span className={`h2 mb-0 ${scoreColors[zxcvbnResult.score]}`}>
-                          Score: {scoreText}
-                        </span>
-                      </div>
-                    )}
-                  </Col>
+                      {zxcvbnResult && (
+                        <div className="text-muted mt-2" style={{ fontSize: 12 }}>
+                          <span className={`h2 mb-0 ${scoreColors[zxcvbnResult.score]}`}>
+                            Score: {scoreText}
+                          </span>
+                        </div>
+                      )}
+                    </Col>
 
-                  <Col xs="auto">
-                    <FeatherIcon icon="clock" size="20" className="text-muted" />
-                  </Col>
-                </Row>
-              </Card.Body>
-            </Card>
-          </div>
-
-          {canShowValidateButton && (
-            <div className="d-flex justify-content-center mt-4">
-              <Button
-                size="lg"
-                className="px-5"
-                disabled={isValidated}
-                onClick={() => {
-                  if (isValidated) return;
-                  setIsValidated(true);
-                  navigate("/home");
-                }}
-              >
-                {isValidated ? "Thème validé ✓" : "Valider"}
-              </Button>
+                    <Col xs="auto">
+                      <FeatherIcon icon="clock" size="20" className="text-muted" />
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card>
             </div>
-          )}
 
-        </Col>
-      </Row>
-    </Container>
+            {canShowValidateButton && (
+              <div className="d-flex justify-content-center mt-4">
+                <Button
+                  size="lg"
+                  className="px-5"
+                  disabled={isValidated}
+                  onClick={() => {
+                    if (isValidated) return;
+                    setIsValidated(true);
+                    navigate("/home");
+                  }}
+                >
+                  {isValidated ? "Thème validé ✓" : "Valider"}
+                </Button>
+              </div>
+            )}
+
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 }
 
