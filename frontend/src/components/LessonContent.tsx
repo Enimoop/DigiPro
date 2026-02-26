@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 
 type LessonItem = {
   id: string;
@@ -23,8 +25,6 @@ type Props = {
 export default function LessonContent({ lessonData, fallbackRedirectTo }: Props) {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
-
-  console.log("Received lessonData:", lessonData);
 
   if (!lessonData || !lessonData.lessons || lessonData.lessons.length === 0) {
     return <div>Aucune donnée de leçon disponible.</div>;
@@ -60,51 +60,22 @@ export default function LessonContent({ lessonData, fallbackRedirectTo }: Props)
 
   return (
     <>
-      <Card key={currentLesson.id} className="mb-4">
+      <Card key={currentLesson.id} className="mb-4 shadow-sm">
         <Card.Header className="d-flex justify-content-between align-items-center">
-          <h4 className="mb-0">{currentLesson.title}</h4>
+          <h4 className="mb-0 fw-bold">{currentLesson.title}</h4>
           <small className="text-muted">
             Étape {currentStep + 1}/{lessons.length}
           </small>
         </Card.Header>
 
-        <Card.Body>
-          <div className="lesson-content">
-            {(() => {
-              const lines = currentLesson.content.split("\n");
-              const nodes: React.ReactNode[] = [];
-              let bullets: string[] = [];
-
-              const flushBullets = () => {
-                if (bullets.length > 0) {
-                  nodes.push(
-                    <ul key={`ul-${nodes.length}`}>
-                      {bullets.map((b, i) => (
-                        <li key={i}>{b}</li>
-                      ))}
-                    </ul>
-                  );
-                  bullets = [];
-                }
-              };
-
-              lines.forEach((line, i) => {
-                const trimmed = line.trim();
-                if (trimmed === "") { flushBullets(); return; }
-                if (trimmed.startsWith("- ")) {
-                  bullets.push(trimmed.slice(2));
-                  return;
-                }
-                flushBullets();
-                nodes.push(<p key={`p-${i}`}>{trimmed}</p>);
-              });
-
-              flushBullets();
-              return nodes;
-            })()}
-          </div>
-        </Card.Body>
-      </Card>
+          <Card.Body>
+            <div className="lesson-content">
+              <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                {currentLesson.content}
+              </ReactMarkdown>
+            </div>
+          </Card.Body>
+        </Card>
 
       <div className="position-relative my-4">
         <div className="section-divider" />
