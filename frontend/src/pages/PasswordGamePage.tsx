@@ -15,6 +15,7 @@ import MaskedPasswordInput from "../components/MaskedPasswordInput";
 export default function PasswordGamePage() {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
+  const [hasNoPersonalData, setHasNoPersonalData] = useState(false);
 
   // règles
   const hasMinLength = password.length >= 12;
@@ -26,11 +27,14 @@ export default function PasswordGamePage() {
   const [canShowValidateButton, setCanShowValidateButton] = useState(false);
 
   const allRulesValid =
-    hasMinLength && hasNumber && hasUpperAndLower && hasSpecialChar;
+    hasMinLength && hasNumber && hasUpperAndLower && hasSpecialChar && hasNoPersonalData;
 
   useEffect(() => {
     if (allRulesValid) {
       setCanShowValidateButton(true);
+    } else {
+      setCanShowValidateButton(false);
+      setIsValidated(false);
     }
   }, [allRulesValid]);
 
@@ -99,20 +103,28 @@ export default function PasswordGamePage() {
             </div>
           </div>
 
-            <Row className="justify-content-center g-4 mb-5">
-              <Col xs={12} md={6} className="d-flex justify-content-center">
-                <Form.Check type="switch" label="12 caractères minimum" checked={hasMinLength} disabled />
-              </Col>
-              <Col xs={12} md={6} className="d-flex justify-content-center">
-                <Form.Check type="switch" label="Contient un chiffre" checked={hasNumber} disabled />
-              </Col>
-              <Col xs={12} md={6} className="d-flex justify-content-center">
-                <Form.Check type="switch" label="Majuscule et minuscule" checked={hasUpperAndLower} disabled />
-              </Col>
-              <Col xs={12} md={6} className="d-flex justify-content-center">
-                <Form.Check type="switch" label="Caractère spécial" checked={hasSpecialChar} disabled />
-              </Col>
-            </Row>
+          <Row className="justify-content-center g-4 mb-5">
+            <Col xs={12} md={6} className="d-flex justify-content-center">
+              <Form.Check type="switch" label="12 caractères minimum" checked={hasMinLength} disabled />
+            </Col>
+            <Col xs={12} md={6} className="d-flex justify-content-center">
+              <Form.Check type="switch" label="Contient un chiffre" checked={hasNumber} disabled />
+            </Col>
+            <Col xs={12} md={6} className="d-flex justify-content-center">
+              <Form.Check type="switch" label="Majuscule et minuscule" checked={hasUpperAndLower} disabled />
+            </Col>
+            <Col xs={12} md={6} className="d-flex justify-content-center">
+              <Form.Check type="switch" label="Caractère spécial" checked={hasSpecialChar} disabled />
+            </Col>
+            <Col xs={12} md={6} className="d-flex justify-content-center">
+              <Form.Check 
+                type="checkbox" 
+                label="Confirmez vous l'absence de données personnelles" 
+                checked={hasNoPersonalData}
+                onChange={(e) => setHasNoPersonalData(e.target.checked)}
+              />
+            </Col>
+          </Row>
 
             <div className="d-flex justify-content-center">
               <Card style={{ minWidth: 320 }}>
