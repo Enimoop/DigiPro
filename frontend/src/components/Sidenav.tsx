@@ -3,6 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
 import { Collapse, Container, Nav, Navbar } from "react-bootstrap";
 import logo from "../assets/logo.svg";
+import SettingsMenu from "./SettingsMenu";
 
 type NavItem = {
   id: string;
@@ -117,9 +118,7 @@ export default function Sidenav({ items }: Props) {
         <FeatherIcon icon="user" size="17" />
       </NavLink>
 
-      <Nav.Link as="button" className="navbar-user-link" style={{ background: "transparent", border: 0 }}>
-        <FeatherIcon icon="search" size="17" />
-      </Nav.Link>
+      <SettingsMenu />
     </Nav>
   </div>
 );

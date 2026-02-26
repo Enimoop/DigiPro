@@ -1,3 +1,7 @@
 .env
 backend/api/__pycache__/
 backend/config/__pycache__/
+
+.claude
+__pycache__
+.venv

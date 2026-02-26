@@ -170,3 +170,144 @@ body {
   border-color: #ddd6fe;
   color: #6d28d9;
 }
+
+/* ── Settings popup ────────────────────────────── */
+.settings-popup {
+  position: fixed;
+  bottom: 90px;
+  left: 220px;
+  transform: translateX(-50%);
+  width: 220px;
+  padding: 1rem;
+  background: #fff;
+  border: 1px solid #e3ebf6;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 1050;
+}
+
+@media (max-width: 768px) {
+  .settings-popup {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    width: min(92vw, 320px);
+    z-index: 9999;
+  }
+}
+
+/* ── Dark mode ─────────────────────────────────── */
+html.dark-mode {
+  color-scheme: dark;
+}
+
+html.dark-mode body {
+  background-color: #1a1d2e;
+  color: #d1d5db;
+}
+
+html.dark-mode .navbar-vertical {
+  background-color: #151827 !important;
+  border-color: #2d3148 !important;
+}
+
+html.dark-mode .navbar-vertical .nav-link,
+html.dark-mode .navbar-vertical .navbar-heading {
+  color: #a5adc6 !important;
+}
+
+html.dark-mode .navbar-vertical .nav-link.active,
+html.dark-mode .navbar-vertical .nav-link:hover {
+  color: #fff !important;
+}
+
+html.dark-mode .card {
+  background-color: #1f2237;
+  border-color: #2d3148;
+  color: #d1d5db;
+}
+
+html.dark-mode .main-content {
+  background-color: #1a1d2e;
+}
+
+html.dark-mode .settings-popup {
+  background: #1f2237;
+  border-color: #2d3148;
+  color: #d1d5db;
+}
+
+html.dark-mode .form-range::-webkit-slider-runnable-track {
+  background: #2d3148;
+}
+
+html.dark-mode .section-divider::after {
+  border-color: #2d3148;
+}
+
+html.dark-mode .header {
+  background-color: #151827 !important;
+  border-color: #2d3148 !important;
+}
+
+html.dark-mode .header-body,
+html.dark-mode .header-pretitle,
+html.dark-mode .header-title {
+  color: #d1d5db !important;
+}
+
+/* ── High contrast ─────────────────────────────── */
+html.high-contrast body {
+  background-color: #000;
+  color: #fff;
+}
+
+html.high-contrast .navbar-vertical {
+  background-color: #000 !important;
+  border-color: #fff !important;
+}
+
+html.high-contrast .navbar-vertical .nav-link,
+html.high-contrast .navbar-vertical .navbar-heading {
+  color: #fff !important;
+}
+
+html.high-contrast .card {
+  background-color: #000;
+  border: 2px solid #fff;
+  color: #fff;
+}
+
+html.high-contrast .main-content {
+  background-color: #000;
+}
+
+html.high-contrast .settings-popup {
+  background: #000;
+  border: 2px solid #fff;
+  color: #fff;
+}
+
+html.high-contrast .header {
+  background-color: #000 !important;
+  border-color: #fff !important;
+}
+
+html.high-contrast .header-body,
+html.high-contrast .header-pretitle,
+html.high-contrast .header-title {
+  color: #fff !important;
+}
+
+html.high-contrast a,
+html.high-contrast .nav-link {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .btn-purple {
+  background-color: #ffff00 !important;
+  border-color: #ffff00 !important;
+  color: #000 !important;
+}
