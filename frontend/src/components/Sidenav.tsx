@@ -118,10 +118,6 @@ export default function Sidenav({ items }: Props) {
         <FeatherIcon icon="user" size="17" />
       </NavLink>
 
-      <Nav.Link as="button" className="navbar-user-link" style={{ background: "transparent", border: 0 }}>
-        <FeatherIcon icon="search" size="17" />
-      </Nav.Link>
-
       <SettingsMenu />
     </Nav>
   </div>
