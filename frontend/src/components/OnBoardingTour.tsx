@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useTour } from "@reactour/tour";
 import { useLocation } from "react-router-dom";
 
