@@ -6,6 +6,7 @@ import { AuthProvider } from "./auth/AuthContext";
 import { SettingsProvider } from "./settings/SettingsContext";
 import "./index.css";
 import "./styles/dashkit/theme.scss";
+import { ModulesProvider } from "./modules/ModulesProvider";
 
 const rootElement = document.getElementById("root");
 
@@ -16,11 +17,13 @@ if (!rootElement) {
 ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <SettingsProvider>
-          <App />
-        </SettingsProvider>
-      </AuthProvider>
+      <ModulesProvider>
+        <AuthProvider>
+          <SettingsProvider>
+            <App />
+          </SettingsProvider>
+        </AuthProvider>
+      </ModulesProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

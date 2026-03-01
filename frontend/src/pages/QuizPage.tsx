@@ -1,35 +1,42 @@
+// src/pages/QuizPage.tsx
 import Header from "../components/Header";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Spinner, Alert } from "react-bootstrap";
 import QuizComponent from "../components/QuizComponent";
 import { useNavigate, useParams } from "react-router-dom";
-
-import { modulesData } from "../nav/modulesData";
-import { themesByModules } from "../nav/themesByModules";
-import { quizByTheme } from "../nav/QuizByTheme";
-
 import LessonQuizGameStepper from "../components/LessonQuizGameStepper";
+import { useModules } from "../modules/ModulesProvider";
+import { getQuizDataByThemeSlug } from "../nav/contentLoaders";
 
 export default function QuizPage() {
   const navigate = useNavigate();
-  const { moduleId, themeId } = useParams();
+  const { moduleId, themeId } = useParams(); // slugs
+  const { loading, error, getModule, getTheme } = useModules();
 
-  if (!moduleId || !themeId) {
-    return <div>Page invalide</div>;
+  if (!moduleId || !themeId) return <div>Page invalide</div>;
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center py-5">
+        <Spinner />
+      </div>
+    );
   }
 
-  const module = modulesData.find((m) => m.id === moduleId);
-  const themes = themesByModules[moduleId as keyof typeof themesByModules] ?? [];
-  const theme = themes.find((t) => t.id === themeId);
-
-  const questions = quizByTheme[themeId as keyof typeof quizByTheme];
-
-  if (!module || !theme) {
-    return <div>Module ou thème introuvable</div>;
+  if (error) {
+    return (
+      <Alert variant="danger">
+        Impossible de charger les modules : {error}
+      </Alert>
+    );
   }
 
-  if (!questions) {
-    return <div>Aucune donnée de quiz pour ce thème.</div>;
-  }
+  const module = getModule(moduleId);
+  const theme = getTheme(moduleId, themeId);
+
+  if (!module || !theme) return <div>Module ou thème introuvable</div>;
+
+  const quizData = getQuizDataByThemeSlug(themeId);
+  if (!quizData) return <div>Aucune donnée de quiz pour ce thème.</div>;
 
   return (
     <>
@@ -48,7 +55,7 @@ export default function QuizPage() {
       </Header>
 
       <QuizComponent
-        questions={questions}
+        questions={quizData.questions}
         onFinish={({ correct, total }) => {
           console.log("Résultat:", correct, "/", total);
         }}

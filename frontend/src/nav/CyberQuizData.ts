@@ -1,17 +1,13 @@
-export type QuizQuestion = {
-  id: string;
-  question: string;
-  options: [string, string, string, string];
-  correctIndex: 0 | 1 | 2 | 3;
-  explanation: string;
-};
+import type { QuizData } from "../types/quiz";
 
-export const cyberQuizData: QuizQuestion[] = [
-  {
-    id: "q1",
-    question: "Quel mot de passe respecte le mieux les recommandations de la CNIL ?",
-    options: [
-      "MotDePasse123",
+
+export const cyberQuizData: QuizData = {
+  questions: [
+    {
+      id: "q1",
+      question: "Quel mot de passe respecte le mieux les recommandations de la CNIL ?",
+      options: [
+        "MotDePasse123",
       "Jean1998!",
       "MonChatAdoreLesCoussins!2024",
       "azertyuiop",
@@ -76,4 +72,6 @@ export const cyberQuizData: QuizQuestion[] = [
     explanation:
       "Le phishing consiste à piéger l’utilisateur pour qu’il saisisse son mot de passe sur un faux site, même avec un bon mot de passe.",
   },
-];
+],
+
+}

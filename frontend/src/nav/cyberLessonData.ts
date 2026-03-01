@@ -1,4 +1,6 @@
-export const cyberLessonData = {
+import type { LessonData } from "../types/lesson";
+
+export const cyberLessonData : LessonData = {
   lessons: [
     {
       id: "1",

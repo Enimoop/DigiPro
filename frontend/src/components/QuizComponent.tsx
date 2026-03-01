@@ -1,13 +1,6 @@
 import { useMemo, useState } from "react";
 import { Button, Card, ProgressBar } from "react-bootstrap";
-
-type QuizQuestion = {
-  id: string;
-  question: string;
-  options: [string, string, string, string];
-  correctIndex: 0 | 1 | 2 | 3;
-  explanation: string;
-};
+import type { QuizQuestion } from "../types/quiz";
 
 type Props = {
   questions: readonly QuizQuestion[];
@@ -192,6 +185,7 @@ export default function QuizComponent({ questions, onFinish, onGoToGame }: Props
           </div>
         </div>
       )}
+
       <br />
     </div>
   );

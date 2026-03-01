@@ -1,31 +1,42 @@
-import { Col, Row } from "react-bootstrap";
+// src/pages/LessonPage.tsx
+import { Col, Row, Spinner, Alert } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import LessonContent from "../components/LessonContent";
-
-import { modulesData } from "../nav/modulesData";
-import { themesByModules } from "../nav/themesByModules";
-
-import { lessonsByTheme } from "../nav/lessonByTheme";
-
 import LessonQuizGameStepper from "../components/LessonQuizGameStepper";
+import { useModules } from "../modules/ModulesProvider";
+import { getLessonDataByThemeSlug } from "../nav/contentLoaders";
 
 export default function LessonPage() {
-  const { moduleId, themeId } = useParams();
+  const { moduleId, themeId } = useParams(); // slugs
+  const { loading, error, getModule, getTheme } = useModules();
+
   if (!moduleId || !themeId) return <div>Page invalide</div>;
 
-  const module = modulesData.find((m) => m.id === moduleId);
-  const themes = themesByModules[moduleId as keyof typeof themesByModules] ?? [];
-  const theme = themes.find((t) => t.id === themeId);
-
-  console.log("Module:", module);
-  console.log("Theme:", theme);
-
-  if (!module || !theme) {
-    return <div>Module ou thème introuvable</div>;
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center py-5">
+        <Spinner />
+      </div>
+    );
   }
 
-  const lessonData = lessonsByTheme[themeId as keyof typeof lessonsByTheme];
+  if (error) {
+    return (
+      <Alert variant="danger">
+        Impossible de charger les modules : {error}
+      </Alert>
+    );
+  }
+
+  const module = getModule(moduleId);
+  const theme = getTheme(moduleId, themeId);
+
+  if (!module || !theme) return <div>Module ou thème introuvable</div>;
+
+  const lessonData = getLessonDataByThemeSlug(themeId);
+  if (!lessonData) return <div>Aucun contenu de leçon pour ce thème.</div>;
+
   return (
     <div>
       <Header className="mt-md-5">
@@ -41,6 +52,7 @@ export default function LessonPage() {
           </Row>
         </Header.Body>
       </Header>
+
       <LessonContent lessonData={lessonData} />
     </div>
   );

@@ -1,4 +1,7 @@
-export const bureautiqueLessonData = {
+import type { LessonData } from "../types/lesson";
+
+
+export const bureautiqueLessonData: LessonData = {
   lessons: [
     {
       id: "1",

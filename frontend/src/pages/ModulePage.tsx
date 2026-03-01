@@ -1,29 +1,40 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import { Row, Col, ProgressBar } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  ProgressBar,
+  Container,
+  Button,
+  Spinner,
+  Alert,
+} from "react-bootstrap";
 import LessonCard from "../components/LessonCard";
-import { modulesData } from "../nav/modulesData";
-import { themesByModules } from "../nav/themesByModules";
-import { Container, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useModules } from "../modules/ModulesProvider";
 
 export default function ModulePage() {
-  const { moduleId } = useParams();
+  const { moduleId } = useParams(); // moduleId = slug
+  const navigate = useNavigate();
+  const { loading, error, getModule } = useModules();
+
   if (!moduleId) return null;
 
-  const module = modulesData.find((m) =>
-    m.route.endsWith(moduleId ?? "")
-
-  );
-
-  const themes = themesByModules[moduleId as keyof typeof themesByModules] ?? [];
-  const navigate = useNavigate();
-
-  if (!module) {
-    return <div>Module introuvable</div>;
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center py-5">
+        <Spinner />
+      </div>
+    );
   }
 
-   if (!module.enabled) {
+  if (error) {
+    return <Alert variant="danger">Impossible de charger les modules : {error}</Alert>;
+  }
+
+  const module = getModule(moduleId);
+  if (!module) return <div>Module introuvable</div>;
+
+  if (!module.enabled) {
     return (
       <Container className="mt-6 text-center" style={{ maxWidth: 800 }}>
         <div
@@ -39,16 +50,15 @@ export default function ModulePage() {
             Le module <strong>{module.title}</strong> n’est pas encore disponible.
           </p>
 
-          <Button
-            className="btn-purple px-5"
-            onClick={() => navigate("/home")}
-          >
+          <Button className="btn-purple px-5" onClick={() => navigate("/home")}>
             Retour aux modules
           </Button>
         </div>
       </Container>
     );
   }
+
+  const themes = module.themes ?? [];
 
   return (
     <div>
@@ -67,10 +77,15 @@ export default function ModulePage() {
 
       {themes.map((theme, idx) => (
         <LessonCard
-          key={theme.id}
+          key={theme.slug}
           stepNumber={idx + 1}
           moduleIcon={module.icon}
-          theme={theme}
+          theme={{
+            id: theme.slug, // si LessonCard attend id
+            title: theme.title,
+            description: theme.description,
+            route: `/modules/${module.slug}/${theme.slug}`,
+          }}
         />
       ))}
     </div>
