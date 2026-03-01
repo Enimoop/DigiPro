@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { api } from "../api"; // <-- ton axios instance
 
 export type ApiTheme = {
   slug: string;
@@ -37,13 +38,17 @@ export function ModulesProvider({ children }: { children: React.ReactNode }) {
   const fetchModules = async () => {
     setLoading(true);
     setError(null);
+
     try {
-      const res = await fetch("http://localhost:8000/api/modules/");
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = (await res.json()) as ApiModule[];
-      setModules(data);
+      const res = await api.get<ApiModule[]>("/api/modules/");
+      setModules(res.data);
     } catch (e: any) {
-      setError(e?.message ?? "Erreur inconnue");
+      const msg =
+        e?.response?.data?.detail ||
+        e?.response?.data?.message ||
+        e?.message ||
+        "Erreur inconnue";
+      setError(msg);
     } finally {
       setLoading(false);
     }

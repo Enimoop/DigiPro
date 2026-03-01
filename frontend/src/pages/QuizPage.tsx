@@ -9,7 +9,7 @@ import { getQuizDataByThemeSlug } from "../nav/contentLoaders";
 
 export default function QuizPage() {
   const navigate = useNavigate();
-  const { moduleId, themeId } = useParams(); // slugs
+  const { moduleId, themeId } = useParams();
   const { loading, error, getModule, getTheme } = useModules();
 
   if (!moduleId || !themeId) return <div>Page invalide</div>;

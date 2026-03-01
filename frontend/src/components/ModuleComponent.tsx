@@ -39,7 +39,6 @@ export default function ModuleComponent({ module }: Props) {
       }}
     >
       <Card.Body className="d-flex flex-column align-items-center p-4">
-        {/* Top */}
         <div className="w-100">
           <div className="icon-circle bg-purple-soft text-purple mb-3 mx-auto">
             <FeatherIcon icon={module.icon || "box"} className="feather-lg" />
@@ -54,7 +53,6 @@ export default function ModuleComponent({ module }: Props) {
           </p>
         </div>
 
-        {/* Bottom */}
         <div className="mt-auto">
           <span
             className={`btn btn-sm ${

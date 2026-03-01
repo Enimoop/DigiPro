@@ -13,7 +13,7 @@ import LessonCard from "../components/LessonCard";
 import { useModules } from "../modules/ModulesProvider";
 
 export default function ModulePage() {
-  const { moduleId } = useParams(); // moduleId = slug
+  const { moduleId } = useParams();
   const navigate = useNavigate();
   const { loading, error, getModule } = useModules();
 
@@ -81,7 +81,7 @@ export default function ModulePage() {
           stepNumber={idx + 1}
           moduleIcon={module.icon}
           theme={{
-            id: theme.slug, // si LessonCard attend id
+            id: theme.slug,
             title: theme.title,
             description: theme.description,
             route: `/modules/${module.slug}/${theme.slug}`,
