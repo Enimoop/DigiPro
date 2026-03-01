@@ -15,6 +15,7 @@ import MaskedPasswordInput from "../components/MaskedPasswordInput";
 export default function PasswordGamePage() {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
+  const [hasNoPersonalData, setHasNoPersonalData] = useState(false);
 
   // règles
   const hasMinLength = password.length >= 12;
@@ -26,11 +27,14 @@ export default function PasswordGamePage() {
   const [canShowValidateButton, setCanShowValidateButton] = useState(false);
 
   const allRulesValid =
-    hasMinLength && hasNumber && hasUpperAndLower && hasSpecialChar;
+    hasMinLength && hasNumber && hasUpperAndLower && hasSpecialChar && hasNoPersonalData;
 
   useEffect(() => {
     if (allRulesValid) {
       setCanShowValidateButton(true);
+    } else {
+      setCanShowValidateButton(false);
+      setIsValidated(false);
     }
   }, [allRulesValid]);
 
@@ -89,15 +93,15 @@ export default function PasswordGamePage() {
             <h1 className="mb-2">Créer votre mot de passe</h1>
             <p className="text-muted mb-4">En suivant les règles vues précédemment</p>
 
-           <div className="d-flex justify-content-center mb-4">
-            <div style={{ maxWidth: 360, width: "100%" }}>
-              <MaskedPasswordInput
-                placeholder="Mot de passe"
-                value={password}
-                onValueChange={setPassword}
-              />
+            <div className="d-flex justify-content-center mb-4">
+              <div style={{ maxWidth: 360, width: "100%" }}>
+                <MaskedPasswordInput
+                  placeholder="Mot de passe"
+                  value={password}
+                  onValueChange={setPassword}
+                />
+              </div>
             </div>
-          </div>
 
             <Row className="justify-content-center g-4 mb-5">
               <Col xs={12} md={6} className="d-flex justify-content-center">
@@ -111,6 +115,14 @@ export default function PasswordGamePage() {
               </Col>
               <Col xs={12} md={6} className="d-flex justify-content-center">
                 <Form.Check type="switch" label="Caractère spécial" checked={hasSpecialChar} disabled />
+              </Col>
+              <Col xs={12} md={6} className="d-flex justify-content-center">
+                <Form.Check
+                  type="checkbox"
+                  label="Confirmez vous l'absence de données personnelles"
+                  checked={hasNoPersonalData}
+                  onChange={(e) => setHasNoPersonalData(e.target.checked)}
+                />
               </Col>
             </Row>
 
@@ -141,8 +153,11 @@ export default function PasswordGamePage() {
               </Card>
             </div>
 
-            {canShowValidateButton && (
-              <div className="d-flex justify-content-center mt-4">
+            <div
+              className="d-flex justify-content-center mt-4"
+              style={{ minHeight: 56 }}
+            >
+              {canShowValidateButton && (
                 <Button
                   size="lg"
                   className="px-5"
@@ -155,8 +170,8 @@ export default function PasswordGamePage() {
                 >
                   {isValidated ? "Thème validé ✓" : "Valider"}
                 </Button>
-              </div>
-            )}
+              )}
+            </div>
 
           </Col>
         </Row>
