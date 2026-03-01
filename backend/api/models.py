@@ -46,3 +46,11 @@ class UserThemeProgress(models.Model):
     class Meta:
         unique_together = ("user", "theme")
         ordering = ["started_at"]
+
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
+    has_seen_onboarding = models.BooleanField(default=False)
+    onboarding_step = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"Profile({self.user})"

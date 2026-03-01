@@ -75,19 +75,26 @@ export default function ModulePage() {
         </Header.Body>
       </Header>
 
-      {themes.map((theme, idx) => (
-        <LessonCard
-          key={theme.slug}
-          stepNumber={idx + 1}
-          moduleIcon={module.icon}
-          theme={{
-            id: theme.slug,
-            title: theme.title,
-            description: theme.description,
-            route: `/modules/${module.slug}/${theme.slug}`,
-          }}
-        />
-      ))}
+      {themes.map((theme, idx) => {
+        const route = `/modules/${module.slug}/${theme.slug}`;
+
+        const tourAttr = idx === 0 ? { "data-tour": "lesson-card" } : {};
+
+        return (
+          <div key={theme.slug} {...tourAttr}>
+            <LessonCard
+              stepNumber={idx + 1}
+              moduleIcon={module.icon}
+              theme={{
+                id: theme.slug,
+                title: theme.title,
+                description: theme.description,
+                route,
+              }}
+            />
+          </div>
+        );
+      })}
     </div>
   );
 }

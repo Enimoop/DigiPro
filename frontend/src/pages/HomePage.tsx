@@ -25,13 +25,20 @@ export default function HomePage() {
         </div>
       )}
 
-      {error && <Alert variant="danger">Impossible de charger les modules: {error}</Alert>}
+      {error && (
+        <Alert variant="danger">
+          Impossible de charger les modules: {error}
+        </Alert>
+      )}
 
       {!loading && !error && (
         <Row className="g-5">
-          {modules.map((m) => (
+          {modules.map((m, idx) => (
             <Col key={m.slug} xs={12} sm={6} lg={4}>
-              <ModuleComponent module={m} />
+              <ModuleComponent
+                module={m}
+                tourId={idx === 0 ? "intro-modules" : undefined}
+              />
             </Col>
           ))}
         </Row>

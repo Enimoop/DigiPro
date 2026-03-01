@@ -32,7 +32,8 @@ INSTALLED_APPS = [
     "corsheaders",
 
     # Local
-    "api",
+
+    "api.apps.ApiConfig",
 ]
 
 # -------------------------------------------------

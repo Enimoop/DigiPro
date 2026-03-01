@@ -20,6 +20,7 @@ type User = {
   username: string;
   email: string | null;
   is_staff?: boolean;
+  has_seen_onboarding?: boolean;
 };
 
 /* =======================

@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import { TourProvider } from "@reactour/tour";
 import App from "./App";
 import { AuthProvider } from "./auth/AuthContext";
 import { SettingsProvider } from "./settings/SettingsContext";
@@ -20,7 +21,27 @@ ReactDOM.createRoot(rootElement).render(
       <ModulesProvider>
         <AuthProvider>
           <SettingsProvider>
-            <App />
+            <TourProvider
+              steps={[]}
+              styles={{
+                popover: (base) => ({
+                  ...base,
+                  background: "#7C3AED",
+                  color: "white",
+                  borderRadius: 18,
+                  padding: 22,
+                  fontSize: "17px",
+                }),
+                badge: (base) => ({
+                  ...base,
+                  background: "white",
+                  color: "#7C3AED",
+                  fontWeight: 700,
+                }),
+              }}
+            >
+              <App />
+            </TourProvider>
           </SettingsProvider>
         </AuthProvider>
       </ModulesProvider>

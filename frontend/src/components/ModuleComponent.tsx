@@ -12,9 +12,10 @@ type Module = {
 
 type Props = {
   module: Module;
+  tourId?: string;
 };
 
-export default function ModuleComponent({ module }: Props) {
+export default function ModuleComponent({ module, tourId }: Props) {
   const navigate = useNavigate();
 
   const go = () => {
@@ -24,6 +25,7 @@ export default function ModuleComponent({ module }: Props) {
 
   return (
     <Card
+      data-tour={tourId}
       className={`module-card text-center h-100 module-clickable ${
         !module.enabled ? "opacity-50" : ""
       }`}

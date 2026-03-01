@@ -136,26 +136,47 @@ export default function Sidenav() {
     ));
   };
 
+  // ✅ Footer avec 3 icônes chacune ciblable par le tour
   const footer = (
     <div className="navbar-user mt-auto mb-md-4">
       <Nav className="flex-row justify-content-around">
-        <Nav.Link as="button" className="navbar-user-link" style={{ background: "transparent", border: 0 }}>
-          <FeatherIcon icon="bell" size="17" />
+        {/* À propos */}
+        <Nav.Link
+          data-tour="bottom-about"
+          as="button"
+          className="navbar-user-link"
+          style={{ background: "transparent", border: 0 }}
+        >
+          <FeatherIcon icon="info" size="17" />
         </Nav.Link>
 
-        <NavLink to="/user" className="navbar-user-link nav-link">
+        {/* Profil */}
+        <NavLink
+          data-tour="bottom-profile"
+          to="/user"
+          className="navbar-user-link nav-link"
+        >
           <FeatherIcon icon="user" size="17" />
         </NavLink>
 
-        <SettingsMenu />
+        {/* Settings */}
+        <div data-tour="bottom-settings">
+          <SettingsMenu />
+        </div>
       </Nav>
     </div>
   );
 
   return (
-    <Navbar expand="md" className="navbar-vertical fixed-start" collapseOnSelect>
+    <Navbar
+      expand="md"
+      className="navbar-vertical fixed-start"
+      collapseOnSelect
+      data-tour="nav-sidebar"
+    >
       <Container fluid>
-        <Navbar.Toggle />
+        {/* Burger (mobile) */}
+        <Navbar.Toggle data-tour="burger" />
 
         <Navbar.Brand as={NavLink} to="/dashboard">
           <img className="navbar-brand-img" src={logo} alt="DigiPro" />

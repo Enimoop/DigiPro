@@ -27,7 +27,7 @@ export default function RegisterPage() {
 
     try {
       await register(email, password);
-      navigate("/dashboard");
+      navigate("/home");
     } catch (e: any) {
       setError(
         e?.response?.data

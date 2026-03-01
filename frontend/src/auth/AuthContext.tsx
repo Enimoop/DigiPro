@@ -2,6 +2,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
   type ReactNode,
 } from "react";
@@ -11,16 +12,22 @@ import { api } from "../api";
    Types
 ======================= */
 
-type User = {
+export type User = {
   id: number;
   username: string;
   email: string | null;
   is_staff?: boolean;
+  has_seen_onboarding: boolean;
 };
 
 type AuthContextType = {
   user: User | null;
   loading: boolean;
+
+  shouldShowOnboarding: boolean;
+
+  dismissOnboarding: () => Promise<void>;
+
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -60,6 +67,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })();
   }, []);
 
+  const shouldShowOnboarding = useMemo(() => {
+    return !!user && user.has_seen_onboarding === false;
+  }, [user]);
+
   async function login(email: string, password: string): Promise<void> {
     await api.get("/api/csrf/");
     await api.post("/api/auth/login/", { email, password });
@@ -69,7 +80,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function register(email: string, password: string): Promise<void> {
     await api.get("/api/csrf/");
     await api.post("/api/auth/register/", { email, password });
-    // auto-login
     await login(email, password);
   }
 
@@ -78,8 +88,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }
 
+  async function dismissOnboarding(): Promise<void> {
+    try {
+      await api.get("/api/csrf/");
+
+      await api.post("/api/onboarding/complete/");
+
+      setUser((prev) =>
+        prev ? { ...prev, has_seen_onboarding: true } : prev
+      );
+    } catch (e) {
+      console.error("Failed to complete onboarding", e);
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        shouldShowOnboarding,
+        dismissOnboarding,
+        login,
+        register,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
