@@ -7,6 +7,8 @@ import { modulesData } from "../nav/modulesData";
 import { themesByModules } from "../nav/themesByModules";
 import { quizByTheme } from "../nav/QuizByTheme";
 
+import LessonQuizGameStepper from "../components/LessonQuizGameStepper";
+
 export default function QuizPage() {
   const navigate = useNavigate();
   const { moduleId, themeId } = useParams();
@@ -19,7 +21,6 @@ export default function QuizPage() {
   const themes = themesByModules[moduleId as keyof typeof themesByModules] ?? [];
   const theme = themes.find((t) => t.id === themeId);
 
-  // 🔥 récup du quiz data depuis themeId
   const questions = quizByTheme[themeId as keyof typeof quizByTheme];
 
   if (!module || !theme) {
@@ -38,6 +39,9 @@ export default function QuizPage() {
             <Col>
               <Header.Pretitle>{module.title}</Header.Pretitle>
               <Header.Title>{theme.title}</Header.Title>
+            </Col>
+            <Col xs="auto">
+              <LessonQuizGameStepper current="quiz" />
             </Col>
           </Row>
         </Header.Body>

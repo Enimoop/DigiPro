@@ -8,19 +8,20 @@ import { themesByModules } from "../nav/themesByModules";
 
 import { lessonsByTheme } from "../nav/lessonByTheme";
 
+import LessonQuizGameStepper from "../components/LessonQuizGameStepper";
 
 export default function LessonPage() {
   const { moduleId, themeId } = useParams();
   if (!moduleId || !themeId) return <div>Page invalide</div>;
 
-   const module = modulesData.find((m) => m.id === moduleId);
+  const module = modulesData.find((m) => m.id === moduleId);
   const themes = themesByModules[moduleId as keyof typeof themesByModules] ?? [];
   const theme = themes.find((t) => t.id === themeId);
 
   console.log("Module:", module);
-  console.log("Theme:", theme); 
+  console.log("Theme:", theme);
 
-    if (!module || !theme) {
+  if (!module || !theme) {
     return <div>Module ou thème introuvable</div>;
   }
 
@@ -33,6 +34,9 @@ export default function LessonPage() {
             <Col>
               <Header.Pretitle>{module.title}</Header.Pretitle>
               <Header.Title>{theme.title}</Header.Title>
+            </Col>
+            <Col xs="auto">
+              <LessonQuizGameStepper current="lesson" />
             </Col>
           </Row>
         </Header.Body>
