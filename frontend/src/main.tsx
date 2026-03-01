@@ -23,6 +23,9 @@ ReactDOM.createRoot(rootElement).render(
           <SettingsProvider>
             <TourProvider
               steps={[]}
+              disableInteraction={true}
+              disableKeyboardNavigation={true as any}
+              onClickMask={() => {}}
               styles={{
                 popover: (base) => ({
                   ...base,

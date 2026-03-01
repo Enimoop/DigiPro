@@ -370,9 +370,6 @@ html.high-contrast .btn-purple {
 
 /* ── Reactour custom styles ─────────────────────────────── */
 
-.reactour__mask * {
-  fill: rgba(0, 0, 0, 0.6) !important;
-}
 
 .reactour__popover {
   font-size: 17px !important;
