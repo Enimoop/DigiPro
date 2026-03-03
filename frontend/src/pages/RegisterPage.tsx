@@ -3,7 +3,12 @@ import FeatherIcon from "feather-icons-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { useAuth } from "../auth/AuthContext";
+
+// Imports des assets
 import logo from "../assets/logo.svg";
+import marianneLogo from "../assets/marianne.svg";
+import valdoiseLogo from "../assets/valdoise.png";
+import fond2 from "../assets/fond2.png";
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -11,10 +16,9 @@ export default function RegisterPage() {
 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [showPwd, setShowPwd] = useState<boolean>(false);
-
-  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -37,30 +41,39 @@ export default function RegisterPage() {
           : e?.message || "Erreur"
       );
     }
-
   }
 
-
   return (
-    <div className="container d-flex align-items-center justify-content-center min-vh-100">
-      <div style={{ maxWidth: 420 }} className="w-100">
-        <div className="text-center mb-4">
-          <img
-            src={logo}
-            alt="DigiPro"
-            style={{ width: 200, height: "auto" }}
-          />
-        </div>
-        <div style={{ maxWidth: 420 }} className="w-100">
-          <h1 className="display-4 text-center mb-3">S'inscrire</h1>
-          <p className="text-muted text-center mb-5">
+    <div 
+      className="container-fluid d-flex align-items-center justify-content-center min-vh-100"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${fond2})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* Conteneur vertical bridé à 420px */}
+      <div className="d-flex flex-column align-items-center w-100" style={{ maxWidth: 420 }}>
+        
+        {/* Bloc central blanc */}
+        <div className="w-100 bg-white p-4 p-md-5 rounded shadow-lg">
+          <div className="text-center mb-4">
+            <img
+              src={logo}
+              alt="DigiPro"
+              style={{ width: 180, height: "auto" }}
+            />
+          </div>
+
+          <h1 className="h2 text-center mb-3">S'inscrire</h1>
+          <p className="text-muted text-center mb-4 small">
             Les compétences numériques à la portée de tous.
           </p>
 
           <Form onSubmit={handleSubmit}>
-
             <div className="form-group mb-3">
-              <Form.Label>Adresse email</Form.Label>
+              <Form.Label className="small fw-bold">Adresse email</Form.Label>
               <Form.Control
                 type="email"
                 value={email}
@@ -70,10 +83,10 @@ export default function RegisterPage() {
               />
             </div>
 
-            <div className="form-group mb-4">
-              <Row>
+            <div className="form-group mb-3">
+              <Row className="mb-1">
                 <Col>
-                  <Form.Label>Mot de passe</Form.Label>
+                  <Form.Label className="small fw-bold">Mot de passe</Form.Label>
                 </Col>
                 <Col xs="auto">
                   <Form.Text className="small text-muted">
@@ -90,63 +103,68 @@ export default function RegisterPage() {
                   required
                 />
                 <InputGroup.Text
-                  role="button"
-                  aria-label="toggle password visibility"
                   onClick={() => setShowPwd((v) => !v)}
                   style={{ cursor: "pointer" }}
                 >
                   <FeatherIcon icon={showPwd ? "eye-off" : "eye"} size="1em" />
                 </InputGroup.Text>
               </InputGroup>
-
             </div>
 
             <div className="form-group mb-4">
-              <Row>
-                <Col>
-                  <Form.Label>Confirmer le mot de passe</Form.Label>
-                </Col>
-                <Col xs="auto">
-                  <Form.Text className="small text-muted">
-                    Utilisez un mot de passe fort
-                  </Form.Text>
-                </Col>
-              </Row>
-
+              <Form.Label className="small fw-bold">Confirmer le mot de passe</Form.Label>
               <InputGroup>
                 <Form.Control
                   type={showPwd ? "text" : "password"}
                   value={passwordConfirm}
                   onChange={(e) => setPasswordConfirm(e.target.value)}
-                  placeholder="Confirm your password"
+                  placeholder="Confirmez votre mot de passe"
                   required
                 />
-
                 <InputGroup.Text
-                  role="button"
-                  aria-label="toggle password visibility"
                   onClick={() => setShowPwd((v) => !v)}
                   style={{ cursor: "pointer" }}
                 >
                   <FeatherIcon icon={showPwd ? "eye-off" : "eye"} size="1em" />
                 </InputGroup.Text>
               </InputGroup>
-
             </div>
 
-            {error && <div className="text-danger text-center mb-3">{error}</div>}
+            {error && (
+              <div className="text-danger text-center mb-3 small">{error}</div>
+            )}
 
-            <Button type="submit" size="lg" className="w-100 mb-3">
+            <Button type="submit" size="lg" className="w-100 mb-4 shadow-sm">
               Sign up
             </Button>
 
-            <p className="text-center">
-              <small className="text-muted text-center">
-                Vous avez déjà un compte? <Link to="/login">Connectez-vous</Link>.
+            <p className="text-center mb-0">
+              <small className="text-muted">
+                Vous avez déjà un compte ?{" "}
+                <Link to="/login" className="fw-bold">Connectez-vous</Link>.
               </small>
             </p>
           </Form>
         </div>
+
+        {/* Barre des logos partenaires alignée (420px) */}
+        <div 
+          className="d-flex justify-content-around align-items-center mt-4 p-3 rounded shadow-sm w-100" 
+          style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+        >
+          <img 
+            src={marianneLogo} 
+            alt="République Française" 
+            style={{ height: "55px", width: "auto" }} 
+          />
+          <div style={{ width: "1px", height: "40px", backgroundColor: "#dee2e6" }}></div>
+          <img 
+            src={valdoiseLogo} 
+            alt="Val d'Oise Le Département" 
+            style={{ height: "50px", width: "auto" }} 
+          />
+        </div>
+
       </div>
     </div>
   );
