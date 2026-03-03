@@ -8,7 +8,9 @@ export const bureautiqueLessonData: LessonData = {
       title: "C’est quoi une extension de fichier ?", // Titre en bleu (#1565c0)
       content: `
 <span style="color: #7C3AED;">**C’est comme une étiquette sur une boîte** :</span>
+
 *Lettre* *(rapport.docx)* → Boîte "Document Word".
+
 *Photo* *(vacances.jpg)* → Boîte "Image".
 
 <span style="color: #7C3AED;">**Pourquoi c’est utile ?**</span>
@@ -16,6 +18,7 @@ export const bureautiqueLessonData: LessonData = {
 - Exemple : *rapport.docx* = Word, *vacances.jpg* = (lecteur de photos).
 
 <div class="box-danger">
+
 **Attention :** Ne renommez pas *Chat.jpg* en *Chat.mp3* → ça ne deviendra pas une musique !
 </div>
       `,
@@ -26,16 +29,19 @@ export const bureautiqueLessonData: LessonData = {
       title: "📄 Documents et tableaux", // Titre + emoji
       content: `
 <div class="box-info">
+
 <span style="color: #7C3AED;">**Documents texte :**</span>
 .txt (Bloc-notes), .docx (Word), .odt (LibreOffice)
 </div>
 
 <div class="box-info">
+
 <span style="color: #7C3AED;">**Tableaux :**</span>
 .xlsx (Excel), .ods(LibreOffice), .csv (liste simple)
 </div>
 
 <div class="box-info">
+
 <span style="color: #7C3AED;">**PDF :**</span>
 .pdf (document à lire, non modifiable)
 </div>
@@ -47,16 +53,19 @@ export const bureautiqueLessonData: LessonData = {
       title: "🎵🖼️🎬 Multimédia", // Titre + emojis
       content: `
 <div class="box-info">
+
 **Fichiers audio :**
 .mp3 (standard), .wav (haute qualité)
 </div>
 
 <div class="box-info">
+
 **Images :**
 .jpg, .jpeg, .png (arrière-plan transparent), .gif (image animée)
 </div>
 
 <div class="box-info">
+
 **Vidéos :**
 .mp4 (standard), .avi, .mkv (haute qualité)
 </div>
@@ -70,15 +79,18 @@ export const bureautiqueLessonData: LessonData = {
 <span style="color: #7C3AED;">**Programmes et scripts :**</span>
 
 <div class="box-info">
+
 .exe, .msi installateurs de logiciels. 
 </div>
 
 <div class="box-info">
+
 .bat, .cmd Exécutent des commandes <span style="color: #e03636;">**(Ne surtout pas ouvrir).**</span>
 </div>
 
 
 <div class="box-danger">
+
 **Règle de sécurité :** ❌ Ne jamais ouvrir un fichier exécutable si vous ne connaissez pas sa source ou ce qu'il fait.
 </div>
       `,
@@ -89,12 +101,14 @@ export const bureautiqueLessonData: LessonData = {
       title: "Afficher les extensions", // Titre en bleu
       content: `
 <div class="box-info">
+
 **Sur Windows :**
 1. Ouvrez un dossier.
 2. Cliquez sur **Affichage** (en haut de la fenêtre) → cochez **Extensions de nom de fichier**.
 </div>
 
 <div class="box-info">
+
 **Exemple :**
 <span style="color: #1ad927;">Vacances.jpg</span> (sûr)
 <span style="color: #e03636;">Document.pdf.exe</span> (dangereux)
