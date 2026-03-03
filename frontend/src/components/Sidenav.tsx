@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
-import { Collapse, Container, Nav, Navbar } from "react-bootstrap";
+import { Collapse, Container, Nav, Navbar, Spinner } from "react-bootstrap";
 import logo from "../assets/logo.svg";
 import SettingsMenu from "./SettingsMenu";
+import { useModules } from "../modules/ModulesProvider";
 
 type NavItem = {
   id: string;
@@ -11,20 +12,44 @@ type NavItem = {
   url?: string;
   icon?: string;
   children?: NavItem[];
-  heading?: boolean; 
+  heading?: boolean;
+  disabled?: boolean;
 };
 
-type Props = {
-  items: NavItem[];
-};
-
-export default function Sidenav({ items }: Props) {
+export default function Sidenav() {
   const location = useLocation();
+  const { modules, loading, error } = useModules();
+
+  // Build nav items from API modules
+  const items: NavItem[] = useMemo(() => {
+    const moduleChildren: NavItem[] = (modules ?? []).map((m) => ({
+      id: `module-${m.slug}`,
+      title: m.title,
+      url: `/modules/${m.slug}`,
+      icon: m.icon || "grid",
+      disabled: !m.enabled,
+    }));
+
+    return [
+      {
+        id: "home",
+        title: "Home",
+        url: "/home",
+        icon: "home",
+      },
+      {
+        id: "modules",
+        title: "Modules",
+        icon: "grid",
+        children: moduleChildren,
+      },
+    ];
+  }, [modules]);
 
   const activeId = useMemo(() => {
     const findActive = (list: NavItem[]): string | null => {
       for (const it of list) {
-        if (it.url && location.pathname === it.url) return it.id;
+        if (it.url && location.pathname.startsWith(it.url)) return it.id;
         if (it.children) {
           const r = findActive(it.children);
           if (r) return r;
@@ -52,14 +77,8 @@ export default function Sidenav({ items }: Props) {
     return list.map((it, idx) => (
       <div key={it.id}>
         {idx > 0 && <hr className="navbar-divider" />}
-
         {it.heading && <h6 className="navbar-heading">{it.title}</h6>}
-
-        {!it.heading && (
-          <Nav className="flex-column">
-            {renderSubitems([it])}
-          </Nav>
-        )}
+        {!it.heading && <Nav className="flex-column">{renderSubitems([it])}</Nav>}
       </div>
     ));
   };
@@ -95,9 +114,19 @@ export default function Sidenav({ items }: Props) {
           <NavLink
             to={it.url || "#"}
             className={({ isActive }) =>
-              `nav-link d-flex align-items-center ${isActive ? "active" : ""}`
+              `nav-link d-flex align-items-center ${isActive ? "active" : ""} ${
+                it.disabled ? "disabled opacity-50" : ""
+              }`
             }
-            onClick={() => setOpenId(it.id)}
+            onClick={(e) => {
+              if (it.disabled) {
+                e.preventDefault();
+                return;
+              }
+              setOpenId(it.id);
+            }}
+            aria-disabled={it.disabled ? true : undefined}
+            tabIndex={it.disabled ? -1 : 0}
           >
             {it.icon && <FeatherIcon icon={it.icon} size="17" className="me-2" />}
             {it.title}
@@ -107,34 +136,67 @@ export default function Sidenav({ items }: Props) {
     ));
   };
 
+  // ✅ Footer avec 3 icônes chacune ciblable par le tour
   const footer = (
-  <div className="navbar-user mt-auto mb-md-4">
-    <Nav className="flex-row justify-content-around">
-      <Nav.Link as="button" className="navbar-user-link" style={{ background: "transparent", border: 0 }}>
-        <FeatherIcon icon="bell" size="17" />
-      </Nav.Link>
+    <div className="navbar-user mt-auto mb-md-4">
+      <Nav className="flex-row justify-content-around">
+        {/* À propos */}
+        <Nav.Link
+          data-tour="bottom-about"
+          as="button"
+          className="navbar-user-link"
+          style={{ background: "transparent", border: 0 }}
+        >
+          <FeatherIcon icon="info" size="17" />
+        </Nav.Link>
 
-      <NavLink to="/user" className="navbar-user-link nav-link">
-        <FeatherIcon icon="user" size="17" />
-      </NavLink>
+        {/* Profil */}
+        <NavLink
+          data-tour="bottom-profile"
+          to="/user"
+          className="navbar-user-link nav-link"
+        >
+          <FeatherIcon icon="user" size="17" />
+        </NavLink>
 
-      <SettingsMenu />
-    </Nav>
-  </div>
-);
-
+        {/* Settings */}
+        <div data-tour="bottom-settings">
+          <SettingsMenu />
+        </div>
+      </Nav>
+    </div>
+  );
 
   return (
-    <Navbar expand="md" className="navbar-vertical fixed-start" collapseOnSelect>
+    <Navbar
+      expand="md"
+      className="navbar-vertical fixed-start"
+      collapseOnSelect
+      data-tour="nav-sidebar"
+    >
       <Container fluid>
-        <Navbar.Toggle />
+        {/* Burger (mobile) */}
+        <Navbar.Toggle data-tour="burger" />
 
         <Navbar.Brand as={NavLink} to="/dashboard">
           <img className="navbar-brand-img" src={logo} alt="DigiPro" />
         </Navbar.Brand>
 
         <Navbar.Collapse>
-          {renderItems(items)}
+          {loading && (
+            <div className="d-flex align-items-center gap-2 px-3 py-3 text-muted">
+              <Spinner size="sm" />
+              <span>Chargement…</span>
+            </div>
+          )}
+
+          {error && (
+            <div className="px-3 py-3 text-danger small">
+              Impossible de charger les modules
+            </div>
+          )}
+
+          {!loading && renderItems(items)}
           {footer}
         </Navbar.Collapse>
       </Container>

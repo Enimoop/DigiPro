@@ -137,4 +137,15 @@ def me(request):
         "username": u.username,
         "email": u.email,
         "is_staff": u.is_staff,
+        "has_seen_onboarding": getattr(u, "profile", None) and u.profile.has_seen_onboarding,
     })
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def complete_onboarding(request):
+    profile = request.user.profile
+    profile.has_seen_onboarding = True
+    profile.onboarding_step = 0
+    profile.save(update_fields=["has_seen_onboarding", "onboarding_step"])
+    return Response({"ok": True, "has_seen_onboarding": True})

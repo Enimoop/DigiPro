@@ -1,17 +1,12 @@
-export type EmailQuestion = {
-  id: string;
-  question: string;
-  options: [string, string, string, string];
-  correctIndex: 0 | 1 | 2 | 3;
-  explanation: string;
-};
+import type { QuizData } from "../types/quiz";
 
-export const emailQuizData: EmailQuestion[] = [
-  {
-    id: "q1",
-    question: "Quel mot de passe est le plus sécurisé ?",
-    options: [
-      "bonjour123",
+export const emailQuizData: QuizData = {
+  questions: [
+    {
+      id: "q1",
+      question: "Quel mot de passe est le plus sécurisé ?",
+      options: [
+        "bonjour123",
       "azerty",
       "MonChatAdoreLesCoussins!2024",
       "123456",
@@ -21,4 +16,5 @@ export const emailQuizData: EmailQuestion[] = [
       "Un mot de passe sécurisé est long, unique et mélange lettres, chiffres et caractères spéciaux.",
   },
 
-];
+],
+}

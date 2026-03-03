@@ -16,7 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from api.views import csrf, login_view, refresh_view, logout_view, me, register_view
+from api.views import complete_onboarding, csrf, login_view, refresh_view, logout_view, me, register_view
+from api.views_modules import modules_list
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -28,4 +29,9 @@ urlpatterns = [
     path("api/auth/register/", register_view),
 
     path("api/me/", me),
+
+    # modules
+    path("api/modules/", modules_list),
+
+    path("api/onboarding/complete/", complete_onboarding, name="complete_onboarding"),
 ]

@@ -20,7 +20,7 @@ export default function LoginPage() {
 
     try {
       await login(email, password);
-      navigate("/dashboard");
+      navigate("/home");
     } catch {
       setError("Identifiants invalides");
     }
@@ -90,7 +90,7 @@ export default function LoginPage() {
           )}
 
           <Button type="submit" size="lg" className="w-100 mb-3">
-            Sign in
+            Se Connecter
           </Button>
 
           <p className="text-center">

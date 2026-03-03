@@ -1,4 +1,6 @@
-export const emailLessonData = {
+import type { LessonData } from "../types/lesson";
+
+export const emailLessonData: LessonData = {
   lessons: [
     {
       id: "1",

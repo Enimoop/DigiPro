@@ -309,6 +309,10 @@ html.high-contrast .btn-purple {
   border-color: #ffff00 !important;
   color: #000 !important;
 }
+
+
+/* ── Chevron stepper ─────────────────────────────── */
+
 .chevron-stepper {
   display: flex;
   gap: 1px;
@@ -362,4 +366,53 @@ html.high-contrast .btn-purple {
 
 .chevron-label.is-done {
   color: #7c3aed;
+}
+
+/* ── Reactour custom styles ─────────────────────────────── */
+
+
+.reactour__popover {
+  font-size: 17px !important;
+  line-height: 1.5 !important;
+}
+
+.reactour__popover h4 {
+  font-size: 20px !important;
+}
+
+button[aria-label="Go to prev step"] svg,
+button[aria-label="Go to next step"] svg {
+  color: #fff !important;
+}
+
+button[aria-label="Go to prev step"] svg path,
+button[aria-label="Go to next step"] svg path {
+  stroke: #fff !important;
+}
+
+button[aria-label="Go to prev step"][disabled] svg,
+button[aria-label="Go to next step"][disabled] svg {
+  color: rgba(0, 0, 0, 0.55) !important;
+}
+
+button[aria-label="Go to prev step"][disabled] svg path,
+button[aria-label="Go to next step"][disabled] svg path {
+  stroke: rgba(0, 0, 0, 0.55) !important;
+  opacity: 0.7 !important;
+}
+
+
+.reactour__mask rect {
+  rx: 14px;
+}
+
+.reactour__mask rect[width="100%"],
+.reactour__mask rect[height="100%"] {
+  opacity: 0 !important;
+}
+
+.lesson-card {
+  width: 240px;
+  min-height: 220px;
+  border-radius: 14px;
 }
