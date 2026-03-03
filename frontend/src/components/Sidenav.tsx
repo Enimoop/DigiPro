@@ -5,6 +5,8 @@ import { Collapse, Container, Nav, Navbar, Spinner } from "react-bootstrap";
 import logo from "../assets/logo.svg";
 import SettingsMenu from "./SettingsMenu";
 import { useModules } from "../modules/ModulesProvider";
+import marianne from "../assets/marianne.svg";
+import valdoise from "../assets/valdoise.png";
 
 type NavItem = {
   id: string;
@@ -20,7 +22,6 @@ export default function Sidenav() {
   const location = useLocation();
   const { modules, loading, error } = useModules();
 
-  // Build nav items from API modules
   const items: NavItem[] = useMemo(() => {
     const moduleChildren: NavItem[] = (modules ?? []).map((m) => ({
       id: `module-${m.slug}`,
@@ -31,18 +32,8 @@ export default function Sidenav() {
     }));
 
     return [
-      {
-        id: "home",
-        title: "Home",
-        url: "/home",
-        icon: "home",
-      },
-      {
-        id: "modules",
-        title: "Modules",
-        icon: "grid",
-        children: moduleChildren,
-      },
+      { id: "home", title: "Home", url: "/home", icon: "home" },
+      { id: "modules", title: "Modules", icon: "grid", children: moduleChildren },
     ];
   }, [modules]);
 
@@ -71,16 +62,6 @@ export default function Sidenav() {
   const isExpanded = (it: NavItem) => {
     if (it.id === openId) return true;
     return isParentOfActive(it, activeId);
-  };
-
-  const renderItems = (list: NavItem[]) => {
-    return list.map((it, idx) => (
-      <div key={it.id}>
-        {idx > 0 && <hr className="navbar-divider" />}
-        {it.heading && <h6 className="navbar-heading">{it.title}</h6>}
-        {!it.heading && <Nav className="flex-column">{renderSubitems([it])}</Nav>}
-      </div>
-    ));
   };
 
   const renderSubitems = (list: NavItem[]) => {
@@ -136,11 +117,18 @@ export default function Sidenav() {
     ));
   };
 
-  // ✅ Footer avec 3 icônes chacune ciblable par le tour
+  const renderItems = (list: NavItem[]) => {
+    return list.map((it, idx) => (
+      <div key={it.id}>
+        {idx > 0 && <hr className="navbar-divider" />}
+        {!it.heading && <Nav className="flex-column">{renderSubitems([it])}</Nav>}
+      </div>
+    ));
+  };
+
   const footer = (
     <div className="navbar-user mt-auto mb-md-4">
       <Nav className="flex-row justify-content-around">
-        {/* À propos */}
         <Nav.Link
           data-tour="bottom-about"
           as="button"
@@ -150,7 +138,6 @@ export default function Sidenav() {
           <FeatherIcon icon="info" size="17" />
         </Nav.Link>
 
-        {/* Profil */}
         <NavLink
           data-tour="bottom-profile"
           to="/user"
@@ -159,7 +146,6 @@ export default function Sidenav() {
           <FeatherIcon icon="user" size="17" />
         </NavLink>
 
-        {/* Settings */}
         <div data-tour="bottom-settings">
           <SettingsMenu />
         </div>
@@ -175,12 +161,26 @@ export default function Sidenav() {
       data-tour="nav-sidebar"
     >
       <Container fluid>
-        {/* Burger (mobile) */}
         <Navbar.Toggle data-tour="burger" />
 
+        {/* Logo DigiPro (inchangé) */}
         <Navbar.Brand as={NavLink} to="/dashboard">
           <img className="navbar-brand-img" src={logo} alt="DigiPro" />
         </Navbar.Brand>
+
+        {/* Logos partenaires PLUS GROS */}
+        <div className="d-flex justify-content-center gap-4 mt-3 mb-3 px-3">
+          <img
+            src={marianne}
+            alt="République Française"
+            style={{ height: 42, width: "auto" }}
+          />
+          <img
+            src={valdoise}
+            alt="Val d’Oise"
+            style={{ height: 42, width: "auto" }}
+          />
+        </div>
 
         <Navbar.Collapse>
           {loading && (
