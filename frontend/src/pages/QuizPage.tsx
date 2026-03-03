@@ -38,6 +38,12 @@ export default function QuizPage() {
   const quizData = getQuizDataByThemeSlug(themeId);
   if (!quizData) return <div>Aucune donnée de quiz pour ce thème.</div>;
 
+  const themesWithGame = [
+    "passwords",
+  ];
+
+  const hasGame = themesWithGame.includes(themeId);
+
   return (
     <>
       <Header className="mt-md-5">
@@ -59,7 +65,11 @@ export default function QuizPage() {
         onFinish={({ correct, total }) => {
           console.log("Résultat:", correct, "/", total);
         }}
-        onGoToGame={() => navigate(`/modules/${moduleId}/${themeId}/game`)}
+        onGoToGame={
+          hasGame
+            ? () => navigate(`/modules/${moduleId}/${themeId}/game`)
+            : undefined
+        }
       />
     </>
   );
