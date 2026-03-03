@@ -84,6 +84,6 @@ export const emailLessonData: LessonData = {
     },
   ],
   end: {
-    redirectTo: "/modules/email/phishing/quiz",,
+    redirectTo: "/modules/email/phishing/quiz",
   },
 } as const;

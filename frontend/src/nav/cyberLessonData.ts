@@ -7,15 +7,32 @@ export const cyberLessonData : LessonData = {
       title: "Comment créer un bon mot de passe ?", // Titre en bleu foncé (#1a237e)
       content: `
 **Pourquoi c’est important ?** <!-- En gras et vert (#2e7d32) -->
+
 Un mot de passe solide protège vos comptes (e-mails, réseaux sociaux, banque) contre les pirates.
 
 **Les 3 règles de base (selon la CNIL) :**
-<span style="color: #2e7d32;">✅ **Long et unique**</span> : Au moins 12 caractères, différent pour chaque site.
-<span style="color: #2e7d32;">✅ **Pas d’infos personnelles**</span> : Évitez votre nom, date de naissance, ou celui de vos enfants.
-<span style="color: #2e7d32;">✅ **Facile à retenir**</span> : Utilisez une phrase simple avec des majuscules et des symboles.
 
-**Exemple :** <!-- Fond jaune clair (#fff9c4) pour mettre en valeur -->
-"J’adoreLesPizzasDuVendredi!2024"
+- <span style="color: #2e7d32;">✅ **Long et unique**</span> : Au moins 12 caractères, différent pour chaque site.
+
+- <span style="color: #2e7d32;">✅ **Pas d’infos personnelles**</span> : Évitez votre nom, date de naissance, ou celui de vos enfants.
+
+- <span style="color: #2e7d32;">✅ **Facile à retenir**</span> : Utilisez une phrase simple avec des majuscules et des symboles.
+
+<div class="box-info">
+Pour les infos
+</div>
+
+<div class="box-success">
+pour les trucs en vert
+</div>
+
+<div class="box-danger">
+pour les trucs en rouge
+</div>
+
+Exemple :
+
+\`J’adoreLesPizzasDuVendredi!2024\`
       `,
     },
 
