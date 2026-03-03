@@ -36,9 +36,8 @@ Un mot de passe solide protège vos comptes (e-mails, réseaux sociaux, banque) 
 
 <span style="color: #e03636;">**À éviter :**</span>
 <span style="color: #e03636;">❌ Le même mot de passe partout.</span>
-<span style="color: #e03636;">❌ L’écrire sur un post-it ou dans un fichier non protégé.</span>
-<span style="color: #e03636;">❌ Des mots trop simples comme "123456" ou "motdepasse".</span>
-<span style="color: #e03636;">❌ L'écrire sur un post-it ou autre support visible de tous.</span>
+<span style="color: #e03636;">❌ Des mots trop simples</span> comme "123456" ou "motdepasse".
+<span style="color: #e03636;">❌ L'écrire sur un post-it</span> ou autre support visible de tous.
 
 <div class="box-danger">
 Un mot de passe long mais réutilisé est **aussi dangereux** qu’un mot de passe faible !
@@ -54,12 +53,12 @@ Un mot de passe long mais réutilisé est **aussi dangereux** qu’un mot de pas
 Une sécurité en plus : même si un pirate devine votre mot de passe, il lui manquera un **second code** (envoyé sur votre téléphone).
 
 <span style="color: #7C3AED;">**Comment ça marche ?**</span>
-1. Vous entrez votre mot de passe.
-2. Le site vous demande un **code supplémentaire** (par SMS, application, ou notification).
+- Vous entrez votre mot de passe.
+- Le site vous demande un **code supplémentaire** (par SMS, application, ou notification).
 
 <span style="color: #7C3AED;">**Pourquoi l’activer ?**</span>
-→ Protège contre 99% des tentatives de piratage.
-→ Indispensable pour les e-mails et comptes bancaires.
+- Protège contre 99% des tentatives de piratage.
+- Indispensable pour les e-mails et comptes bancaires.
 
 <div class="box-info">
 **Exemples d’applications :** Google Authenticator, Microsoft Authenticator.
@@ -95,9 +94,9 @@ Vous n’avez plus qu’**un seul mot de passe à retenir** : celui du gestionna
       title: "Les pièges à éviter", // Titre en bleu foncé (#1a237e)
       content: `
 <span style="color: #7C3AED;">**Erreurs fréquentes :**</span>
-<span style="color: #e03636;">❌ **Partager son mot de passe** (même avec un proche).</span>
-<span style="color: #e03636;">❌ **Réutiliser le même mot de passe** (sur plusieurs sites différents).</span>
-<span style="color: #e03636;">❌ **Attention au Phishing** (liens suspects, faux e-mails de banque, réseaux sociaux…).</span>
+<span style="color: #e03636;">❌ **Partager son mot de passe**</span> (même avec un proche).
+<span style="color: #e03636;">❌ **Réutiliser le même mot de passe**</span> (sur plusieurs sites différents).
+<span style="color: #e03636;">❌ **Attention au Phishing**</span> (liens suspects, faux e-mails de banque, réseaux sociaux…).
 
 <div class="box-success">
 **Règle d’or :** *Aucun service sérieux ne vous demandera votre mot de passe par e-mail ou téléphone.*
