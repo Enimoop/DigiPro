@@ -104,9 +104,9 @@ export default function OnboardingTour({ open, isMobile, onClose }: Props) {
       },
       {
         selector: '[data-tour="intro-modules"]',
-        title: "Choisis un module 🙂",
+        title: "Choisir un module 🙂",
         text: "Cliquez maintenant sur une carte module. Le tuto continuera automatiquement dans le module.",
-        stepInteraction: true, // ✅ autorise clic module
+        stepInteraction: true,
       },
     ];
 
@@ -128,7 +128,6 @@ export default function OnboardingTour({ open, isMobile, onClose }: Props) {
         selector: '[data-tour="lesson-card"]',
         title: "Les thèmes",
         text: "Voici un thème. Il suffit de cliquer sur la carte pour démarrer la leçon.",
-        stepInteraction: true, // ✅ autorise clic theme
       },
       {
         selector: "body",
