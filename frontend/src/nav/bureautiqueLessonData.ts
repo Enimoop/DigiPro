@@ -5,18 +5,19 @@ export const bureautiqueLessonData: LessonData = {
   lessons: [
     {
       id: "1",
-      title: "C’est quoi une extension ?", // Titre en bleu (#1565c0)
+      title: "C’est quoi une extension de fichier ?", // Titre en bleu (#1565c0)
       content: `
-**C’est comme une étiquette sur une boîte** :
-- <span style="color: #1565c0;">*Lettre.**docx*</span> → Boîte "Document Word".
-- <span style="color: #1565c0;">*Photo.**jpg*</span> → Boîte "Image".
+<span style="color: #7C3AED;">**C’est comme une étiquette sur une boîte** :</span>
+*Lettre* *(rapport.docx)* → Boîte "Document Word".
+*Photo* *(vacances.jpg)* → Boîte "Image".
 
-**Pourquoi c’est utile ?**
-→ Votre ordinateur sait **avec quel outil ouvrir la boîte**.
-→ Exemple : *.docx* = ciseaux (Word), *.mp3* = tournevis (lecteur musique).
+<span style="color: #7C3AED;">**Pourquoi c’est utile ?**</span>
+- Votre ordinateur sait **avec quel outil ouvrir la boîte**.
+- Exemple : *rapport.docx* = Word, *vacances.jpg* = (lecteur de photos).
 
-**:warning: Attention :**
-<span style="color: #c62828;">Ne renommez pas *Chat.**jpg* en *Chat.**mp3* → ça ne deviendra pas une musique !</span>
+<div class="box-danger">
+**Attention :** Ne renommez pas *Chat.jpg* en *Chat.mp3* → ça ne deviendra pas une musique !
+</div>
       `,
     },
 
@@ -24,14 +25,20 @@ export const bureautiqueLessonData: LessonData = {
       id: "2",
       title: "📄 Documents et tableaux", // Titre + emoji
       content: `
-**Documents texte :**
-<span style="color: #2e7d32;">.txt</span> (Bloc-notes), <span style="color: #2e7d32;">.docx</span> (Word), <span style="color: #2e7d32;">.odt</span> (LibreOffice)
+<div class="box-info">
+<span style="color: #7C3AED;">**Documents texte :**</span>
+.txt (Bloc-notes), .docx (Word), .odt (LibreOffice)
+</div>
 
-**Tableaux :**
-<span style="color: #2e7d32;">.xlsx</span> (Excel), <span style="color: #2e7d32;">.ods</span> (LibreOffice), <span style="color: #2e7d32;">.csv</span> (liste simple)
+<div class="box-info">
+<span style="color: #7C3AED;">**Tableaux :**</span>
+.xlsx (Excel), .ods(LibreOffice), .csv (liste simple)
+</div>
 
-**PDF :**
-<span style="color: #2e7d32;">.pdf</span> (document à lire, non modifiable)
+<div class="box-info">
+<span style="color: #7C3AED;">**PDF :**</span>
+.pdf (document à lire, non modifiable)
+</div>
       `,
     },
 
@@ -39,14 +46,20 @@ export const bureautiqueLessonData: LessonData = {
       id: "3",
       title: "🎵🖼️🎬 Multimédia", // Titre + emojis
       content: `
+<div class="box-info">
 **Fichiers audio :**
-<span style="color: #2e7d32;">.mp3</span>, <span style="color: #2e7d32;">.wav</span>
+.mp3 (standard), .wav (haute qualité)
+</div>
 
+<div class="box-info">
 **Images :**
-<span style="color: #2e7d32;">.jpg</span>, <span style="color: #2e7d32;">.png</span>, <span style="color: #2e7d32;">.gif</span>
+.jpg, .jpeg, .png (arrière-plan transparent), .gif (image animée)
+</div>
 
+<div class="box-info">
 **Vidéos :**
-<span style="color: #2e7d32;">.mp4</span>, <span style="color: #2e7d32;">.mkv</span>, <span style="color: #2e7d32;">.avi</span>
+.mp4 (standard), .avi, .mkv (haute qualité)
+</div>
       `,
     },
 
@@ -54,12 +67,20 @@ export const bureautiqueLessonData: LessonData = {
       id: "4",
       title: "⚠️ Fichiers exécutables (ATTENTION)", // Titre en rouge
       content: `
-**Programmes et scripts :**
-<span style="color: #c62828;">.exe</span>, <span style="color: #c62828;">.msi</span> Installeurs de logiciels. 
-<span style="color: #c62828;">.bat</span>, <span style="color: #c62828;">.cmd</span> Exécutent des commandes <span style="color: #c62828;">**(Ne surtout pas ouvrir).**</span>
+<span style="color: #7C3AED;">**Programmes et scripts :**</span>
 
-**Règle de sécurité :**
-<span style="color: #c62828;">❌ Ne jamais ouvrir un fichier exécutable si tu ne connais pas sa source ou ce qu'il fait.</span>
+<div class="box-info">
+.exe, .msi installateurs de logiciels. 
+</div>
+
+<div class="box-info">
+.bat, .cmd Exécutent des commandes <span style="color: #e03636;">**(Ne surtout pas ouvrir).**</span>
+</div>
+
+
+<div class="box-danger">
+**Règle de sécurité :** ❌ Ne jamais ouvrir un fichier exécutable si vous ne connaissez pas sa source ou ce qu'il fait.
+</div>
       `,
     },
 
@@ -67,13 +88,17 @@ export const bureautiqueLessonData: LessonData = {
       id: "5",
       title: "Afficher les extensions", // Titre en bleu
       content: `
+<div class="box-info">
 **Sur Windows :**
-1. Ouvre un dossier.
-2. Clique sur **Affichage** → coche **Extensions de nom de fichier**.
+1. Ouvrez un dossier.
+2. Cliquez sur **Affichage** (en haut de la fenêtre) → cochez **Extensions de nom de fichier**.
+</div>
 
+<div class="box-info">
 **Exemple :**
-<span style="color: #2e7d32;">✔ Vacances.jpg</span> (sûr)
-<span style="color: #c62828;">❌ Document.pdf.exe</span> (dangereux)
+<span style="color: #1ad927;">Vacances.jpg</span> (sûr)
+<span style="color: #e03636;">Document.pdf.exe</span> (dangereux)
+</div>
       `,
     },
   ],
