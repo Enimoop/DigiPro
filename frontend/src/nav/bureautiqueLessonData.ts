@@ -30,19 +30,19 @@ export const bureautiqueLessonData: LessonData = {
       content: `
 <div class="box-info">
 
-<span style="color: #7C3AED;">**Documents texte :**</span>
+**Documents texte :**
 .txt (Bloc-notes), .docx (Word), .odt (LibreOffice)
 </div>
 
 <div class="box-info">
 
-<span style="color: #7C3AED;">**Tableaux :**</span>
+**Tableaux :**
 .xlsx (Excel), .ods(LibreOffice), .csv (liste simple)
 </div>
 
 <div class="box-info">
 
-<span style="color: #7C3AED;">**PDF :**</span>
+**PDF :**
 .pdf (document à lire, non modifiable)
 </div>
       `,

@@ -246,7 +246,7 @@ html.dark-mode .section-divider::after {
 }
 
 html.dark-mode .header {
-  background-color: #151827 !important;
+  background-color: #1a1d2e !important;
   border-color: #2d3148 !important;
 }
 
@@ -1076,4 +1076,753 @@ button[aria-label="Go to next step"][disabled] svg path {
   .phishing-email-time {
     display: none;
   }
+}
+
+/* ===== DARK MODE & HIGH CONTRAST FIXES ===== */
+
+/* ── Dark mode for buttons ────────────────────────────── */
+html.dark-mode .btn-purple {
+  background-color: #a78bfa !important;
+  border-color: #a78bfa !important;
+  color: #1f2937 !important;
+}
+
+html.dark-mode .btn-purple:hover,
+html.dark-mode .btn-purple:focus {
+  background-color: #c4b5fd !important;
+  border-color: #c4b5fd !important;
+  color: #1f2937 !important;
+}
+
+html.dark-mode .btn-purple:active {
+  background-color: #9f7aea !important;
+  border-color: #9f7aea !important;
+}
+
+html.dark-mode .btn-white,
+html.dark-mode .btn-light,
+html.dark-mode .btn-outline-primary {
+  color: #d1d5db !important;
+  border-color: #4b5563 !important;
+}
+
+html.dark-mode .btn-white:hover,
+html.dark-mode .btn-light:hover,
+html.dark-mode .btn-outline-primary:hover {
+  background-color: #374151 !important;
+  color: #fff !important;
+}
+
+/* ── Dark mode for Bureautique game ────────────────────────────── */
+html.dark-mode .bureautique-box {
+  background: #2d3748 !important;
+  border-color: #4b5563 !important;
+  color: #e5e7eb !important;
+}
+
+html.dark-mode .bureautique-box-icon {
+  color: #a78bfa;
+}
+
+html.dark-mode .bureautique-box-content {
+  color: #d1d5db;
+}
+
+html.dark-mode .bureautique-box:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+html.dark-mode .bureautique-box.feedback-success {
+  background: #064e3b !important;
+  border-color: #10b981 !important;
+}
+
+html.dark-mode .bureautique-box.feedback-error {
+  background: #7f1d1d !important;
+  border-color: #fca5a5 !important;
+}
+
+html.dark-mode .bureautique-progress {
+  background-color: #374151 !important;
+}
+
+html.dark-mode .bureautique-box {
+  background: #2d3748 !important;
+  border-color: #4b5563 !important;
+  color: #e5e7eb !important;
+}
+
+html.dark-mode .bureautique-box:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+html.dark-mode .bureautique-box-content {
+  color: #d1d5db;
+}
+
+html.dark-mode .bureautique-box-content > div {
+  color: #e5e7eb !important;
+}
+
+html.dark-mode .bureautique-file {
+  background: #1f2937 !important;
+  border-color: #4b5563 !important;
+  color: #d1d5db !important;
+}
+
+html.dark-mode .bureautique-file:hover {
+  background: #2d3748 !important;
+  border-color: #6b7280 !important;
+}
+
+html.dark-mode .bureautique-file.dragging {
+  background: #374151 !important;
+  opacity: 0.8;
+}
+
+html.dark-mode .bureautique-box.feedback-success {
+  background: #064e3b !important;
+  border-color: #10b981 !important;
+  color: #d1f5e8 !important;
+}
+
+html.dark-mode .bureautique-box.feedback-error {
+  background: #7f1d1d !important;
+  border-color: #fca5a5 !important;
+  color: #fecaca !important;
+}
+
+html.dark-mode .bureautique-progress {
+  background-color: #374151 !important;
+}
+
+/* ── Dark mode for Phishing game ────────────────────────────── */
+html.dark-mode .phishing-progress {
+  background-color: #374151;
+}
+
+html.dark-mode .phishing-email-container {
+  background: #2d3748 !important;
+  border-color: #4b5563 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+html.dark-mode .phishing-email-header {
+  background: #1f2937 !important;
+  border-color: #374151 !important;
+  color: #e5e7eb;
+}
+
+html.dark-mode .phishing-email-name {
+  color: #f3f4f6 !important;
+}
+
+html.dark-mode .phishing-email-addr {
+  color: #9ca3af !important;
+}
+
+html.dark-mode .phishing-email-time {
+  color: #6b7280 !important;
+}
+
+html.dark-mode .phishing-email-subject {
+  color: #f3f4f6 !important;
+}
+
+html.dark-mode .phishing-email-body {
+  color: #d1d5db !important;
+  border-color: #374151 !important;
+}
+
+html.dark-mode .phishing-email-container.feedback-correct {
+  background: #064e3b !important;
+  border-color: #10b981 !important;
+}
+
+html.dark-mode .phishing-email-container.feedback-wrong {
+  background: #7f1d1d !important;
+  border-color: #fca5a5 !important;
+}
+
+html.dark-mode .phishing-red-flags {
+  background: #2d3748 !important;
+  border-color: #4b5563 !important;
+  color: #d1d5db !important;
+}
+
+html.dark-mode .phishing-red-flags li {
+  color: #e5e7eb !important;
+}
+
+html.dark-mode .phishing-red-flags-inline {
+  background: #1f2937 !important;
+  border-left-color: #6b7280 !important;
+}
+
+html.dark-mode .phishing-red-flags-inline strong {
+  color: #a78bfa !important;
+}
+
+html.dark-mode .phishing-red-flags-inline li {
+  color: #d1d5db !important;
+}
+
+html.dark-mode .phishing-red-flags-inline li:before {
+  color: #a78bfa !important;
+}
+
+/* ── High contrast mode for buttons ────────────────────────────── */
+html.high-contrast .btn-purple {
+  background-color: #ffff00 !important;
+  border-color: #000 !important;
+  color: #000 !important;
+}
+
+html.high-contrast .btn-purple:hover,
+html.high-contrast .btn-purple:focus {
+  background-color: #ffff00 !important;
+  border-color: #000 !important;
+  color: #000 !important;
+}
+
+html.high-contrast .btn-white,
+html.high-contrast .btn-light,
+html.high-contrast .btn-outline-primary {
+  background-color: #000 !important;
+  border-color: #fff !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast .btn-white:hover,
+html.high-contrast .btn-light:hover,
+html.high-contrast .btn-outline-primary:hover {
+  background-color: #fff !important;
+  border-color: #000 !important;
+  color: #000 !important;
+}
+
+/* ── High contrast mode for Bureautique game ────────────────────────────── */
+html.high-contrast .bureautique-box {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast .bureautique-box-content {
+  color: #ffff00;
+}
+
+html.high-contrast .bureautique-box-content > div {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .bureautique-file {
+  background: #000 !important;
+  border: 2px dashed #fff !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast .bureautique-file:hover {
+  background: #fff !important;
+  border-color: #000 !important;
+  color: #000 !important;
+}
+
+html.dark-mode .bureautique-tutorial-modal .modal-content {
+  background: #2d3748 !important;
+  border-color: #4b5563 !important;
+}
+
+html.dark-mode .bureautique-tutorial-modal .modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border-radius: 16px 16px 0 0;
+  color: #fff;
+}
+
+html.dark-mode .bureautique-tutorial-body {
+  background: #2d3748;
+  color: #d1d5db;
+}
+
+html.dark-mode .bureautique-tutorial-demo {
+  background: #1f2937 !important;
+  border: 1px solid #4b5563;
+}
+
+html.dark-mode .tutorial-file {
+  background: #374151 !important;
+  border-color: #4b5563 !important;
+  color: #e5e7eb !important;
+}
+
+html.dark-mode .tutorial-box {
+  background: #374151 !important;
+  border-color: #4b5563 !important;
+  color: #e5e7eb !important;
+}
+
+html.dark-mode .tutorial-box.highlight {
+  border-color: #667eea !important;
+  background: #2d1f4d !important;
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.4) !important;
+}
+
+html.dark-mode .tutorial-arrow {
+  color: #a78bfa !important;
+}
+
+html.dark-mode .tutorial-instructions h5 {
+  color: #f3f4f6 !important;
+}
+
+html.dark-mode .instruction-step div:last-child {
+  color: #d1d5db !important;
+}
+
+html.dark-mode .step-number {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+html.dark-mode .tutorial-note {
+  background: #3c2365 !important;
+  border-color: #6b5b95 !important;
+  color: #e5e7eb !important;
+}
+
+html.dark-mode .tutorial-note strong {
+  color: #c4b5fd !important;
+}
+
+html.high-contrast .bureautique-box.feedback-success {
+  background: #000 !important;
+  border-color: #00ff00 !important;
+  color: #00ff00 !important;
+}
+
+html.high-contrast .bureautique-box.feedback-error {
+  background: #000 !important;
+  border-color: #ff0000 !important;
+  color: #ff0000 !important;
+}
+
+html.high-contrast .bureautique-progress {
+  background-color: #fff !important;
+}
+
+html.high-contrast .bureautique-progress .progress-bar {
+  background: #ffff00 !important;
+}
+
+/* ── High contrast mode for Tutorial ────────────────────────────── */
+html.high-contrast .bureautique-tutorial-modal .modal-content {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #ffff00;
+}
+
+html.high-contrast .bureautique-tutorial-modal .modal-header {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  border-bottom: 2px solid #fff !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast .bureautique-tutorial-modal .modal-header .btn-close {
+  filter: brightness(0) invert(1) !important;
+}
+
+html.high-contrast .bureautique-tutorial-body {
+  background: #000;
+  color: #ffff00;
+  border: 1px solid #fff;
+}
+
+html.high-contrast .bureautique-tutorial-demo {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+html.high-contrast .tutorial-file {
+  background: #000 !important;
+  border: 2px dashed #fff !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast .tutorial-file.dragging-animation {
+  background: #666 !important;
+}
+
+html.high-contrast .tutorial-box {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast .tutorial-box.highlight {
+  border: 2px solid #ffff00 !important;
+  background: #000 !important;
+  box-shadow: 0 0 20px rgba(255, 255, 0, 0.6) !important;
+}
+
+html.high-contrast .tutorial-arrow {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .tutorial-instructions h5 {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .instruction-step div:last-child {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .step-number {
+  background: #ffff00 !important;
+  color: #000 !important;
+  border: 1px solid #000;
+}
+
+html.high-contrast .tutorial-checkmark {
+  color: #00ff00 !important;
+}
+
+html.high-contrast .tutorial-note {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast .tutorial-note strong {
+  color: #ffff00 !important;
+}
+
+/* ── High contrast mode for Phishing game ────────────────────────────── */
+html.high-contrast .phishing-progress {
+  background-color: #fff !important;
+}
+
+html.high-contrast .phishing-progress .progress-bar {
+  background: #ffff00 !important;
+}
+
+html.high-contrast .phishing-email-container {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  box-shadow: none;
+  color: #ffff00;
+}
+
+html.high-contrast .phishing-email-header {
+  background: #000 !important;
+  border: 1px solid #fff !important;
+}
+
+html.high-contrast .phishing-email-name {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .phishing-email-addr {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .phishing-email-time {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .phishing-email-subject {
+  color: #ffff00 !important;
+  border: none;
+}
+
+html.high-contrast .phishing-email-body {
+  color: #ffff00 !important;
+  border: 1px solid #fff !important;
+  background: #000 !important;
+}
+
+html.high-contrast .phishing-avatar {
+  background: #fff !important;
+  color: #000 !important;
+}
+
+html.high-contrast .phishing-email-container.feedback-correct {
+  background: #000 !important;
+  border-color: #00ff00 !important;
+}
+
+html.high-contrast .phishing-email-container.feedback-wrong {
+  background: #000 !important;
+  border-color: #ff0000 !important;
+}
+
+html.high-contrast .phishing-red-flags {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast .phishing-red-flags li {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .phishing-red-flags-inline {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+html.high-contrast .phishing-red-flags-inline strong {
+  color: #ffff00 !important;
+}
+
+/* ── High contrast mode for Phishing game ────────────────────────────── */
+html.high-contrast .phishing-progress {
+  background-color: #fff !important;
+}
+
+html.high-contrast .phishing-progress .progress-bar {
+  background: #ffff00 !important;
+}
+
+html.high-contrast .phishing-email-container {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  box-shadow: none;
+  color: #ffff00;
+}
+
+html.high-contrast .phishing-email-header {
+  background: #000 !important;
+  border: 1px solid #fff !important;
+}
+
+html.high-contrast .phishing-email-name {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .phishing-email-addr {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .phishing-email-time {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .phishing-email-subject {
+  color: #ffff00 !important;
+  border: none;
+}
+
+html.high-contrast .phishing-email-body {
+  color: #ffff00 !important;
+  border: 1px solid #fff !important;
+  background: #000 !important;
+}
+
+html.high-contrast .phishing-avatar {
+  background: #fff !important;
+  color: #000 !important;
+}
+
+html.high-contrast .phishing-email-container.feedback-correct {
+  background: #000 !important;
+  border-color: #00ff00 !important;
+}
+
+html.high-contrast .phishing-email-container.feedback-wrong {
+  background: #000 !important;
+  border-color: #ff0000 !important;
+}
+
+html.high-contrast .phishing-red-flags {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast .phishing-red-flags li {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .phishing-red-flags-inline {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+html.high-contrast .phishing-red-flags-inline strong {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .phishing-red-flags-inline li {
+  color: #ffff00 !important;
+}
+
+/* ── Dark mode for lesson cards and theme buttons ────────────────────────────── */
+html.dark-mode .bg-purple-soft {
+  background-color: rgba(167, 139, 250, 0.25) !important;
+  color: #c4b5fd !important;
+}
+
+html.dark-mode .icon-circle {
+  color: #c4b5fd !important;
+}
+
+html.dark-mode .btn-start {
+  background-color: #2d3748 !important;
+  border-color: #4b5563 !important;
+  color: #a78bfa !important;
+}
+
+html.dark-mode .module-clickable:hover .btn-start {
+  background-color: #4b5563 !important;
+  border-color: #6b7280 !important;
+  color: #c4b5fd !important;
+}
+
+html.dark-mode .module-card:hover {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark-mode .module-card:hover {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark-mode .lesson-card {
+  background: #2d3748 !important;
+  color: #e5e7eb !important;
+}
+
+html.dark-mode .section-divider::after {
+  border-color: #4b5563 !important;
+}
+
+html.dark-mode .box-success {
+  background: #064e3b !important;
+  border-left-color: #10b981 !important;
+  color: #d1f5e8 !important;
+}
+
+html.dark-mode .box-danger {
+  background: #7f1d1d !important;
+  border-left-color: #fca5a5 !important;
+  color: #fecaca !important;
+}
+
+html.dark-mode .box-info {
+  background: #3c2365 !important;
+  border-left-color: #c4b5fd !important;
+  color: #ede9fe !important;
+}
+
+html.dark-mode .text-success-soft,
+html.dark-mode .text-danger-soft,
+html.dark-mode .text-info-soft {
+  color: #e5e7eb !important;
+}
+
+/* ── High contrast mode for lesson cards and theme buttons ────────────────────────────── */
+html.high-contrast .bg-purple-soft {
+  background-color: #ffff00 !important;
+}
+
+html.high-contrast .btn-start {
+  background-color: #000 !important;
+  border-color: #fff !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast .module-clickable:hover .btn-start {
+  background-color: #ffff00 !important;
+  border-color: #ffff00 !important;
+  color: #000 !important;
+}
+
+html.high-contrast .lesson-card {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast .text-purple {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .icon-circle {
+  background: #fff !important;
+  border: 2px solid #ffff00 !important;
+  color: #000 !important;
+}
+
+html.high-contrast .bg-purple-soft {
+  background-color: #fff !important;
+  border: 2px solid #ffff00;
+  color: #000 !important;
+}
+
+html.high-contrast .module-clickable {
+  border: 2px solid #ffff00 !important;
+}
+
+html.high-contrast .module-clickable:hover {
+  background: #ffff00 !important;
+  color: #000 !important;
+  border-color: #000 !important;
+}
+
+html.high-contrast .module-clickable:hover .icon-circle {
+  background: #ffff00 !important;
+  border-color: #000 !important;
+  color: #000 !important;
+}
+
+html.high-contrast .module-clickable:hover h4 {
+  color: #000 !important;
+}
+
+html.high-contrast .module-clickable:hover p {
+  color: #000 !important;
+}
+
+html.high-contrast .module-clickable:hover .text-muted {
+  color: #000 !important;
+}
+
+html.high-contrast .module-clickable:hover .text-purple {
+  color: #000 !important;
+}
+
+html.high-contrast .module-clickable:hover .btn-start {
+  background: #000 !important;
+  border-color: #000 !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast .section-divider::after {
+  border-color: #fff !important;
+}
+
+html.high-contrast .box-success {
+  background: #000 !important;
+  border: 2px solid #00ff00 !important;
+  border-left: 4px solid #00ff00 !important;
+  color: #00ff00 !important;
+}
+
+html.high-contrast .box-danger {
+  background: #000 !important;
+  border: 2px solid #ff0000 !important;
+  border-left: 4px solid #ff0000 !important;
+  color: #ff0000 !important;
+}
+
+html.high-contrast .box-info {
+  background: #000 !important;
+  border: 2px solid #ffff00 !important;
+  border-left: 4px solid #ffff00 !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast .text-success-soft,
+html.high-contrast .text-danger-soft,
+html.high-contrast .text-info-soft {
+  color: #ffff00 !important;
 }
