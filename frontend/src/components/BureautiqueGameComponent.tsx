@@ -64,11 +64,20 @@ export default function BureautiqueGameComponent({ }: Props) {
   const [feedbackBox, setFeedbackBox] = useState<string | null>(null);
   const [feedbackType, setFeedbackType] = useState<"success" | "error" | null>(null);
   const [showTutorial, setShowTutorial] = useState(true);
+  const [isMobile] = useState(() => {
+
+    return (
+      navigator.maxTouchPoints > 0 ||
+      'ontouchstart' in window ||
+      navigator.userAgent.match(/iPad|iPhone|Android/i) !== null
+    );
+  });
 
   const currentFile = FILES[currentFileIndex];
   const progress = ((currentFileIndex + 1) / FILES.length) * 100;
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    if (isMobile) return;
     setIsDragging(true);
     setDraggedFileId(currentFile.id);
     e.dataTransfer.effectAllowed = "move";
@@ -80,12 +89,13 @@ export default function BureautiqueGameComponent({ }: Props) {
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    if (isMobile) return;
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
   };
 
-  const handleDropOnBox = (boxId: string) => {
-    if (!draggedFileId) return;
+  const handleDropOrClick = (boxId: string) => {
+    if (!isMobile && !draggedFileId) return;
 
     setFeedbackBox(boxId);
 
@@ -196,20 +206,28 @@ export default function BureautiqueGameComponent({ }: Props) {
               <ProgressBar now={progress} className="bureautique-progress" />
             </div>
 
-            <h2 className="text-center mb-4">Classez le fichier dans la bonne boîte</h2>
+            <h2 className="text-center mb-4">
+              {isMobile ? "Cliquez sur la bonne boîte" : "Classez le fichier dans la bonne boîte"}
+            </h2>
 
-            {/* Fichier à glisser */}
+            {/* Fichier à glisser ou mode mobile */}
             <Row className="justify-content-center mb-5">
               <Col xs={12} className="text-center">
                 <div
-                  draggable
+                  draggable={!isMobile}
                   onDragStart={handleDragStart}
                   onDragEnd={handleDragEnd}
                   className={`bureautique-file ${isDragging ? "dragging" : ""}`}
+                  style={{ cursor: isMobile ? "default" : "grab" }}
                 >
                   <FeatherIcon icon="file" size={56} className="mb-2" />
                   <div className="fw-bold fs-4">{currentFile.name}</div>
                   <div className="text-muted" style={{ fontSize: "1.1rem" }}>{currentFile.extension}</div>
+                  {isMobile && (
+                    <div className="text-info-soft" style={{ fontSize: "0.9rem", marginTop: "0.5rem" }}>
+                      ☝️ Cliquez sur la bonne boîte ci-dessous
+                    </div>
+                  )}
                 </div>
               </Col>
             </Row>
@@ -217,10 +235,11 @@ export default function BureautiqueGameComponent({ }: Props) {
             {/* Boîtes de destination */}
             <Row className="g-3">
               {BOXES.map((box) => (
-                <Col xs={12} sm={6} lg={4} key={box.id}>
+                <Col xs={6} sm={6} md={6} lg={6} xl={4} key={box.id}>
                   <div
                     onDragOver={handleDragOver}
-                    onDrop={() => handleDropOnBox(box.id)}
+                    onDrop={() => handleDropOrClick(box.id)}
+                    onClick={() => isMobile && handleDropOrClick(box.id)}
                     className={`bureautique-box ${feedbackBox === box.id ? `feedback-${feedbackType}` : ""
                       }`}
                     style={{
@@ -229,6 +248,7 @@ export default function BureautiqueGameComponent({ }: Props) {
                         feedbackBox === box.id && feedbackType === "success"
                           ? `${box.color}20`
                           : "transparent",
+                      cursor: isMobile ? "pointer" : "drop",
                     }}
                   >
                     <div className="bureautique-box-content">

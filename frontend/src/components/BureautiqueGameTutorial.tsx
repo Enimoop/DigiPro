@@ -9,6 +9,13 @@ type Props = {
 
 export default function BureautiqueGameTutorial({ show, onClose }: Props) {
   const [animationPhase, setAnimationPhase] = useState(0);
+  const [isMobile] = useState(() => {
+    return (
+      navigator.maxTouchPoints > 0 ||
+      'ontouchstart' in window ||
+      navigator.userAgent.match(/iPad|iPhone|Android/i) !== null
+    );
+  });
 
   useEffect(() => {
     if (!show) return;
@@ -36,7 +43,7 @@ export default function BureautiqueGameTutorial({ show, onClose }: Props) {
         <div className="bureautique-tutorial-demo mb-4">
           {/* Fichier */}
           <div
-            className={`tutorial-file ${animationPhase >= 1 ? "dragging-animation" : ""}`}
+            className={`tutorial-file ${!isMobile && animationPhase >= 1 ? "dragging-animation" : ""}`}
           >
             <FeatherIcon icon="file" size={40} />
             <div className="mt-2">
@@ -48,12 +55,22 @@ export default function BureautiqueGameTutorial({ show, onClose }: Props) {
           {/* Flèche/indication */}
           {animationPhase >= 1 && (
             <div className="tutorial-arrow">
-              <FeatherIcon icon="arrow-right" size={32} />
+              {isMobile ? (
+                <FeatherIcon icon="arrow-down" size={32} />
+              ) : (
+                <FeatherIcon icon="arrow-right" size={32} />
+              )}
             </div>
           )}
 
           {/* Boîtes de destination */}
-          <div className="tutorial-boxes">
+          <div
+            className="tutorial-boxes"
+            style={{
+              flexDirection: isMobile ? "column" : "row",
+              width: isMobile ? "100%" : "auto"
+            }}
+          >
             <div className={`tutorial-box ${animationPhase >= 2 ? "highlight" : ""}`}>
               <FeatherIcon icon="file-text" size={28} style={{ color: "#4B7EFF" }} />
               <div className="small fw-semibold">Word</div>
@@ -79,28 +96,57 @@ export default function BureautiqueGameTutorial({ show, onClose }: Props) {
         <div className="tutorial-instructions">
           <h5 className="mb-3">Les étapes :</h5>
 
-          <div className="instruction-step mb-3">
-            <div className="step-number">1</div>
-            <div>
-              <strong>Cliquez et glissez</strong> le fichier vers la bonne boîte
-            </div>
-          </div>
+          {isMobile ? (
+            <>
+              <div className="instruction-step mb-3">
+                <div className="step-number">1</div>
+                <div>
+                  Regardez le fichier affiché en haut
+                </div>
+              </div>
 
-          <div className="instruction-step mb-3">
-            <div className="step-number">2</div>
-            <div>
-              <strong>Relâchez</strong> pour déposer le fichier
-            </div>
-          </div>
+              <div className="instruction-step mb-3">
+                <div className="step-number">2</div>
+                <div>
+                  <strong>Cliquez sur la boîte</strong> correspondant au bon type de fichier
+                </div>
+              </div>
 
-          <div className="instruction-step">
-            <div className="step-number">3</div>
-            <div>
-              Si c'est correct ✅ : animation et fichier suivant
-              <br />
-              Si c'est faux ❌ : le fichier revient au centre pour réessayer
-            </div>
-          </div>
+              <div className="instruction-step">
+                <div className="step-number">3</div>
+                <div>
+                  Si c'est correct ✅ : animation et fichier suivant
+                  <br />
+                  Si c'est faux ❌ : le fichier reste pour réessayer
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="instruction-step mb-3">
+                <div className="step-number">1</div>
+                <div>
+                  <strong>Cliquez et glissez</strong> le fichier vers la bonne boîte
+                </div>
+              </div>
+
+              <div className="instruction-step mb-3">
+                <div className="step-number">2</div>
+                <div>
+                  <strong>Relâchez</strong> pour déposer le fichier
+                </div>
+              </div>
+
+              <div className="instruction-step">
+                <div className="step-number">3</div>
+                <div>
+                  Si c'est correct ✅ : animation et fichier suivant
+                  <br />
+                  Si c'est faux ❌ : le fichier revient au centre pour réessayer
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="tutorial-note mt-4 p-3" style={{
@@ -114,7 +160,7 @@ export default function BureautiqueGameTutorial({ show, onClose }: Props) {
 
       <Modal.Footer>
         <Button variant="primary" onClick={onClose} className="px-4">
-          Comprendre et jouer
+          {isMobile ? "Cliquez et jouez" : "Glissez et jouez"}
         </Button>
       </Modal.Footer>
     </Modal>

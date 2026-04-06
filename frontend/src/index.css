@@ -581,12 +581,33 @@ button[aria-label="Go to next step"][disabled] svg path {
   }
 
   .bureautique-box {
-    padding: 1.5rem;
-    min-height: 120px;
+    padding: 0.8rem 0.6rem;
+    min-height: 85px;
+    border-width: 2px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .bureautique-box-content {
+    gap: 0.3rem !important;
+  }
+
+  .bureautique-box .feather {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .bureautique-box-content > div:last-child {
+    font-size: 0.85rem !important;
   }
 
   .bureautique-box:hover {
     transform: none;
+  }
+
+  .bureautique-box:active {
+    transform: scale(0.95);
   }
 }
 
