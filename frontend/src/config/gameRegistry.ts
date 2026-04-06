@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
 import BureautiqueGameComponent from "../components/BureautiqueGameComponent";
 import PasswordGameComponent from "../components/PasswordGameComponent";
+import PhishingGameComponent from "../components/PhishingGameComponent";
 
 export interface GameComponentProps {
   themeId?: string;
@@ -13,6 +14,7 @@ export interface GameRegistry {
 export const gameRegistry: GameRegistry = {
   bureautique: BureautiqueGameComponent,
   passwords: PasswordGameComponent,
+  email: PhishingGameComponent,
   // Ajoute d'autres jeux ici au fur et à mesure
   // cybersecurite: CyberGameComponent,
 };
