@@ -61,4 +61,4 @@ jobs:
             docker compose pull
             docker compose up -d
             docker compose exec -T backend python manage.py migrate
-            docker rmi $(docker images | grep -E 'backend|frontend' | grep -v REPOSITORY | awk '{print $3}' | tail -n +2) 2>/dev/null || true
+            docker rmi $(docker images --no-trunc | grep -E 'backend|frontend' | awk '{print $3}' | while read id; do ! docker ps -a --filter ancestor=$id --quiet | grep -q . && echo $id; done) 2>/dev/null || true
