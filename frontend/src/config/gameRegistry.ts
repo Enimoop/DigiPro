@@ -15,8 +15,6 @@ export const gameRegistry: GameRegistry = {
   bureautique: BureautiqueGameComponent,
   passwords: PasswordGameComponent,
   email: PhishingGameComponent,
-  // Ajoute d'autres jeux ici au fur et à mesure
-  // cybersecurite: CyberGameComponent,
 };
 
 export const getGameComponent = (moduleId: string): ComponentType<GameComponentProps> | null => {
