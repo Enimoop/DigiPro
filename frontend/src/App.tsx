@@ -8,10 +8,10 @@ import PasswordResetPage from "./pages/PasswordResetPage";
 import HomePage from "./pages/HomePage";
 import AppLayout from "./layouts/AppLayouts";
 import UserPage from "./pages/UserPage";
-import PasswordGamePage from "./pages/PasswordGamePage";
 import LessonPage from "./pages/LessonPage";
 import ModulePage from "./pages/ModulePage";
 import QuizPage from "./pages/QuizPage";
+import GamePage from "./pages/GamePage";
 
 export default function App() {
   return (
@@ -20,7 +20,7 @@ export default function App() {
 
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/reset-password" element= {<PasswordResetPage />} />
+      <Route path="/reset-password" element={<PasswordResetPage />} />
       <Route element={<AppLayout />}>
         <Route
           path="/dashboard"
@@ -54,7 +54,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-         <Route
+        <Route
           path="/modules/:moduleId/:themeId/lesson"
           element={
             <ProtectedRoute>
@@ -74,7 +74,7 @@ export default function App() {
           path="/modules/:moduleId/:themeId/game"
           element={
             <ProtectedRoute>
-              <PasswordGamePage />
+              <GamePage />
             </ProtectedRoute>
           }
         />

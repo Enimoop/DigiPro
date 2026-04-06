@@ -1,7 +1,7 @@
 import Header from "../components/Header";
 import { Row, Col, Spinner, Alert } from "react-bootstrap";
 import ModuleComponent from "../components/ModuleComponent";
-import { useModules } from "../modules/ModulesProvider";
+import { useModules } from "../contexts/ModulesProvider";
 
 export default function HomePage() {
   const { modules, loading, error } = useModules();
@@ -33,7 +33,7 @@ export default function HomePage() {
 
       {!loading && !error && (
         <Row className="g-5">
-          {modules.map((m, idx) => (
+          {modules.map((m: typeof modules[number], idx: number) => (
             <Col key={m.slug} xs={12} sm={6} lg={4}>
               <ModuleComponent
                 module={m}

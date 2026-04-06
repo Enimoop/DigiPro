@@ -4,7 +4,7 @@ import FeatherIcon from "feather-icons-react";
 import { Collapse, Container, Nav, Navbar, Spinner } from "react-bootstrap";
 import logo from "../assets/logo.svg";
 import SettingsMenu from "./SettingsMenu";
-import { useModules } from "../modules/ModulesProvider";
+import { useModules, type ApiModule } from "../contexts/ModulesProvider";
 import marianne from "../assets/marianne.svg";
 import valdoise from "../assets/valdoise.png";
 
@@ -23,7 +23,7 @@ export default function Sidenav() {
   const { modules, loading, error } = useModules();
 
   const items: NavItem[] = useMemo(() => {
-    const moduleChildren: NavItem[] = (modules ?? []).map((m) => ({
+    const moduleChildren: NavItem[] = (modules ?? []).map((m: ApiModule) => ({
       id: `module-${m.slug}`,
       title: m.title,
       url: `/modules/${m.slug}`,
@@ -95,8 +95,7 @@ export default function Sidenav() {
           <NavLink
             to={it.url || "#"}
             className={({ isActive }) =>
-              `nav-link d-flex align-items-center ${isActive ? "active" : ""} ${
-                it.disabled ? "disabled opacity-50" : ""
+              `nav-link d-flex align-items-center ${isActive ? "active" : ""} ${it.disabled ? "disabled opacity-50" : ""
               }`
             }
             onClick={(e) => {

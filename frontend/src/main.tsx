@@ -4,10 +4,10 @@ import { BrowserRouter } from "react-router-dom";
 import { TourProvider } from "@reactour/tour";
 import App from "./App";
 import { AuthProvider } from "./auth/AuthContext";
-import { SettingsProvider } from "./settings/SettingsContext";
+import { SettingsProvider } from "./contexts/SettingsContext";
 import "./index.css";
 import "./styles/dashkit/theme.scss";
-import { ModulesProvider } from "./modules/ModulesProvider";
+import { ModulesProvider } from "./contexts/ModulesProvider";
 
 const rootElement = document.getElementById("root");
 
@@ -25,7 +25,7 @@ ReactDOM.createRoot(rootElement).render(
               steps={[]}
               disableInteraction={true}
               disableKeyboardNavigation={true as any}
-              onClickMask={() => {}}
+              onClickMask={() => { }}
               styles={{
                 popover: (base) => ({
                   ...base,

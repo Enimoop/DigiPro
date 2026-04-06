@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import FeatherIcon from "feather-icons-react";
 import { Nav } from "react-bootstrap";
-import { useSettings } from "../settings/SettingsContext";
+import { useSettings } from "../contexts/SettingsContext";
 
 export default function SettingsMenu() {
   const { fontSize, setFontSize, darkMode, toggleDarkMode, highContrast, toggleHighContrast } = useSettings();
