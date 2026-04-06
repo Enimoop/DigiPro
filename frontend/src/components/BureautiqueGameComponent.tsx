@@ -58,7 +58,6 @@ type Props = {
 export default function BureautiqueGameComponent({ }: Props) {
   const navigate = useNavigate();
   const [currentFileIndex, setCurrentFileIndex] = useState(0);
-  const [score, setScore] = useState(0);
   const [gameFinished, setGameFinished] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [draggedFileId, setDraggedFileId] = useState<string | null>(null);
@@ -94,7 +93,6 @@ export default function BureautiqueGameComponent({ }: Props) {
 
     if (isCorrect) {
       setFeedbackType("success");
-      setScore(score + 1);
       setTimeout(() => {
         if (currentFileIndex < FILES.length - 1) {
           setCurrentFileIndex(currentFileIndex + 1);
@@ -143,15 +141,15 @@ export default function BureautiqueGameComponent({ }: Props) {
               <div className="mb-4">
                 <FeatherIcon icon="check-circle" size={64} className="text-success" />
               </div>
-              <h2 className="mb-3">Félicitations ! 🎉</h2>
+              <h2 className="mb-3">Félicitations !</h2>
               <p className="text-muted mb-4">
-                Vous avez classé correctement <strong>{score} / {FILES.length}</strong> fichiers.
+                Vous avez classé correctement tous les fichiers.
               </p>
 
               <div className="d-flex gap-2 justify-content-center">
                 <Button
                   variant="primary"
-                  onClick={() => navigate("/modules")}
+                  onClick={() => navigate("/home")}
                 >
                   Retour vers l'accueil
                 </Button>
