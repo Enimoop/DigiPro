@@ -27,3 +27,4 @@ jobs:
             docker compose --env-file .env --env-file .env.tag pull
             docker compose --env-file .env --env-file .env.tag up -d
             docker compose --env-file .env --env-file .env.tag exec -T backend python manage.py migrate
+            docker rmi $(docker images --no-trunc | grep -E 'backend|frontend' | awk '{print $3}' | while read id; do ! docker ps -a --filter ancestor=$id --quiet | grep -q . && echo $id; done) 2>/dev/null || true

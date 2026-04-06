@@ -41,6 +41,7 @@ export default function QuizPage() {
   const themesWithGame = [
     "passwords",
     "bases",
+    "phishing"
   ];
 
   const hasGame = themesWithGame.includes(themeId);
