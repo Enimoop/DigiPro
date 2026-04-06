@@ -3,16 +3,18 @@ import { useMemo, useState, useEffect } from "react";
 import { Container, Row, Col, Form, Card, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-
-import Header from "../components/Header";
-import LessonQuizGameStepper from "../components/LessonQuizGameStepper";
+import Header from "./Header";
+import LessonQuizGameStepper from "./LessonQuizGameStepper";
+import MaskedPasswordInput from "./MaskedPasswordInput";
 
 import { zxcvbn } from "@zxcvbn-ts/core";
 import { dictionary, adjacencyGraphs } from "@zxcvbn-ts/language-common";
 
-import MaskedPasswordInput from "../components/MaskedPasswordInput";
+type Props = {
+  themeId?: string;
+};
 
-export default function PasswordGamePage() {
+export default function PasswordGameComponent({ }: Props) {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [hasNoPersonalData, setHasNoPersonalData] = useState(false);
@@ -37,7 +39,6 @@ export default function PasswordGamePage() {
       setIsValidated(false);
     }
   }, [allRulesValid]);
-
 
   const scoreLabels = ["Très faible", "Faible", "Moyen", "Fort", "Très fort"];
 

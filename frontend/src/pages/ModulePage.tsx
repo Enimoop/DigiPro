@@ -10,7 +10,7 @@ import {
   Alert,
 } from "react-bootstrap";
 import LessonCard from "../components/LessonCard";
-import { useModules } from "../modules/ModulesProvider";
+import { useModules } from "../contexts/ModulesProvider";
 
 export default function ModulePage() {
   const { moduleId } = useParams();
@@ -75,7 +75,7 @@ export default function ModulePage() {
         </Header.Body>
       </Header>
 
-      {themes.map((theme, idx) => {
+      {themes.map((theme: typeof themes[number], idx: number) => {
         const route = `/modules/${module.slug}/${theme.slug}`;
 
         const tourAttr = idx === 0 ? { "data-tour": "lesson-card" } : {};

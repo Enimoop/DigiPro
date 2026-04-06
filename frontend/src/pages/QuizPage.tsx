@@ -4,7 +4,7 @@ import { Row, Col, Spinner, Alert } from "react-bootstrap";
 import QuizComponent from "../components/QuizComponent";
 import { useNavigate, useParams } from "react-router-dom";
 import LessonQuizGameStepper from "../components/LessonQuizGameStepper";
-import { useModules } from "../modules/ModulesProvider";
+import { useModules } from "../contexts/ModulesProvider";
 import { getQuizDataByThemeSlug } from "../nav/contentLoaders";
 
 export default function QuizPage() {
@@ -40,6 +40,7 @@ export default function QuizPage() {
 
   const themesWithGame = [
     "passwords",
+    "bases",
   ];
 
   const hasGame = themesWithGame.includes(themeId);

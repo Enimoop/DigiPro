@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import LessonContent from "../components/LessonContent";
 import LessonQuizGameStepper from "../components/LessonQuizGameStepper";
-import { useModules } from "../modules/ModulesProvider";
+import { useModules } from "../contexts/ModulesProvider";
 import { getLessonDataByThemeSlug } from "../nav/contentLoaders";
 
 export default function LessonPage() {
