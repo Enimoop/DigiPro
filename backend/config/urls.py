@@ -16,7 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from api.views import complete_onboarding, csrf, login_view, refresh_view, logout_view, me, register_view
+from api.views import (
+    complete_onboarding, csrf, login_view, refresh_view, logout_view, me, register_view,
+    get_user_progress, theme_progress_detail
+)
 from api.views_modules import modules_list
 
 urlpatterns = [
@@ -34,4 +37,8 @@ urlpatterns = [
     path("api/modules/", modules_list),
 
     path("api/onboarding/complete/", complete_onboarding, name="complete_onboarding"),
+
+    # progress
+    path("api/progress/", get_user_progress, name="get_user_progress"),
+    path("api/progress/<int:theme_id>/", theme_progress_detail, name="theme_progress_detail"),
 ]

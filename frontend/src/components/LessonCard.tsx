@@ -3,6 +3,7 @@ import FeatherIcon from "feather-icons-react";
 import { useNavigate } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import type { UserProgress } from "../api";
 
 type Props = {
   stepNumber: number;
@@ -13,14 +14,19 @@ type Props = {
     description: string;
     route: string;
   };
+  progress?: UserProgress;
 };
 
-export default function LessonCard({ stepNumber, moduleIcon, theme }: Props) {
+export default function LessonCard({ stepNumber, moduleIcon, theme, progress }: Props) {
   const navigate = useNavigate();
 
   const go = () => {
     navigate(`${theme.route}/lesson`);
   };
+
+  // Determine status badge
+  const isCompleted = progress?.completed;
+  const isStarted = progress && !isCompleted;
 
   return (
     <div>
@@ -37,7 +43,7 @@ export default function LessonCard({ stepNumber, moduleIcon, theme }: Props) {
         <Col xs={6} md={4} className="d-flex justify-content-center">
           <Card
             className="module-card text-center h-100 module-clickable lesson-card w-100"
-            style={{ maxWidth: 240 }}
+            style={{ maxWidth: 240, position: "relative" }}
             role="button"
             tabIndex={0}
             onClick={go}
@@ -48,6 +54,26 @@ export default function LessonCard({ stepNumber, moduleIcon, theme }: Props) {
               }
             }}
           >
+            {(isCompleted || isStarted) && (
+              <div
+                title={isCompleted ? "Thème complété" : "Thème en cours"}
+                style={{
+                  position: "absolute",
+                  top: 12,
+                  left: 12,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: 28,
+                  height: 28,
+                  backgroundColor: isCompleted ? "#10B981" : "#F59E0B",
+                  borderRadius: "50%",
+                  zIndex: 10,
+                }}
+              >
+                <FeatherIcon icon={isCompleted ? "check" : "clock"} size={16} color="white" />
+              </div>
+            )}
             <Card.Body className="d-flex flex-column align-items-center p-4">
               <div className="w-100">
                 <div className="icon-circle bg-purple-soft text-purple mb-3 mx-auto">

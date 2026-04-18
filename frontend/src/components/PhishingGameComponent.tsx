@@ -9,11 +9,12 @@ import { PHISHING_EMAILS } from "../nav/phishingEmails";
 
 type Props = {
   themeId?: string;
+  onGameComplete?: () => void | Promise<void>;
 };
 
 const EMAILS = PHISHING_EMAILS;
 
-export default function PhishingGameComponent({ }: Props) {
+export default function PhishingGameComponent({ onGameComplete }: Props) {
   const navigate = useNavigate();
   const [currentEmailIndex, setCurrentEmailIndex] = useState(0);
   const [gameFinished, setGameFinished] = useState(false);
@@ -74,7 +75,15 @@ export default function PhishingGameComponent({ }: Props) {
               </p>
 
               <div className="d-flex gap-2 justify-content-center">
-                <Button variant="primary" onClick={() => navigate("/home")}>
+                <Button
+                  variant="primary"
+                  onClick={async () => {
+                    if (onGameComplete) {
+                      await onGameComplete();
+                    }
+                    navigate("/home");
+                  }}
+                >
                   Retour aux modules
                 </Button>
               </div>

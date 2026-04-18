@@ -5,6 +5,7 @@ import PhishingGameComponent from "../components/PhishingGameComponent";
 
 export interface GameComponentProps {
   themeId?: string;
+  onGameComplete?: () => void | Promise<void>;
 }
 
 export interface GameRegistry {

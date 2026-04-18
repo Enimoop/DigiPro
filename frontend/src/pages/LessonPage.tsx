@@ -1,15 +1,42 @@
 // src/pages/LessonPage.tsx
 import { Col, Row, Spinner, Alert } from "react-bootstrap";
 import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 import Header from "../components/Header";
 import LessonContent from "../components/LessonContent";
 import LessonQuizGameStepper from "../components/LessonQuizGameStepper";
 import { useModules } from "../contexts/ModulesProvider";
 import { getLessonDataByThemeSlug } from "../nav/contentLoaders";
+import { startThemeProgress, getThemeProgress } from "../api";
 
 export default function LessonPage() {
-  const { moduleId, themeId } = useParams(); // slugs
+  const { moduleId, themeId } = useParams(); 
   const { loading, error, getModule, getTheme } = useModules();
+
+  useEffect(() => {
+    const recordStart = async () => {
+      const theme = getTheme(moduleId!, themeId!);
+      if (theme && theme.id) {
+        try {
+          await getThemeProgress(theme.id);
+        } catch (err: any) {
+          if (err?.response?.status === 404) {
+            try {
+              await startThemeProgress(theme.id);
+            } catch (createErr) {
+              console.error("Failed to record progress start:", createErr);
+            }
+          } else {
+            console.error("Error checking progress:", err);
+          }
+        }
+      }
+    };
+
+    if (!loading && moduleId && themeId) {
+      recordStart();
+    }
+  }, [loading, moduleId, themeId, getTheme]);
 
   if (!moduleId || !themeId) return <div>Page invalide</div>;
 

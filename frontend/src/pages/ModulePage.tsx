@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import {
   Row,
@@ -11,11 +12,34 @@ import {
 } from "react-bootstrap";
 import LessonCard from "../components/LessonCard";
 import { useModules } from "../contexts/ModulesProvider";
+import { getUserProgress } from "../api";
+import type { UserProgress } from "../api";
 
 export default function ModulePage() {
   const { moduleId } = useParams();
   const navigate = useNavigate();
   const { loading, error, getModule } = useModules();
+  const [progressMap, setProgressMap] = useState<Record<number, UserProgress>>({});
+  const [progressLoading, setProgressLoading] = useState(true);
+
+  // Fetch user progress on mount
+  useEffect(() => {
+    const fetchProgress = async () => {
+      try {
+        const progressList = await getUserProgress();
+        const map = Object.fromEntries(
+          progressList.map((p) => [p.theme, p])
+        );
+        setProgressMap(map);
+      } catch (err) {
+        console.error("Failed to fetch progress:", err);
+      } finally {
+        setProgressLoading(false);
+      }
+    };
+
+    fetchProgress();
+  }, []);
 
   if (!moduleId) return null;
 
@@ -75,26 +99,38 @@ export default function ModulePage() {
         </Header.Body>
       </Header>
 
-      {themes.map((theme: typeof themes[number], idx: number) => {
-        const route = `/modules/${module.slug}/${theme.slug}`;
+      {progressLoading && (
+        <div className="d-flex justify-content-center py-5">
+          <Spinner />
+        </div>
+      )}
 
-        const tourAttr = idx === 0 ? { "data-tour": "lesson-card" } : {};
+      {!progressLoading && (
+        <>
+          {themes.map((theme: typeof themes[number], idx: number) => {
+            const route = `/modules/${module.slug}/${theme.slug}`;
+            const progress = theme.id ? progressMap[theme.id] : undefined;
 
-        return (
-          <div key={theme.slug} {...tourAttr}>
-            <LessonCard
-              stepNumber={idx + 1}
-              moduleIcon={module.icon}
-              theme={{
-                id: theme.slug,
-                title: theme.title,
-                description: theme.description,
-                route,
-              }}
-            />
-          </div>
-        );
-      })}
+            const tourAttr = idx === 0 ? { "data-tour": "lesson-card" } : {};
+
+            return (
+              <div key={theme.slug} {...tourAttr}>
+                <LessonCard
+                  stepNumber={idx + 1}
+                  moduleIcon={module.icon}
+                  theme={{
+                    id: theme.slug,
+                    title: theme.title,
+                    description: theme.description,
+                    route,
+                  }}
+                  progress={progress}
+                />
+              </div>
+            );
+          })}
+        </>
+      )}
     </div>
   );
 }

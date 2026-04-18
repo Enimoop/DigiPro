@@ -5,6 +5,73 @@ export const api = axios.create({
   withCredentials: true,
 });
 
+// ---- Progress API ----
+
+export type UserProgress = {
+  id: number;
+  theme: number;
+  theme_slug: string;
+  theme_title: string;
+  module_slug: string;
+  completed: boolean;
+  progress_pct: number;
+  started_at: string;
+  updated_at: string;
+};
+
+/**
+ * Create or start progress tracking for a theme
+ * Initializes started_at automatically on creation
+ */
+export const startThemeProgress = async (themeId: number): Promise<UserProgress> => {
+  const res = await api.post(`/api/progress/${themeId}/`, {
+    completed: false,
+    progress_pct: 0,
+  });
+  return res.data;
+};
+
+/**
+ * Update quiz score for a theme
+ */
+export const updateQuizScore = async (
+  themeId: number,
+  scorePercent: number
+): Promise<UserProgress> => {
+  const res = await api.put(`/api/progress/${themeId}/`, {
+    progress_pct: scorePercent,
+  });
+  return res.data;
+};
+
+/**
+ * Mark a theme as completed (game finished)
+ */
+export const completeTheme = async (themeId: number): Promise<UserProgress> => {
+  const res = await api.put(`/api/progress/${themeId}/`, {
+    completed: true,
+  });
+  return res.data;
+};
+
+/**
+ * Get all progress for the current user
+ */
+export const getUserProgress = async (): Promise<UserProgress[]> => {
+  const res = await api.get("/api/progress/");
+  return res.data;
+};
+
+/**
+ * Get progress for a specific theme
+ */
+export const getThemeProgress = async (themeId: number): Promise<UserProgress> => {
+  const res = await api.get(`/api/progress/${themeId}/`);
+  return res.data;
+};
+
+// ---- Auth API ----
+
 let isRefreshing = false;
 let queue: Array<(ok: boolean) => void> = [];
 

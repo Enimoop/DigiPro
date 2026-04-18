@@ -12,9 +12,10 @@ import { dictionary, adjacencyGraphs } from "@zxcvbn-ts/language-common";
 
 type Props = {
   themeId?: string;
+  onGameComplete?: () => void | Promise<void>;
 };
 
-export default function PasswordGameComponent({ }: Props) {
+export default function PasswordGameComponent({ onGameComplete }: Props) {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [hasNoPersonalData, setHasNoPersonalData] = useState(false);
@@ -163,9 +164,12 @@ export default function PasswordGameComponent({ }: Props) {
                   size="lg"
                   className="px-5"
                   disabled={isValidated}
-                  onClick={() => {
+                  onClick={async () => {
                     if (isValidated) return;
                     setIsValidated(true);
+                    if (onGameComplete) {
+                      await onGameComplete();
+                    }
                     navigate("/home");
                   }}
                 >

@@ -5,6 +5,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
+from .models import Theme, UserThemeProgress
+from .serializers import UserThemeProgressSerializer
 
 User = get_user_model()
 
@@ -149,3 +151,60 @@ def complete_onboarding(request):
     profile.onboarding_step = 0
     profile.save(update_fields=["has_seen_onboarding", "onboarding_step"])
     return Response({"ok": True, "has_seen_onboarding": True})
+
+
+# -------------------------------------------------
+# PROGRESS ENDPOINTS
+# -------------------------------------------------
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_user_progress(request):
+    """Get all progress for the authenticated user"""
+    progress = UserThemeProgress.objects.filter(user=request.user).select_related("theme", "theme__module")
+    serializer = UserThemeProgressSerializer(progress, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET", "POST", "PUT"])
+@permission_classes([IsAuthenticated])
+def theme_progress_detail(request, theme_id):
+    """
+    GET: Get progress for a specific theme
+    POST/PUT: Create or update progress for a specific theme
+    """
+    try:
+        theme = Theme.objects.get(id=theme_id)
+    except Theme.DoesNotExist:
+        return Response({"detail": "Theme not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        try:
+            progress = UserThemeProgress.objects.get(user=request.user, theme=theme)
+            serializer = UserThemeProgressSerializer(progress)
+            return Response(serializer.data)
+        except UserThemeProgress.DoesNotExist:
+            return Response(
+                {"detail": "No progress yet for this theme"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+    elif request.method in ["POST", "PUT"]:
+        # Create or update progress
+        progress, created = UserThemeProgress.objects.get_or_create(
+            user=request.user,
+            theme=theme,
+        )
+        
+        # Update fields from request data
+        data = request.data
+        if "completed" in data:
+            progress.completed = data["completed"]
+        if "progress_pct" in data:
+            # Ensure progress_pct is between 0 and 100
+            pct = int(data["progress_pct"])
+            progress.progress_pct = max(0, min(100, pct))
+
+        progress.save()
+        serializer = UserThemeProgressSerializer(progress)
+        http_status = status.HTTP_201_CREATED if created else status.HTTP_200_OK
+        return Response(serializer.data, status=http_status)
