@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from "
 import { api } from "../api"; // <-- ton axios instance
 
 export type ApiTheme = {
+  id: number;
   slug: string;
   title: string;
   description: string;

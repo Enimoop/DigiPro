@@ -53,9 +53,10 @@ const BOXES: Box[] = [
 
 type Props = {
   themeId?: string;
+  onGameComplete?: () => void | Promise<void>;
 };
 
-export default function BureautiqueGameComponent({ }: Props) {
+export default function BureautiqueGameComponent({ onGameComplete }: Props) {
   const navigate = useNavigate();
   const [currentFileIndex, setCurrentFileIndex] = useState(0);
   const [gameFinished, setGameFinished] = useState(false);
@@ -159,7 +160,12 @@ export default function BureautiqueGameComponent({ }: Props) {
               <div className="d-flex gap-2 justify-content-center">
                 <Button
                   variant="primary"
-                  onClick={() => navigate("/home")}
+                  onClick={async () => {
+                    if (onGameComplete) {
+                      await onGameComplete();
+                    }
+                    navigate("/home");
+                  }}
                 >
                   Retour vers l'accueil
                 </Button>

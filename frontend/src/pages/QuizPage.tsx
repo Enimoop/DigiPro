@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import LessonQuizGameStepper from "../components/LessonQuizGameStepper";
 import { useModules } from "../contexts/ModulesProvider";
 import { getQuizDataByThemeSlug } from "../nav/contentLoaders";
+import { updateQuizScore } from "../api";
 
 export default function QuizPage() {
   const navigate = useNavigate();
@@ -46,6 +47,20 @@ export default function QuizPage() {
 
   const hasGame = themesWithGame.includes(themeId);
 
+  const handleQuizFinish = async (result: { correct: number; total: number }) => {
+    const scorePercent = Math.round((result.correct / result.total) * 100);
+
+    try {
+      if (theme.id) {
+        await updateQuizScore(theme.id, scorePercent);
+      }
+    } catch (err) {
+      console.error("Failed to save quiz score:", err);
+    }
+
+    console.log("Résultat:", result.correct, "/", result.total);
+  };
+
   return (
     <>
       <Header className="mt-md-5">
@@ -64,9 +79,7 @@ export default function QuizPage() {
 
       <QuizComponent
         questions={quizData.questions}
-        onFinish={({ correct, total }) => {
-          console.log("Résultat:", correct, "/", total);
-        }}
+        onFinish={handleQuizFinish}
         onGoToGame={
           hasGame
             ? () => navigate(`/modules/${moduleId}/${themeId}/game`)
