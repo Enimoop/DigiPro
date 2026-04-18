@@ -44,11 +44,17 @@ export const emailLessonData: LessonData = {
 
 **Ce que vous pouvez faire :**
 
-<span style="color: #1ad927;">✔ **Survolez le lien**</span> (sans cliquer) pour voir l’URL réelle.
+<div style="display: flex; flex-direction: column; gap: 30px;">
+  <div>
+    <span style="color: #1ad927;">✔ <strong>Survolez le lien</strong></span> (sans cliquer) pour voir l'URL réelle.
+<br>
+<span style="color: #1ad927;">✔ <strong>Vérifiez l'adresse e-mail</strong></span> de l'expéditeur.
+<br>
+<span style="color: #1ad927;">✔ <strong>Contactez le service</strong></span> via leur site officiel si vous avez un doute.
+  </div>
 
-<span style="color: #1ad927;">✔ **Vérifiez l’adresse e-mail**</span> de l’expéditeur.
-
-<span style="color: #1ad927;">✔ **Contactez le service**</span> via leur site officiel si vous avez un doute.
+  <img src="/gifs/hover_mail.gif" alt="Démonstration survol de lien" style="width: 100%; max-width: 500px; border-radius: 8px;" />
+</div>
       `,
     },
 
