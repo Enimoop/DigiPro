@@ -165,12 +165,10 @@ export default function Sidenav() {
         <Container fluid>
           <Navbar.Toggle data-tour="burger" />
 
-          {/* Logo DigiPro (inchangé) */}
           <Navbar.Brand as={NavLink} to="/dashboard">
             <img className="navbar-brand-img" src={logo} alt="DigiPro" />
           </Navbar.Brand>
 
-          {/* Logos partenaires PLUS GROS */}
           <div className="d-flex justify-content-center gap-4 mt-3 mb-3 px-3">
             <img
               src={marianne}
@@ -244,15 +242,15 @@ export default function Sidenav() {
 
           {/* Description text */}
           <div className="border-top pt-4">
-            <h5 className="fw-bold mb-3">À propos de DigiPro</h5>
+            <h5 className="fw-bold mb-3">À propos de DigiPro95</h5>
             <p className="text-muted mb-0" style={{ fontSize: "0.95rem", lineHeight: 1.7 }}>
-              DigiPro est une plateforme éducative conçue pour apprendre les fondamentaux de l'informatique et de la cybersécurité.
+              DigiPro95 est une plateforme éducative conçue pour apprendre les fondamentaux de l'informatique et de la cybersécurité.
               <br />
               <br />
               Développée par un groupe d'étudiants en Master 2 de l'ESIEE-IT dans le cadre du ProjectLab, elle s'adresse spécifiquement à ceux qui éprouvent des difficultés avec les bases de l'informatique.
               <br />
               <br />
-              Grâce à des modules interactifs, des quiz engageants et des jeux éducatifs, DigiPro rend l'apprentissage accessible, ludique et progressif.
+              Grâce à des modules interactifs, des quiz engageants et des jeux éducatifs, DigiPro95 rend l'apprentissage accessible, ludique et progressif.
             </p>
           </div>
         </Modal.Body>
