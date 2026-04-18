@@ -84,6 +84,9 @@ export default function ModulePage() {
 
   const themes = module.themes ?? [];
 
+  const completedThemesCount = themes.filter((theme) => progressMap[theme.id]?.completed).length;
+  const progressPercent = themes.length > 0 ? Math.round((completedThemesCount / themes.length) * 100) : 0;
+
   return (
     <div>
       <Header className="mt-md-5">
@@ -95,7 +98,7 @@ export default function ModulePage() {
             </Col>
           </Row>
 
-          <ProgressBar now={66} className="mt-3" />
+          <ProgressBar now={progressPercent} className="mt-3" />
         </Header.Body>
       </Header>
 
