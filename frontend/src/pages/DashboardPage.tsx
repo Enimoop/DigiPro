@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Row, Col, Container, Accordion, ProgressBar, Badge, Spinner, Alert } from "react-bootstrap";
+import { Row, Col, Container, Accordion, ProgressBar, Badge, Spinner } from "react-bootstrap";
 import FeatherIcon from "feather-icons-react";
 import Header from "../components/Header";
 import { useAuth } from "../auth/AuthContext";
