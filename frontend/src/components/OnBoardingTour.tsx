@@ -32,7 +32,7 @@ export default function OnboardingTour({ open, isMobile, onClose }: Props) {
     const desktop: StepDef[] = [
       {
         selector: "body",
-        title: "Bienvenue sur DigiPro 👋",
+        title: "Bienvenue sur DigiPro95 👋",
         text:
           "DigiPro95 vous aide à apprendre les bases du numérique avec des modules simples.\n\n" +
           "Nous allons vous montrer rapidement où sont les éléments importants 🙂\n\n" +
@@ -73,7 +73,7 @@ export default function OnboardingTour({ open, isMobile, onClose }: Props) {
     const mobile: StepDef[] = [
       {
         selector: "body",
-        title: "Bienvenue sur DigiPro 👋",
+        title: "Bienvenue sur DigiPro95 👋",
         text:
           "DigiPro95 vous aide à apprendre les bases du numérique avec des modules simples.\n\n" +
           "Nous allons vous montrer rapidement où sont les éléments importants 🙂",

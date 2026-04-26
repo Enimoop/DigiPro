@@ -1,4 +1,4 @@
-# DigiPro — Setup local 
+# DigiPro95 — Setup local 
 
 Ce repo contient une application **Django (API + auth cookies/JWT)** + **React (Dashkit / React-Bootstrap)** + **PostgreSQL**, orchestrés avec **Docker Compose**.
 
