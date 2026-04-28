@@ -105,7 +105,18 @@ const Tabs = React.forwardRef<HTMLDivElement, React.ComponentProps<typeof Nav>>(
 );
 Tabs.displayName = "Header.Tabs";
 
+/* ---------------- Header.Secondary ---------------- */
 
+const Secondary = React.forwardRef<HTMLHeadingElement, TitleProps>(
+  ({ className, ...props }, ref) => (
+    <h2
+      ref={ref}
+      className={classNames("header-secondary", className)}
+      {...props}
+    />
+  )
+);
+Secondary.displayName = "Header.Secondary";
 
 /* ---------------- Export with subcomponents ---------------- */
 
@@ -115,5 +126,6 @@ export default Object.assign(Header, {
   Title,
   Subtitle,
   Pretitle,
+  Secondary,
   Tabs,
 });

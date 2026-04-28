@@ -1,17 +1,23 @@
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import authenticate, get_user_model, update_session_auth_hash
+from django.http import JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.decorators import (
+    api_view,
+    permission_classes,
+    authentication_classes,
+)
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
+import json
 from .models import Theme, UserThemeProgress
 from .serializers import UserThemeProgressSerializer
 
 User = get_user_model()
 
-COOKIE_SECURE = False 
-COOKIE_SAMESITE = "Lax" 
+COOKIE_SECURE = False
+COOKIE_SAMESITE = "Lax"
 
 
 # -------------------------------------------------
@@ -31,14 +37,21 @@ def csrf(request):
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def register_view(request):
-    username = (request.data.get("username") or "").strip()  # optionnel, mais on peut le garder
+    username = (
+        request.data.get("username") or ""
+    ).strip()  # optionnel, mais on peut le garder
     email = (request.data.get("email") or "").strip().lower()
     password = request.data.get("password") or ""
 
     if not email:
-        return Response({"email": ["This field is required."]}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"email": ["This field is required."]}, status=status.HTTP_400_BAD_REQUEST
+        )
     if User.objects.filter(email__iexact=email).exists():
-        return Response({"email": ["This email is already used."]}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"email": ["This email is already used."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     if not username:
         # fallback simple: username = partie avant @ (avec suffixe si conflit)
@@ -51,11 +64,15 @@ def register_view(request):
         username = candidate
 
     if len(password) < 8:
-        return Response({"password": ["Minimum 8 characters."]}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"password": ["Minimum 8 characters."]}, status=status.HTTP_400_BAD_REQUEST
+        )
 
     user = User.objects.create_user(username=username, email=email, password=password)
-    return Response({"id": user.id, "username": user.username, "email": user.email}, status=status.HTTP_201_CREATED)
-
+    return Response(
+        {"id": user.id, "username": user.username, "email": user.email},
+        status=status.HTTP_201_CREATED,
+    )
 
 
 # -------------------------------------------------
@@ -68,23 +85,45 @@ def login_view(request):
     password = request.data.get("password") or ""
 
     if not email or not password:
-        return Response({"detail": "Email and password required"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"detail": "Email and password required"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     try:
         user = User.objects.get(email__iexact=email)
     except User.DoesNotExist:
-        return Response({"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST
+        )
 
     if not user.check_password(password):
-        return Response({"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST
+        )
 
     refresh = RefreshToken.for_user(user)
     access = str(refresh.access_token)
 
     res = Response({"detail": "Logged in"}, status=status.HTTP_200_OK)
-    res.set_cookie("access_token", access, httponly=True, secure=COOKIE_SECURE, samesite=COOKIE_SAMESITE, path="/")
-    res.set_cookie("refresh_token", str(refresh), httponly=True, secure=COOKIE_SECURE, samesite=COOKIE_SAMESITE, path="/api/auth/refresh/")
+    res.set_cookie(
+        "access_token",
+        access,
+        httponly=True,
+        secure=COOKIE_SECURE,
+        samesite=COOKIE_SAMESITE,
+        path="/",
+    )
+    res.set_cookie(
+        "refresh_token",
+        str(refresh),
+        httponly=True,
+        secure=COOKIE_SECURE,
+        samesite=COOKIE_SAMESITE,
+        path="/api/auth/refresh/",
+    )
     return res
+
 
 # -------------------------------------------------
 # REFRESH -> lit refresh_token cookie, renouvelle access_token cookie
@@ -95,13 +134,17 @@ def login_view(request):
 def refresh_view(request):
     refresh_token = request.COOKIES.get("refresh_token")
     if not refresh_token:
-        return Response({"detail": "No refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(
+            {"detail": "No refresh token"}, status=status.HTTP_401_UNAUTHORIZED
+        )
 
     try:
         refresh = RefreshToken(refresh_token)
         access = str(refresh.access_token)
     except Exception:
-        return Response({"detail": "Invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(
+            {"detail": "Invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED
+        )
 
     res = Response({"detail": "refreshed"}, status=status.HTTP_200_OK)
     res.set_cookie(
@@ -134,13 +177,16 @@ def logout_view(request):
 @permission_classes([IsAuthenticated])
 def me(request):
     u = request.user
-    return Response({
-        "id": u.id,
-        "username": u.username,
-        "email": u.email,
-        "is_staff": u.is_staff,
-        "has_seen_onboarding": getattr(u, "profile", None) and u.profile.has_seen_onboarding,
-    })
+    return Response(
+        {
+            "id": u.id,
+            "username": u.username,
+            "email": u.email,
+            "is_staff": u.is_staff,
+            "has_seen_onboarding": getattr(u, "profile", None)
+            and u.profile.has_seen_onboarding,
+        }
+    )
 
 
 @api_view(["POST"])
@@ -160,7 +206,9 @@ def complete_onboarding(request):
 @permission_classes([IsAuthenticated])
 def get_user_progress(request):
     """Get all progress for the authenticated user"""
-    progress = UserThemeProgress.objects.filter(user=request.user).select_related("theme", "theme__module")
+    progress = UserThemeProgress.objects.filter(user=request.user).select_related(
+        "theme", "theme__module"
+    )
     serializer = UserThemeProgressSerializer(progress, many=True)
     return Response(serializer.data)
 
@@ -194,7 +242,7 @@ def theme_progress_detail(request, theme_id):
             user=request.user,
             theme=theme,
         )
-        
+
         # Update fields from request data
         data = request.data
         if "completed" in data:
@@ -208,3 +256,34 @@ def theme_progress_detail(request, theme_id):
         serializer = UserThemeProgressSerializer(progress)
         http_status = status.HTTP_201_CREATED if created else status.HTTP_200_OK
         return Response(serializer.data, status=http_status)
+
+
+# -------------------------------------------------
+# UPDATE PROFILE -> endpoint protégé : permet à l'utilisateur de mettre à jour son profil (email, nom, mot de passe)
+# -------------------------------------------------
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def update_profile(request):
+    if request.method == "POST" and request.user.is_authenticated:
+        data = json.loads(request.body)
+        user = request.user
+
+        current_password = data.get("current_password")
+        if not user.check_password(current_password):
+            return JsonResponse(
+                {"error": "Le mot de passe actuel est incorrect."}, status=400
+            )
+
+        user.first_name = data.get("firstName", user.first_name)
+        user.last_name = data.get("lastName", user.last_name)
+        user.email = data.get("email", user.email)
+
+        new_password = data.get("new_password")
+        if new_password:
+            user.set_password(new_password)
+            user.save()
+            update_session_auth_hash(request, user)
+        else:
+            user.save()
+
+        return JsonResponse({"message": "Succès"})
