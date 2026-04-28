@@ -1,6 +1,14 @@
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import get_user_model, update_session_auth_hash
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from django.utils.html import strip_tags
 from django.views.decorators.csrf import ensure_csrf_cookie
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.decorators import (
+    api_view,
+    permission_classes,
+    authentication_classes,
+)
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
@@ -10,8 +18,12 @@ from .serializers import UserThemeProgressSerializer
 
 User = get_user_model()
 
-COOKIE_SECURE = False 
-COOKIE_SAMESITE = "Lax" 
+COOKIE_SECURE = False
+COOKIE_SAMESITE = "Lax"
+
+
+def has_html_like_content(value: str) -> bool:
+    return value != strip_tags(value) or "<" in value or ">" in value
 
 
 # -------------------------------------------------
@@ -31,14 +43,39 @@ def csrf(request):
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def register_view(request):
-    username = (request.data.get("username") or "").strip()  # optionnel, mais on peut le garder
+    username = (
+        request.data.get("username") or ""
+    ).strip()  # optionnel, mais on peut le garder
     email = (request.data.get("email") or "").strip().lower()
     password = request.data.get("password") or ""
 
+    if has_html_like_content(email):
+        return Response(
+            {"email": ["L'email ne doit pas contenir de balises HTML."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if has_html_like_content(password):
+        return Response(
+            {"password": ["Le mot de passe ne doit pas contenir de balises HTML."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if has_html_like_content(username):
+        return Response(
+            {"username": ["Le nom d'utilisateur ne doit pas contenir de balises HTML."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
     if not email:
-        return Response({"email": ["This field is required."]}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"email": ["This field is required."]}, status=status.HTTP_400_BAD_REQUEST
+        )
     if User.objects.filter(email__iexact=email).exists():
-        return Response({"email": ["This email is already used."]}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"email": ["This email is already used."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     if not username:
         # fallback simple: username = partie avant @ (avec suffixe si conflit)
@@ -51,11 +88,15 @@ def register_view(request):
         username = candidate
 
     if len(password) < 8:
-        return Response({"password": ["Minimum 8 characters."]}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"password": ["Minimum 8 characters."]}, status=status.HTTP_400_BAD_REQUEST
+        )
 
     user = User.objects.create_user(username=username, email=email, password=password)
-    return Response({"id": user.id, "username": user.username, "email": user.email}, status=status.HTTP_201_CREATED)
-
+    return Response(
+        {"id": user.id, "username": user.username, "email": user.email},
+        status=status.HTTP_201_CREATED,
+    )
 
 
 # -------------------------------------------------
@@ -67,24 +108,52 @@ def login_view(request):
     email = (request.data.get("email") or "").strip().lower()
     password = request.data.get("password") or ""
 
+    if has_html_like_content(email) or has_html_like_content(password):
+        return Response(
+            {"detail": "Les identifiants ne doivent pas contenir de balises HTML."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
     if not email or not password:
-        return Response({"detail": "Email and password required"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"detail": "Email and password required"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     try:
         user = User.objects.get(email__iexact=email)
     except User.DoesNotExist:
-        return Response({"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST
+        )
 
     if not user.check_password(password):
-        return Response({"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST
+        )
 
     refresh = RefreshToken.for_user(user)
     access = str(refresh.access_token)
 
     res = Response({"detail": "Logged in"}, status=status.HTTP_200_OK)
-    res.set_cookie("access_token", access, httponly=True, secure=COOKIE_SECURE, samesite=COOKIE_SAMESITE, path="/")
-    res.set_cookie("refresh_token", str(refresh), httponly=True, secure=COOKIE_SECURE, samesite=COOKIE_SAMESITE, path="/api/auth/refresh/")
+    res.set_cookie(
+        "access_token",
+        access,
+        httponly=True,
+        secure=COOKIE_SECURE,
+        samesite=COOKIE_SAMESITE,
+        path="/",
+    )
+    res.set_cookie(
+        "refresh_token",
+        str(refresh),
+        httponly=True,
+        secure=COOKIE_SECURE,
+        samesite=COOKIE_SAMESITE,
+        path="/api/auth/refresh/",
+    )
     return res
+
 
 # -------------------------------------------------
 # REFRESH -> lit refresh_token cookie, renouvelle access_token cookie
@@ -95,13 +164,17 @@ def login_view(request):
 def refresh_view(request):
     refresh_token = request.COOKIES.get("refresh_token")
     if not refresh_token:
-        return Response({"detail": "No refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(
+            {"detail": "No refresh token"}, status=status.HTTP_401_UNAUTHORIZED
+        )
 
     try:
         refresh = RefreshToken(refresh_token)
         access = str(refresh.access_token)
     except Exception:
-        return Response({"detail": "Invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(
+            {"detail": "Invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED
+        )
 
     res = Response({"detail": "refreshed"}, status=status.HTTP_200_OK)
     res.set_cookie(
@@ -134,13 +207,29 @@ def logout_view(request):
 @permission_classes([IsAuthenticated])
 def me(request):
     u = request.user
-    return Response({
-        "id": u.id,
-        "username": u.username,
-        "email": u.email,
-        "is_staff": u.is_staff,
-        "has_seen_onboarding": getattr(u, "profile", None) and u.profile.has_seen_onboarding,
-    })
+    return Response(
+        {
+            "id": u.id,
+            "username": u.username,
+            "email": u.email,
+            "first_name": u.first_name,
+            "last_name": u.last_name,
+            "is_staff": u.is_staff,
+            "has_seen_onboarding": getattr(u, "profile", None)
+            and u.profile.has_seen_onboarding,
+        }
+    )
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete_account(request):
+    request.user.delete()
+
+    res = Response({"detail": "Account deleted."}, status=status.HTTP_200_OK)
+    res.delete_cookie("access_token", path="/")
+    res.delete_cookie("refresh_token", path="/api/auth/refresh/")
+    return res
 
 
 @api_view(["POST"])
@@ -160,7 +249,9 @@ def complete_onboarding(request):
 @permission_classes([IsAuthenticated])
 def get_user_progress(request):
     """Get all progress for the authenticated user"""
-    progress = UserThemeProgress.objects.filter(user=request.user).select_related("theme", "theme__module")
+    progress = UserThemeProgress.objects.filter(user=request.user).select_related(
+        "theme", "theme__module"
+    )
     serializer = UserThemeProgressSerializer(progress, many=True)
     return Response(serializer.data)
 
@@ -194,7 +285,7 @@ def theme_progress_detail(request, theme_id):
             user=request.user,
             theme=theme,
         )
-        
+
         # Update fields from request data
         data = request.data
         if "completed" in data:
@@ -208,3 +299,120 @@ def theme_progress_detail(request, theme_id):
         serializer = UserThemeProgressSerializer(progress)
         http_status = status.HTTP_201_CREATED if created else status.HTTP_200_OK
         return Response(serializer.data, status=http_status)
+
+
+# -------------------------------------------------
+# PROFILE UPDATE ENDPOINTS
+# -------------------------------------------------
+@api_view(["PATCH"])
+@permission_classes([IsAuthenticated])
+def update_profile_info(request):
+    user = request.user
+
+    first_name = (request.data.get("first_name") or "").strip()
+    last_name = (request.data.get("last_name") or "").strip()
+    email = (request.data.get("email") or "").strip().lower()
+
+    if not email:
+        return Response({"email": ["This field is required."]}, status=status.HTTP_400_BAD_REQUEST)
+
+    if first_name != strip_tags(first_name) or "<" in first_name or ">" in first_name:
+        return Response(
+            {"first_name": ["Le prénom ne doit pas contenir de balises HTML."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if last_name != strip_tags(last_name) or "<" in last_name or ">" in last_name:
+        return Response(
+            {"last_name": ["Le nom ne doit pas contenir de balises HTML."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if email != strip_tags(email) or "<" in email or ">" in email:
+        return Response(
+            {"email": ["L'email ne doit pas contenir de balises HTML."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    try:
+        validate_email(email)
+    except ValidationError:
+        return Response(
+            {"email": ["Veuillez saisir une adresse email valide."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    email_in_use = (
+        User.objects.filter(email__iexact=email)
+        .exclude(pk=user.pk)
+        .exists()
+    )
+    if email_in_use:
+        return Response({"email": ["This email is already used."]}, status=status.HTTP_400_BAD_REQUEST)
+
+    user.first_name = first_name
+    user.last_name = last_name
+    user.email = email
+    user.save(update_fields=["first_name", "last_name", "email"])
+
+    return Response(
+        {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "is_staff": user.is_staff,
+            "has_seen_onboarding": getattr(user, "profile", None)
+            and user.profile.has_seen_onboarding,
+        },
+        status=status.HTTP_200_OK,
+    )
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def change_password(request):
+    user = request.user
+    current_password = request.data.get("current_password") or ""
+    new_password = request.data.get("new_password") or ""
+    confirm_password = request.data.get("confirm_password") or ""
+
+    if (
+        has_html_like_content(current_password)
+        or has_html_like_content(new_password)
+        or has_html_like_content(confirm_password)
+    ):
+        return Response(
+            {"detail": "Les champs mot de passe ne doivent pas contenir de balises HTML."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if not user.check_password(current_password):
+        return Response(
+            {"current_password": ["Le mot de passe actuel est incorrect."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if not new_password:
+        return Response(
+            {"new_password": ["Ce champ est requis."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if new_password != confirm_password:
+        return Response(
+            {"confirm_password": ["Les mots de passe ne correspondent pas."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    try:
+        validate_password(new_password, user=user)
+    except ValidationError as exc:
+        return Response({"new_password": list(exc.messages)}, status=status.HTTP_400_BAD_REQUEST)
+
+    user.set_password(new_password)
+    user.save(update_fields=["password"])
+    update_session_auth_hash(request, user)
+
+    return Response({"detail": "Password updated."}, status=status.HTTP_200_OK)

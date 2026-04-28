@@ -6,7 +6,7 @@ import logo from "../assets/logo.svg";
 import SettingsMenu from "./SettingsMenu";
 import { useModules, type ApiModule } from "../contexts/ModulesProvider";
 import marianne from "../assets/marianne.svg";
-import valdoise from "../assets/valdoise.png";
+import valdoise from "../assets/valdoise.webp";
 
 type NavItem = {
   id: string;

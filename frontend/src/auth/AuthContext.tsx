@@ -16,6 +16,8 @@ export type User = {
   id: number;
   username: string;
   email: string | null;
+  first_name: string;
+  last_name: string;
   is_staff?: boolean;
   has_seen_onboarding: boolean;
 };
@@ -23,6 +25,7 @@ export type User = {
 type AuthContextType = {
   user: User | null;
   loading: boolean;
+  refreshUser: () => Promise<void>;
 
   shouldShowOnboarding: boolean;
 
@@ -31,6 +34,7 @@ type AuthContextType = {
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  deleteAccount: () => Promise<void>;
 };
 
 /* =======================
@@ -88,6 +92,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }
 
+  async function deleteAccount(): Promise<void> {
+    await api.delete("/api/me/delete/");
+    setUser(null);
+  }
+
   async function dismissOnboarding(): Promise<void> {
     try {
       await api.get("/api/csrf/");
@@ -107,11 +116,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         user,
         loading,
+        refreshUser: loadMe,
         shouldShowOnboarding,
         dismissOnboarding,
         login,
         register,
         logout,
+        deleteAccount,
       }}
     >
       {children}

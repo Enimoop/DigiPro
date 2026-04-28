@@ -1,7 +1,4 @@
-import type { ComponentType } from "react";
-import BureautiqueGameComponent from "../components/BureautiqueGameComponent";
-import PasswordGameComponent from "../components/PasswordGameComponent";
-import PhishingGameComponent from "../components/PhishingGameComponent";
+import { lazy, type ComponentType, type LazyExoticComponent } from "react";
 
 export interface GameComponentProps {
   themeId?: string;
@@ -9,16 +6,16 @@ export interface GameComponentProps {
 }
 
 export interface GameRegistry {
-  [moduleId: string]: ComponentType<GameComponentProps>;
+  [moduleId: string]: LazyExoticComponent<ComponentType<GameComponentProps>>;
 }
 
 export const gameRegistry: GameRegistry = {
-  bureautique: BureautiqueGameComponent,
-  passwords: PasswordGameComponent,
-  email: PhishingGameComponent,
+  bureautique: lazy(() => import("../components/BureautiqueGameComponent")),
+  passwords: lazy(() => import("../components/PasswordGameComponent")),
+  email: lazy(() => import("../components/PhishingGameComponent")),
 };
 
-export const getGameComponent = (moduleId: string): ComponentType<GameComponentProps> | null => {
+export const getGameComponent = (moduleId: string): LazyExoticComponent<ComponentType<GameComponentProps>> | null => {
   return gameRegistry[moduleId] || null;
 };
 

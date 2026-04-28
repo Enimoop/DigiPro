@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { useParams } from "react-router-dom";
 import { getGameComponent } from "../config/gameRegistry";
 import { completeTheme } from "../api";
@@ -28,5 +29,9 @@ export default function GamePage() {
     }
   };
 
-  return <GameComponent themeId={themeId} onGameComplete={handleGameComplete} />;
+  return (
+    <Suspense fallback={<div className="d-flex justify-content-center py-5">Chargement du jeu...</div>}>
+      <GameComponent themeId={themeId} onGameComplete={handleGameComplete} />
+    </Suspense>
+  );
 }

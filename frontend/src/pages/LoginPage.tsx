@@ -3,13 +3,14 @@ import FeatherIcon from "feather-icons-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { useAuth } from "../auth/AuthContext";
+import { isUnsafeInput } from "../utils/inputSafety";
 
 // Imports des assets
 import logo from "../assets/logo.svg";
 import marianneLogo from "../assets/marianne.svg";
-import valdoiseLogo from "../assets/valdoise.png";
+import valdoiseLogo from "../assets/valdoise.webp";
 // Import de votre image de fond locale
-import fond2 from "../assets/fond2.png";
+import fond2 from "../assets/fond2.webp";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -23,6 +24,11 @@ export default function LoginPage() {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
+
+    if (isUnsafeInput(email) || isUnsafeInput(password)) {
+      setError("Les champs ne doivent pas contenir de balises HTML.");
+      return;
+    }
 
     try {
       await login(email, password);
