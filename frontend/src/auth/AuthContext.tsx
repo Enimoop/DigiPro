@@ -16,6 +16,8 @@ export type User = {
   id: number;
   username: string;
   email: string | null;
+  first_name: string;
+  last_name: string;
   is_staff?: boolean;
   has_seen_onboarding: boolean;
 };
@@ -23,6 +25,7 @@ export type User = {
 type AuthContextType = {
   user: User | null;
   loading: boolean;
+  refreshUser: () => Promise<void>;
 
   shouldShowOnboarding: boolean;
 
@@ -107,6 +110,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         user,
         loading,
+        refreshUser: loadMe,
         shouldShowOnboarding,
         dismissOnboarding,
         login,

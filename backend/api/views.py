@@ -1,5 +1,6 @@
-from django.contrib.auth import authenticate, get_user_model, update_session_auth_hash
-from django.http import JsonResponse
+from django.contrib.auth import get_user_model, update_session_auth_hash
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.decorators import (
     api_view,
@@ -10,7 +11,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
-import json
 from .models import Theme, UserThemeProgress
 from .serializers import UserThemeProgressSerializer
 
@@ -182,6 +182,8 @@ def me(request):
             "id": u.id,
             "username": u.username,
             "email": u.email,
+            "first_name": u.first_name,
+            "last_name": u.last_name,
             "is_staff": u.is_staff,
             "has_seen_onboarding": getattr(u, "profile", None)
             and u.profile.has_seen_onboarding,
@@ -259,31 +261,81 @@ def theme_progress_detail(request, theme_id):
 
 
 # -------------------------------------------------
-# UPDATE PROFILE -> endpoint protégé : permet à l'utilisateur de mettre à jour son profil (email, nom, mot de passe)
+# PROFILE UPDATE ENDPOINTS
 # -------------------------------------------------
+@api_view(["PATCH"])
+@permission_classes([IsAuthenticated])
+def update_profile_info(request):
+    user = request.user
+
+    first_name = (request.data.get("first_name") or "").strip()
+    last_name = (request.data.get("last_name") or "").strip()
+    email = (request.data.get("email") or "").strip().lower()
+
+    if not email:
+        return Response({"email": ["This field is required."]}, status=status.HTTP_400_BAD_REQUEST)
+
+    email_in_use = (
+        User.objects.filter(email__iexact=email)
+        .exclude(pk=user.pk)
+        .exists()
+    )
+    if email_in_use:
+        return Response({"email": ["This email is already used."]}, status=status.HTTP_400_BAD_REQUEST)
+
+    user.first_name = first_name
+    user.last_name = last_name
+    user.email = email
+    user.save(update_fields=["first_name", "last_name", "email"])
+
+    return Response(
+        {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "is_staff": user.is_staff,
+            "has_seen_onboarding": getattr(user, "profile", None)
+            and user.profile.has_seen_onboarding,
+        },
+        status=status.HTTP_200_OK,
+    )
+
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
-def update_profile(request):
-    if request.method == "POST" and request.user.is_authenticated:
-        data = json.loads(request.body)
-        user = request.user
+def change_password(request):
+    user = request.user
+    current_password = request.data.get("current_password") or ""
+    new_password = request.data.get("new_password") or ""
+    confirm_password = request.data.get("confirm_password") or ""
 
-        current_password = data.get("current_password")
-        if not user.check_password(current_password):
-            return JsonResponse(
-                {"error": "Le mot de passe actuel est incorrect."}, status=400
-            )
+    if not user.check_password(current_password):
+        return Response(
+            {"current_password": ["Le mot de passe actuel est incorrect."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
-        user.first_name = data.get("firstName", user.first_name)
-        user.last_name = data.get("lastName", user.last_name)
-        user.email = data.get("email", user.email)
+    if not new_password:
+        return Response(
+            {"new_password": ["Ce champ est requis."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
-        new_password = data.get("new_password")
-        if new_password:
-            user.set_password(new_password)
-            user.save()
-            update_session_auth_hash(request, user)
-        else:
-            user.save()
+    if new_password != confirm_password:
+        return Response(
+            {"confirm_password": ["Les mots de passe ne correspondent pas."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
-        return JsonResponse({"message": "Succès"})
+    try:
+        validate_password(new_password, user=user)
+    except ValidationError as exc:
+        return Response({"new_password": list(exc.messages)}, status=status.HTTP_400_BAD_REQUEST)
+
+    user.set_password(new_password)
+    user.save(update_fields=["password"])
+    update_session_auth_hash(request, user)
+
+    return Response({"detail": "Password updated."}, status=status.HTTP_200_OK)

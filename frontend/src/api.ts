@@ -70,6 +70,38 @@ export const getThemeProgress = async (themeId: number): Promise<UserProgress> =
   return res.data;
 };
 
+export type MeUser = {
+  id: number;
+  username: string;
+  email: string | null;
+  first_name: string;
+  last_name: string;
+  is_staff?: boolean;
+  has_seen_onboarding: boolean;
+};
+
+export type UpdateProfilePayload = {
+  first_name: string;
+  last_name: string;
+  email: string;
+};
+
+export type ChangePasswordPayload = {
+  current_password: string;
+  new_password: string;
+  confirm_password: string;
+};
+
+export const updateProfileInfo = async (payload: UpdateProfilePayload): Promise<MeUser> => {
+  const res = await api.patch("/api/me/profile/", payload);
+  return res.data;
+};
+
+export const changeUserPassword = async (payload: ChangePasswordPayload): Promise<{ detail: string }> => {
+  const res = await api.post("/api/me/password/", payload);
+  return res.data;
+};
+
 // ---- Auth API ----
 
 let isRefreshing = false;

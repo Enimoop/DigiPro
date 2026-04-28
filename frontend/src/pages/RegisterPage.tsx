@@ -7,8 +7,8 @@ import { useAuth } from "../auth/AuthContext";
 // Imports des assets
 import logo from "../assets/logo.svg";
 import marianneLogo from "../assets/marianne.svg";
-import valdoiseLogo from "../assets/valdoise.png";
-import fond2 from "../assets/fond2.png";
+import valdoiseLogo from "../assets/valdoise.webp";
+import fond2 from "../assets/fond2.webp";
 
 export default function RegisterPage() {
   const { register } = useAuth();
