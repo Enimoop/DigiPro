@@ -141,7 +141,7 @@ export default function RegisterPage() {
             )}
 
             <Button type="submit" size="lg" className="w-100 mb-4 shadow-sm">
-              Sign up
+              Créer mon compte
             </Button>
 
             <p className="text-center mb-0">
