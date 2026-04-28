@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from api.views import (
     complete_onboarding, csrf, login_view, refresh_view, logout_view, me, register_view,
-    get_user_progress, theme_progress_detail, update_profile_info, change_password
+    get_user_progress, theme_progress_detail, update_profile_info, change_password, delete_account
 )
 from api.views_modules import modules_list
 
@@ -32,6 +32,7 @@ urlpatterns = [
     path("api/auth/register/", register_view),
 
     path("api/me/", me),
+    path("api/me/delete/", delete_account, name="delete_account"),
     path("api/me/profile/", update_profile_info, name="update_profile_info"),
     path("api/me/password/", change_password, name="change_password"),
 

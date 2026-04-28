@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from django.utils.html import strip_tags
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.decorators import (
     api_view,
@@ -18,6 +20,10 @@ User = get_user_model()
 
 COOKIE_SECURE = False
 COOKIE_SAMESITE = "Lax"
+
+
+def has_html_like_content(value: str) -> bool:
+    return value != strip_tags(value) or "<" in value or ">" in value
 
 
 # -------------------------------------------------
@@ -42,6 +48,24 @@ def register_view(request):
     ).strip()  # optionnel, mais on peut le garder
     email = (request.data.get("email") or "").strip().lower()
     password = request.data.get("password") or ""
+
+    if has_html_like_content(email):
+        return Response(
+            {"email": ["L'email ne doit pas contenir de balises HTML."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if has_html_like_content(password):
+        return Response(
+            {"password": ["Le mot de passe ne doit pas contenir de balises HTML."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if has_html_like_content(username):
+        return Response(
+            {"username": ["Le nom d'utilisateur ne doit pas contenir de balises HTML."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     if not email:
         return Response(
@@ -83,6 +107,12 @@ def register_view(request):
 def login_view(request):
     email = (request.data.get("email") or "").strip().lower()
     password = request.data.get("password") or ""
+
+    if has_html_like_content(email) or has_html_like_content(password):
+        return Response(
+            {"detail": "Les identifiants ne doivent pas contenir de balises HTML."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     if not email or not password:
         return Response(
@@ -191,6 +221,17 @@ def me(request):
     )
 
 
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete_account(request):
+    request.user.delete()
+
+    res = Response({"detail": "Account deleted."}, status=status.HTTP_200_OK)
+    res.delete_cookie("access_token", path="/")
+    res.delete_cookie("refresh_token", path="/api/auth/refresh/")
+    return res
+
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def complete_onboarding(request):
@@ -275,6 +316,32 @@ def update_profile_info(request):
     if not email:
         return Response({"email": ["This field is required."]}, status=status.HTTP_400_BAD_REQUEST)
 
+    if first_name != strip_tags(first_name) or "<" in first_name or ">" in first_name:
+        return Response(
+            {"first_name": ["Le prénom ne doit pas contenir de balises HTML."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if last_name != strip_tags(last_name) or "<" in last_name or ">" in last_name:
+        return Response(
+            {"last_name": ["Le nom ne doit pas contenir de balises HTML."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if email != strip_tags(email) or "<" in email or ">" in email:
+        return Response(
+            {"email": ["L'email ne doit pas contenir de balises HTML."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    try:
+        validate_email(email)
+    except ValidationError:
+        return Response(
+            {"email": ["Veuillez saisir une adresse email valide."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
     email_in_use = (
         User.objects.filter(email__iexact=email)
         .exclude(pk=user.pk)
@@ -310,6 +377,16 @@ def change_password(request):
     current_password = request.data.get("current_password") or ""
     new_password = request.data.get("new_password") or ""
     confirm_password = request.data.get("confirm_password") or ""
+
+    if (
+        has_html_like_content(current_password)
+        or has_html_like_content(new_password)
+        or has_html_like_content(confirm_password)
+    ):
+        return Response(
+            {"detail": "Les champs mot de passe ne doivent pas contenir de balises HTML."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     if not user.check_password(current_password):
         return Response(

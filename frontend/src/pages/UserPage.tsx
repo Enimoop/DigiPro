@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import MaskedPasswordInput from "../components/MaskedPasswordInput";
-import { Accordion, Badge, Button, Col, Container, Form, ProgressBar, Row, Spinner } from "react-bootstrap";
+import { Accordion, Badge, Button, Col, Container, Form, Modal, ProgressBar, Row, Spinner } from "react-bootstrap";
 import FeatherIcon from "feather-icons-react";
+import { useNavigate } from "react-router-dom";
 import { useModules } from "../contexts/ModulesProvider";
 import { changeUserPassword, getUserProgress, updateProfileInfo } from "../api";
 import { useAuth } from "../auth/AuthContext";
+import { isUnsafeInput } from "../utils/inputSafety";
 import type { UserProgress } from "../api";
 
 export default function UserPage() {
-  const { user, refreshUser, logout } = useAuth();
+  const { user, refreshUser, logout, deleteAccount } = useAuth();
+  const navigate = useNavigate();
   const { modules, loading: modulesLoading } = useModules();
   const [progress, setProgress] = useState<UserProgress[]>([]);
   const [progressLoading, setProgressLoading] = useState(true);
@@ -25,6 +28,10 @@ export default function UserPage() {
   const [passwordMessage, setPasswordMessage] = useState<string | null>(null);
   const [profileError, setProfileError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
+  const [deleteModalStep, setDeleteModalStep] = useState<"confirm" | "processing">("confirm");
+  const [deleteAccountError, setDeleteAccountError] = useState<string | null>(null);
+  const [deletingAccount, setDeletingAccount] = useState(false);
 
   useEffect(() => {
     const fetchProgress = async () => {
@@ -53,6 +60,16 @@ export default function UserPage() {
     setProfileMessage(null);
     setProfileError(null);
 
+    if (
+      isUnsafeInput(firstName) ||
+      isUnsafeInput(lastName) ||
+      isUnsafeInput(email)
+    ) {
+      setProfileError("Les champs prénom, nom et email ne doivent pas contenir de balises HTML.");
+      setProfileSaving(false);
+      return;
+    }
+
     try {
       await updateProfileInfo({
         first_name: firstName,
@@ -62,9 +79,12 @@ export default function UserPage() {
       await refreshUser();
       setProfileMessage("Profil mis à jour.");
     } catch (error: any) {
+      const data = error?.response?.data;
       const apiError =
-        error?.response?.data?.email?.[0] ||
-        error?.response?.data?.detail ||
+        data?.email?.[0] ||
+        data?.first_name?.[0] ||
+        data?.last_name?.[0] ||
+        data?.detail ||
         "Impossible de mettre à jour le profil.";
       setProfileError(apiError);
     } finally {
@@ -77,6 +97,16 @@ export default function UserPage() {
     setPasswordSaving(true);
     setPasswordMessage(null);
     setPasswordError(null);
+
+    if (
+      isUnsafeInput(currentPassword) ||
+      isUnsafeInput(newPassword) ||
+      isUnsafeInput(confirmPassword)
+    ) {
+      setPasswordError("Les champs mot de passe ne doivent pas contenir de balises HTML.");
+      setPasswordSaving(false);
+      return;
+    }
 
     try {
       await changeUserPassword({
@@ -117,6 +147,42 @@ export default function UserPage() {
       progressPercent,
     };
   });
+
+  const violetButtonStyle = {
+    backgroundColor: "#7C3AED",
+    borderColor: "#7C3AED",
+  };
+
+  const handleOpenDeleteModal = () => {
+    setDeleteAccountError(null);
+    setDeleteModalStep("confirm");
+    setShowDeleteConfirmModal(true);
+  };
+
+  const handleConfirmDeleteIntent = () => {
+    setDeleteModalStep("processing");
+    setDeletingAccount(true);
+
+    window.setTimeout(() => {
+      void handleDeleteAccount();
+    }, 1200);
+  };
+
+  const handleDeleteAccount = async () => {
+    setDeleteAccountError(null);
+
+    try {
+      await deleteAccount();
+      navigate("/login", { replace: true });
+    } catch (error: any) {
+      const apiError = error?.response?.data?.detail || "Impossible de supprimer le compte.";
+      setDeleteAccountError(apiError);
+      setShowDeleteConfirmModal(false);
+      setDeleteModalStep("confirm");
+    } finally {
+      setDeletingAccount(false);
+    }
+  };
 
   return (
     <div className="main-content">
@@ -169,9 +235,11 @@ export default function UserPage() {
               </Row>
               {profileError && <div className="text-danger mb-3">{profileError}</div>}
               {profileMessage && <div className="text-success mb-3">{profileMessage}</div>}
-              <Button type="submit" disabled={profileSaving}>
-                {profileSaving ? "Sauvegarde..." : "Sauvegarder"}
-              </Button>
+              <div className="d-flex justify-content-end">
+                <Button type="submit" disabled={profileSaving} style={violetButtonStyle}>
+                  {profileSaving ? "Sauvegarde..." : "Sauvegarder"}
+                </Button>
+              </div>
             </form>
 
             <hr className="my-5" />
@@ -215,9 +283,11 @@ export default function UserPage() {
 
               {passwordError && <div className="text-danger mb-3">{passwordError}</div>}
               {passwordMessage && <div className="text-success mb-3">{passwordMessage}</div>}
-              <Button type="submit" disabled={passwordSaving}>
-                {passwordSaving ? "Sauvegarde..." : "Sauvegarder"}
-              </Button>
+              <div className="d-flex justify-content-end">
+                <Button type="submit" disabled={passwordSaving} style={violetButtonStyle}>
+                  {passwordSaving ? "Sauvegarde..." : "Sauvegarder"}
+                </Button>
+              </div>
             </form>
 
             <hr className="my-5" />
@@ -322,14 +392,53 @@ export default function UserPage() {
                   </p>
                 </Col>
                 <Col xs="auto">
-                  <Button variant="danger">Supprimer</Button>
+                  <Button variant="danger" onClick={handleOpenDeleteModal}>
+                    Supprimer
+                  </Button>
                 </Col>
               </Row>
+              {deleteAccountError && <div className="text-danger mt-3">{deleteAccountError}</div>}
             <br />
             <br />
           </Col>
         </Row>
       </Container>
+
+      <Modal
+        show={showDeleteConfirmModal}
+        onHide={() => {
+          if (!deletingAccount) {
+            setShowDeleteConfirmModal(false);
+            setDeleteModalStep("confirm");
+          }
+        }}
+        centered
+      >
+        <Modal.Header closeButton={!deletingAccount}>
+          <Modal.Title>
+            {deleteModalStep === "confirm" ? "Supprimer votre compte" : "Déconnexion imminente"}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {deleteModalStep === "confirm"
+            ? "Êtes-vous sûr de vouloir supprimer votre compte ?"
+            : "Vous allez être déconnecté."}
+        </Modal.Body>
+        {deleteModalStep === "confirm" ? (
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowDeleteConfirmModal(false)}>
+              Annuler
+            </Button>
+            <Button variant="danger" onClick={handleConfirmDeleteIntent}>
+              Supprimer
+            </Button>
+          </Modal.Footer>
+        ) : (
+          <div className="d-flex justify-content-center pb-4">
+            <Spinner />
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

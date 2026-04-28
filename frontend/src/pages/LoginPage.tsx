@@ -3,6 +3,7 @@ import FeatherIcon from "feather-icons-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { useAuth } from "../auth/AuthContext";
+import { isUnsafeInput } from "../utils/inputSafety";
 
 // Imports des assets
 import logo from "../assets/logo.svg";
@@ -23,6 +24,11 @@ export default function LoginPage() {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
+
+    if (isUnsafeInput(email) || isUnsafeInput(password)) {
+      setError("Les champs ne doivent pas contenir de balises HTML.");
+      return;
+    }
 
     try {
       await login(email, password);

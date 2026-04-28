@@ -102,6 +102,11 @@ export const changeUserPassword = async (payload: ChangePasswordPayload): Promis
   return res.data;
 };
 
+export const deleteCurrentUser = async (): Promise<{ detail: string }> => {
+  const res = await api.delete("/api/me/delete/");
+  return res.data;
+};
+
 // ---- Auth API ----
 
 let isRefreshing = false;

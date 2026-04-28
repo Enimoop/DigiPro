@@ -34,6 +34,7 @@ type AuthContextType = {
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  deleteAccount: () => Promise<void>;
 };
 
 /* =======================
@@ -91,6 +92,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }
 
+  async function deleteAccount(): Promise<void> {
+    await api.delete("/api/me/delete/");
+    setUser(null);
+  }
+
   async function dismissOnboarding(): Promise<void> {
     try {
       await api.get("/api/csrf/");
@@ -116,6 +122,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         login,
         register,
         logout,
+        deleteAccount,
       }}
     >
       {children}
