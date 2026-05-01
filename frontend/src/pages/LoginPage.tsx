@@ -5,11 +5,11 @@ import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { useAuth } from "../auth/AuthContext";
 import { isUnsafeInput } from "../utils/inputSafety";
 
-// Imports des assets
 import logo from "../assets/logo.svg";
-import marianneLogo from "../assets/marianne.svg";
-import valdoiseLogo from "../assets/valdoise.webp";
-// Import de votre image de fond locale
+import prefetlogo from "../assets/prefetvaldoise.webp";
+import egaliteLogo from "../assets/egalite.webp";
+import entrepriselogo from "../assets/entreprise.webp";
+
 import fond2 from "../assets/fond2.webp";
 
 export default function LoginPage() {
@@ -42,17 +42,14 @@ export default function LoginPage() {
     <div 
       className="container-fluid d-flex align-items-center justify-content-center min-vh-100"
       style={{
-        // Utilisation de l'image importée 'fond2' avec un léger voile sombre pour la lisibilité
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${fond2})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
       }}
     >
-      {/* Conteneur vertical bridé à 420px pour aligner parfaitement le bloc et les logos */}
       <div className="d-flex flex-column align-items-center w-100" style={{ maxWidth: 420 }}>
         
-        {/* Bloc central blanc (Formulaire de connexion) */}
         <div className="w-100 bg-white p-4 p-md-5 rounded shadow-lg">
           <div className="text-center mb-4">
             <img
@@ -85,7 +82,6 @@ export default function LoginPage() {
                   <Form.Label className="small fw-bold">Mot de Passe</Form.Label>
                 </Col>
                 <Col xs="auto">
-                  {/* Curseur par défaut ici car ce n'est pas un lien cliquable */}
                   <Form.Text className="small text-muted">
                     Mot de passe oublié ?
                   </Form.Text>
@@ -102,7 +98,7 @@ export default function LoginPage() {
                 />
                 <InputGroup.Text
                   onClick={() => setShowPwd((v) => !v)}
-                  style={{ cursor: "pointer" }} // On garde le curseur main sur l'oeil car il est cliquable
+                  style={{ cursor: "pointer" }}
                 >
                   <FeatherIcon icon={showPwd ? "eye-off" : "eye"} size="1em" />
                 </InputGroup.Text>
@@ -126,20 +122,25 @@ export default function LoginPage() {
           </Form>
         </div>
 
-        {/* Barre des logos partenaires alignée sur la largeur 420px */}
         <div 
           className="d-flex justify-content-around align-items-center mt-4 p-3 rounded shadow-sm w-100" 
           style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
         >
           <img 
-            src={marianneLogo} 
-            alt="République Française" 
+            src={prefetlogo} 
+            alt="Préfecture du Val d'Oise" 
             style={{ height: "55px", width: "auto" }} 
           />
           <div style={{ width: "1px", height: "40px", backgroundColor: "#dee2e6" }}></div>
           <img 
-            src={valdoiseLogo} 
-            alt="Val d'Oise Le Département" 
+            src={egaliteLogo} 
+            alt="Egalité des chances" 
+            style={{ height: "55px", width: "auto" }} 
+          />
+          <div style={{ width: "1px", height: "40px", backgroundColor: "#dee2e6" }}></div>
+          <img 
+            src={entrepriselogo} 
+            alt="Entreprises" 
             style={{ height: "50px", width: "auto" }} 
           />
         </div>

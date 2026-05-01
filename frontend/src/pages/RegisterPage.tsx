@@ -7,8 +7,9 @@ import { isUnsafeInput } from "../utils/inputSafety";
 
 // Imports des assets
 import logo from "../assets/logo.svg";
-import marianneLogo from "../assets/marianne.svg";
-import valdoiseLogo from "../assets/valdoise.webp";
+import prefetlogo from "../assets/prefetvaldoise.webp";
+import egaliteLogo from "../assets/egalite.webp";
+import entrepriselogo from "../assets/entreprise.webp";
 import fond2 from "../assets/fond2.webp";
 
 export default function RegisterPage() {
@@ -159,14 +160,20 @@ export default function RegisterPage() {
           style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
         >
           <img 
-            src={marianneLogo} 
-            alt="République Française" 
+            src={prefetlogo} 
+            alt="Préfecture du Val d'Oise" 
             style={{ height: "55px", width: "auto" }} 
           />
           <div style={{ width: "1px", height: "40px", backgroundColor: "#dee2e6" }}></div>
           <img 
-            src={valdoiseLogo} 
-            alt="Val d'Oise Le Département" 
+            src={egaliteLogo} 
+            alt="Egalité des chances" 
+            style={{ height: "55px", width: "auto" }} 
+          />
+          <div style={{ width: "1px", height: "40px", backgroundColor: "#dee2e6" }}></div>
+          <img 
+            src={entrepriselogo} 
+            alt="Entreprises" 
             style={{ height: "50px", width: "auto" }} 
           />
         </div>
