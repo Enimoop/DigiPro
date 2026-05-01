@@ -1,12 +1,14 @@
 import { useMemo, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import FeatherIcon from "feather-icons-react";
-import { Collapse, Container, Nav, Navbar, Spinner, Modal, Row, Col } from "react-bootstrap";
+import { Collapse, Container, Nav, Navbar, Spinner } from "react-bootstrap";
 import logo from "../assets/logo.svg";
+import AboutModal from "./AboutModal";
 import SettingsMenu from "./SettingsMenu";
 import { useModules, type ApiModule } from "../contexts/ModulesProvider";
-import marianne from "../assets/marianne.svg";
-import valdoise from "../assets/valdoise.webp";
+import prefetlogo from "../assets/prefetvaldoise.webp";
+import egaliteLogo from "../assets/egalite.webp";
+import entrepriselogo from "../assets/entreprise.webp";
 
 type NavItem = {
   id: string;
@@ -171,13 +173,18 @@ export default function Sidenav() {
 
           <div className="d-flex justify-content-center gap-4 mt-3 mb-3 px-3">
             <img
-              src={marianne}
-              alt="République Française"
+              src={prefetlogo}
+              alt="Préfecture du Val d'Oise"
               style={{ height: 42, width: "auto" }}
             />
             <img
-              src={valdoise}
-              alt="Val d’Oise"
+              src={egaliteLogo}
+              alt="Egalité des chances"
+              style={{ height: 42, width: "auto" }}
+            />
+            <img
+              src={entrepriselogo}
+              alt="Entreprises"
               style={{ height: 42, width: "auto" }}
             />
           </div>
@@ -202,59 +209,7 @@ export default function Sidenav() {
         </Container>
       </Navbar>
 
-      {/* À propos Modal */}
-      <Modal show={showAboutModal} onHide={() => setShowAboutModal(false)} centered size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>À propos</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Row className="g-4 mb-5">
-            {[
-              { name: "Marine Forcioli", role: "Ingénierie Logicielle et Management des SI", icon: "user" },
-              { name: "Noah Sochandamandon", role: "Ingénierie Logicielle et Management des SI", icon: "user" },
-              { name: "Clément Philippe", role: "Ingénieur Cybersécurité", icon: "user" },
-              { name: "Josselin Matthieu", role: "Ingénieur Cybersécurité", icon: "user" },
-              { name: "Willem Szwarc-leguillier", role: "IA & BigData", icon: "user" },
-              { name: "Amine Kheddaoui", role: "IA & BigData", icon: "user" },
-            ].map((person, idx) => (
-              <Col xs={12} md={6} key={idx}>
-                <div className="text-center">
-                  <div
-                    style={{
-                      width: 80,
-                      height: 80,
-                      backgroundColor: "#F0F1FB",
-                      borderRadius: "50%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      margin: "0 auto 12px",
-                    }}
-                  >
-                    <FeatherIcon icon={person.icon} size={40} className="text-purple" />
-                  </div>
-                  <h6 className="mb-1 fw-bold" style={{ fontSize: "1.05rem" }}>{person.name}</h6>
-                  <p className="text-muted small">{person.role}</p>
-                </div>
-              </Col>
-            ))}
-          </Row>
-
-          {/* Description text */}
-          <div className="border-top pt-4">
-            <h5 className="fw-bold mb-3">À propos de DigiPro95</h5>
-            <p className="text-muted mb-0" style={{ fontSize: "0.95rem", lineHeight: 1.7 }}>
-              DigiPro95 est une plateforme éducative conçue pour apprendre les fondamentaux de l'informatique et de la cybersécurité.
-              <br />
-              <br />
-              Développée par un groupe d'étudiants en Master 2 de l'ESIEE-IT dans le cadre du ProjectLab, elle s'adresse spécifiquement à ceux qui éprouvent des difficultés avec les bases de l'informatique.
-              <br />
-              <br />
-              Grâce à des modules interactifs, des quiz engageants et des jeux éducatifs, DigiPro95 rend l'apprentissage accessible, ludique et progressif.
-            </p>
-          </div>
-        </Modal.Body>
-      </Modal>
+      <AboutModal show={showAboutModal} onHide={() => setShowAboutModal(false)} />
     </>
   );
 }
