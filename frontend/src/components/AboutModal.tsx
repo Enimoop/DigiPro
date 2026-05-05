@@ -1,6 +1,11 @@
 import FeatherIcon from "feather-icons-react";
 import { Col, Modal, Row } from "react-bootstrap";
 import esieeItLogo from "../assets/logo-esiee-it.webp";
+import josselinPhoto from "../assets/josselin.webp";
+import aminePhoto from "../assets/Amine.webp";
+import marinePhoto from "../assets/Marine.webp";
+import clementPhoto from "../assets/Clement.webp";
+import noahPhoto from "../assets/noah.webp";
 
 type AboutModalProps = {
   show: boolean;
@@ -8,12 +13,12 @@ type AboutModalProps = {
 };
 
 const contributors = [
-  { name: "Marine Forcioli", role: "Ingénierie Logicielle et Management des SI", icon: "user" },
-  { name: "Noah Sochandamandon", role: "Ingénierie Logicielle et Management des SI", icon: "user" },
-  { name: "Clément Philippe", role: "Ingénieur Cybersécurité", icon: "user" },
-  { name: "Josselin Matthieu", role: "Ingénieur Cybersécurité", icon: "user" },
+  { name: "Marine Forcioli", role: "Ingénierie Logicielle et Management des SI", icon: "user", photo: marinePhoto },
+  { name: "Noah Sochandamandon", role: "Ingénierie Logicielle et Management des SI", icon: "user", photo: noahPhoto },
+  { name: "Clément Philippe", role: "Ingénieur Cybersécurité", icon: "user", photo: clementPhoto },
+  { name: "Josselin Mathieu", role: "Ingénieur Cybersécurité", icon: "user", photo: josselinPhoto },
   { name: "Willem Szwarc-leguillier", role: "IA & BigData", icon: "user" },
-  { name: "Amine Kheddaoui", role: "IA & BigData", icon: "user" },
+  { name: "Amine Kheddaoui", role: "IA & BigData", icon: "user", photo: aminePhoto },
 ];
 
 export default function AboutModal({ show, onHide }: AboutModalProps) {
@@ -37,9 +42,14 @@ export default function AboutModal({ show, onHide }: AboutModalProps) {
                     alignItems: "center",
                     justifyContent: "center",
                     margin: "0 auto 12px",
+                    overflow: "hidden",
                   }}
                 >
-                  <FeatherIcon icon={person.icon} size={40} className="text-purple" />
+                  {"photo" in person && person.photo ? (
+                    <img src={person.photo} alt={person.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  ) : (
+                    <FeatherIcon icon={person.icon} size={40} className="text-purple" />
+                  )}
                 </div>
                 <h6 className="mb-1 fw-bold" style={{ fontSize: "1.05rem" }}>{person.name}</h6>
                 <p className="text-muted small">{person.role}</p>
