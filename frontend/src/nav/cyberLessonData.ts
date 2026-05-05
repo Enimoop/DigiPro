@@ -121,8 +121,6 @@ Vous n’avez plus qu’**un seul mot de passe à retenir** : celui du gestionna
 **Règle d’or :** *Aucun service sérieux ne vous demandera votre mot de passe par e-mail ou téléphone.*
 </div>
 
-Exemple :
-
 \`Phishing = Hameçonnage\`
       `,
     },
