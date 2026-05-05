@@ -17,12 +17,14 @@ export const emailLessonData: LessonData = {
 <br>
 
 <span style="color: #7C3AED;">**Exemple de phishing :**</span>
-*"Votre compte a été piraté ! Cliquez ici pour le sécuriser : [lien louche]."*
+*"Votre compte a été piraté ! Cliquez ici pour le sécuriser : https://secu.c-agricole.link/QuzhjgZQqGrhWvnhIO "*
 
 <div class="box-danger">
 
 **Ne cliquez jamais** sur ce genre de lien !
 </div>
+
+\`Phishing = Hameçonnage\`
       `,
     },
 
@@ -126,8 +128,8 @@ export const emailLessonData: LessonData = {
 <div class="box-info">
 
 <span style="color: #7C3AED;">**Outils utiles :**</span>
-- [Signal Spam](https://www.signal-spam.fr/) (pour signaler les arnaques en France).
-- [Phishing Initiative](https://www.phishing-initiative.fr/) (liste des sites frauduleux).
+- [<u>Signal Spam</u>](https://www.signal-spam.fr/) (pour signaler les arnaques en France).
+- [<u>Phishing Initiative</u>](https://www.phishing-initiative.fr/) (liste des sites frauduleux).
 </div>
 
       `,
