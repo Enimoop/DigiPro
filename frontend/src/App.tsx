@@ -3,7 +3,6 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./auth/ProtectedRoute";
 
 const LoginPage = lazy(() => import("./pages/LoginPage"));
-const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const PasswordResetPage = lazy(() => import("./pages/PasswordResetPage"));
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -18,20 +17,12 @@ export default function App() {
   return (
     <Suspense fallback={<div className="d-flex justify-content-center py-5">Chargement...</div>}>
       <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/" element={<Navigate to="/home" replace />} />
 
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/reset-password" element={<PasswordResetPage />} />
         <Route element={<AppLayout />}>
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <DashboardPage />
-              </ProtectedRoute>
-            }
-          />
           <Route
             path="/home"
             element={

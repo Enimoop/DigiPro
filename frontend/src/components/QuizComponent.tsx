@@ -60,6 +60,14 @@ export default function QuizComponent({ questions, onFinish, onGoToGame }: Props
     return "outline-secondary";
   };
 
+  const getFinishMessage = () => {
+    if (scorePercent === 100) return { text: "Parfait! 🎉", color: "success" };
+    if (scorePercent >= 80) return { text: "Excellent! 🌟", color: "success" };
+    if (scorePercent >= 60) return { text: "Bon travail! 👌", color: "info" };
+    if (scorePercent >= 40) return { text: "Bien essayé! 👍", color: "warning" };
+    return { text: "Réessayez! 💪", color: "danger" };
+  };
+
   const canValidate = selectedIndex !== null && !validated && !finished;
   const canNext = validated && !finished;
   const scorePercent = Math.round((correctCount / total) * 100);
@@ -140,7 +148,9 @@ export default function QuizComponent({ questions, onFinish, onGoToGame }: Props
 
       {finished && (
         <div className="quiz-summary mt-4 p-4">
-          <div className="fw-bold fs-3 mb-2">Bravo 🎉</div>
+          <div className="fw-bold fs-3 mb-2" style={{ color: `var(--bs-${getFinishMessage().color})` }}>
+            {getFinishMessage().text}
+          </div>
           <div className="text-muted fs-5 mb-4">
             Ton score : <span className="fw-bold">{correctCount}/{total}</span> ({scorePercent}%)
           </div>

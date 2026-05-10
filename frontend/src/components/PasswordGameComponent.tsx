@@ -129,7 +129,7 @@ export default function PasswordGameComponent({ onGameComplete }: Props) {
             </Row>
 
             <div className="d-flex justify-content-center">
-              <Card className="password-game__meter" style={{ minWidth: 320 }}>
+              <Card style={{ minWidth: 320 }}>
                 <Card.Body>
                   <Row className="align-items-center">
                     <Col className="text-start">

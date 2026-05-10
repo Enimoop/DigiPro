@@ -68,7 +68,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div 
+    <div
       className="container-fluid d-flex align-items-center justify-content-center min-vh-100"
       style={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${fond2})`,
@@ -79,7 +79,7 @@ export default function RegisterPage() {
     >
       {/* Conteneur vertical bridé à 420px */}
       <div className="d-flex flex-column align-items-center w-100" style={{ maxWidth: 420 }}>
-        
+
         {/* Bloc central blanc */}
         <div className="w-100 bg-white p-4 p-md-5 rounded shadow-lg">
           <div className="text-center mb-4">
@@ -184,26 +184,26 @@ export default function RegisterPage() {
         </div>
 
         {/* Barre des logos partenaires alignée (420px) */}
-        <div 
-          className="d-flex justify-content-around align-items-center mt-4 p-3 rounded shadow-sm w-100" 
+        <div
+          className="d-flex justify-content-around align-items-center mt-4 p-3 rounded shadow-sm w-100"
           style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
         >
-          <img 
-            src={prefetlogo} 
-            alt="Préfecture du Val d'Oise" 
-            style={{ height: "55px", width: "auto" }} 
+          <img
+            src={prefetlogo}
+            alt="Préfecture du Val d'Oise"
+            style={{ height: "55px", width: "auto" }}
           />
           <div style={{ width: "1px", height: "40px", backgroundColor: "#dee2e6" }}></div>
-          <img 
-            src={egaliteLogo} 
-            alt="Egalité des chances" 
-            style={{ height: "55px", width: "auto" }} 
+          <img
+            src={egaliteLogo}
+            alt="Egalité des chances"
+            style={{ height: "55px", width: "auto" }}
           />
           <div style={{ width: "1px", height: "40px", backgroundColor: "#dee2e6" }}></div>
-          <img 
-            src={entrepriselogo} 
-            alt="Entreprises" 
-            style={{ height: "50px", width: "auto" }} 
+          <img
+            src={entrepriselogo}
+            alt="Entreprises"
+            style={{ height: "50px", width: "auto" }}
           />
         </div>
 

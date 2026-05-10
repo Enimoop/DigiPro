@@ -566,20 +566,28 @@ body {
   background-color: var(--theme-addon-hover-bg);
 }
 
-.password-game .form-check-label,
-.password-game .form-check-input,
-.password-game .text-muted {
-  color: var(--theme-text-muted) !important;
+.password-game .form-check-label {
+  color: var(--theme-text) !important;
+  opacity: 1 !important;
 }
 
 .password-game .form-check-input {
-  background-color: var(--theme-surface);
-  border-color: var(--theme-border-strong);
+  opacity: 1 !important;
 }
 
-.password-game .form-check-input:checked {
-  background-color: var(--theme-input-focus-border);
-  border-color: var(--theme-input-focus-border);
+.password-game .form-switch .form-check-input {
+  background-color: var(--theme-border) !important;
+  border-color: var(--theme-border) !important;
+  width: 3.5em !important;
+}
+
+.password-game .form-switch .form-check-input:checked {
+  background-color: var(--theme-input-focus-border) !important;
+  border-color: var(--theme-input-focus-border) !important;
+}
+
+.password-game .form-switch .form-check-input:disabled {
+  opacity: 1 !important;
 }
 
 .password-game__meter {
@@ -1513,7 +1521,33 @@ html.dark-mode .phishing-feedback.alert-danger {
 }
 
 html.dark-mode .password-game .form-check-input {
-  background-color: var(--theme-surface-muted);
+  opacity: 1 !important;
+}
+
+html.dark-mode .password-game .form-switch .form-check-input {
+  background-color: var(--theme-border) !important;
+  border-color: var(--theme-border) !important;
+}
+
+html.dark-mode .password-game .form-switch .form-check-input:checked {
+  background-color: var(--theme-input-focus-border) !important;
+  border-color: var(--theme-input-focus-border) !important;
+}
+
+html.dark-mode .password-game .form-check-label {
+  color: var(--theme-text) !important;
+  opacity: 1 !important;
+}
+
+html.dark-mode .password-game .card,
+html.dark-mode .password-game .card-body {
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-border) !important;
+  color: var(--theme-text) !important;
+}
+
+html.dark-mode .password-game h6 {
+  color: var(--theme-text-muted) !important;
 }
 
 /* ── Dark mode for Bureautique game ────────────────────────────── */
@@ -1716,15 +1750,51 @@ html.high-contrast .phishing-action-button:focus {
   color: #000 !important;
 }
 
-html.high-contrast .password-game .form-check-label,
-html.high-contrast .password-game .text-muted,
-html.high-contrast .password-game__meter {
+html.high-contrast .password-game .form-check-label {
   color: #ffff00 !important;
 }
 
-html.high-contrast .password-game .form-check-input {
+html.high-contrast .password-game .text-muted,
+html.high-contrast .password-game__meter,
+html.high-contrast .password-game h6 {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .password-game .card,
+html.high-contrast .password-game .card-body {
   background-color: #000 !important;
-  border-color: #fff !important;
+  border: 2px solid #fff !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast .password-game .form-check-label {
+  color: #ffff00 !important;
+  opacity: 1 !important;
+}
+
+html.high-contrast .password-game .form-check-input {
+  opacity: 1 !important;
+  border: 2px solid #fff !important;
+}
+
+html.high-contrast .password-game .form-switch .form-check-input {
+  background-color: #333 !important;
+  border: 2px solid #fff !important;
+}
+
+html.high-contrast .password-game .form-switch .form-check-input:checked {
+  background-color: #ffff00 !important;
+  border: 2px solid #ffff00 !important;
+}
+
+html.high-contrast .password-game .form-check:not(.form-switch) .form-check-input {
+  background-color: #000 !important;
+  border: 2px solid #fff !important;
+}
+
+html.high-contrast .password-game .form-check:not(.form-switch) .form-check-input:checked {
+  background-color: #ffff00 !important;
+  border: 2px solid #ffff00 !important;
 }
 
 /* ── High contrast mode for Bureautique game ────────────────────────────── */
