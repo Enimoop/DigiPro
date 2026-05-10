@@ -87,7 +87,7 @@ export default function PasswordGameComponent({ onGameComplete }: Props) {
       </Header>
       <Container
         fluid
-        className="d-flex align-items-center"
+        className="password-game d-flex align-items-center"
         style={{ minHeight: "calc(100vh - 300px)" }}
       >
         <Row className="justify-content-center w-100">
@@ -129,7 +129,7 @@ export default function PasswordGameComponent({ onGameComplete }: Props) {
             </Row>
 
             <div className="d-flex justify-content-center">
-              <Card style={{ minWidth: 320 }}>
+              <Card className="password-game__meter" style={{ minWidth: 320 }}>
                 <Card.Body>
                   <Row className="align-items-center">
                     <Col className="text-start">

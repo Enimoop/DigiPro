@@ -36,7 +36,7 @@ export const emailLessonData: LessonData = {
 
 **- Expéditeur bizarre** : Une adresse e-mail qui imite mal une marque (ex: "support@paypa1.com" "1" au lieu de "L").
 
-**- Fautes d’orthographe** : Les faut e-mail comporte souvent plusieurs fautes d'othographe.
+**- Fautes d’orthographe** : Les faux e-mails comportent souvent plusieurs fautes d'orthographe.
 
 **- Urgence ou menace** : "Votre compte sera bloqué dans 24h !"
 

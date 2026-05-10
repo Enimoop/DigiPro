@@ -4,8 +4,133 @@ body,
   min-height: 100%;
 }
 
+/* ===== THEME TOKENS ===== */
+:root {
+  --theme-bg: #ffffff;
+  --theme-surface: #ffffff;
+  --theme-surface-muted: #f8fafc;
+  --theme-surface-soft: #f0f1fb;
+  --theme-text: #111827;
+  --theme-text-muted: #6b7280;
+  --theme-heading: #111827;
+  --theme-border: #e5e7eb;
+  --theme-border-strong: #d1d5db;
+  --theme-divider: #e3ebf6;
+  --theme-shadow: 0 16px 40px rgba(15, 23, 42, 0.14);
+  --theme-border-width: 1px;
+  --theme-input-bg: #ffffff;
+  --theme-input-text: #111827;
+  --theme-input-placeholder: #9ca3af;
+  --theme-input-focus-border: #7c3aed;
+  --theme-input-focus-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.18);
+  --theme-addon-bg: #ffffff;
+  --theme-addon-hover-bg: #f8f5ff;
+  --theme-addon-text: #6b7280;
+  --theme-addon-hover-text: #7c3aed;
+  --theme-progress-track: #e5e7eb;
+  --theme-progress-fill: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+  --theme-progress-text: #ffffff;
+  --theme-icon-filter: none;
+}
+
+html.dark-mode {
+  color-scheme: dark;
+  --theme-bg: #1a1d2e;
+  --theme-surface: #1f2237;
+  --theme-surface-muted: #111827;
+  --theme-surface-soft: #2d3148;
+  --theme-text: #d1d5db;
+  --theme-text-muted: #aeb8d3;
+  --theme-heading: #f9fafb;
+  --theme-border: #2d3148;
+  --theme-border-strong: #4b5563;
+  --theme-divider: #2d3148;
+  --theme-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+  --theme-input-bg: #111827;
+  --theme-input-text: #f9fafb;
+  --theme-input-placeholder: #9ca3af;
+  --theme-input-focus-border: #a78bfa;
+  --theme-input-focus-shadow: 0 0 0 0.2rem rgba(167, 139, 250, 0.2);
+  --theme-addon-bg: #1f2937;
+  --theme-addon-hover-bg: #2d3748;
+  --theme-addon-text: #d1d5db;
+  --theme-addon-hover-text: #f9fafb;
+  --theme-progress-track: #374151;
+  --theme-progress-fill: linear-gradient(90deg, #60a5fa 0%, #3b82f6 100%);
+  --theme-progress-text: #eff6ff;
+  --theme-icon-filter: brightness(0) invert(1);
+}
+
+html.high-contrast {
+  color-scheme: dark;
+  --theme-bg: #000000;
+  --theme-surface: #000000;
+  --theme-surface-muted: #000000;
+  --theme-surface-soft: #000000;
+  --theme-text: #ffffff;
+  --theme-text-muted: #ffff00;
+  --theme-heading: #ffff00;
+  --theme-border: #ffffff;
+  --theme-border-strong: #ffffff;
+  --theme-divider: #ffffff;
+  --theme-shadow: none;
+  --theme-border-width: 2px;
+  --theme-input-bg: #000000;
+  --theme-input-text: #ffffff;
+  --theme-input-placeholder: #ffff00;
+  --theme-input-focus-border: #ffff00;
+  --theme-input-focus-shadow: 0 0 0 0.2rem rgba(255, 255, 0, 0.25);
+  --theme-addon-bg: #000000;
+  --theme-addon-hover-bg: #ffffff;
+  --theme-addon-text: #ffff00;
+  --theme-addon-hover-text: #000000;
+  --theme-progress-track: #ffffff;
+  --theme-progress-fill: #ffff00;
+  --theme-progress-text: #000000;
+  --theme-icon-filter: brightness(0) invert(1);
+}
+
+/* ===== GLOBAL FOUNDATION ===== */
 body {
   margin: 0;
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
+  --bs-body-bg: var(--theme-bg);
+  --bs-body-color: var(--theme-text);
+  --bs-border-color: var(--theme-border);
+  --bs-secondary-color: var(--theme-text-muted);
+  --bs-secondary-bg: var(--theme-surface);
+  --bs-tertiary-bg: var(--theme-surface-muted);
+  --bs-emphasis-color: var(--theme-heading);
+}
+
+.text-muted {
+  color: var(--theme-text-muted) !important;
+}
+
+.card {
+  background-color: var(--theme-surface);
+  border: var(--theme-border-width) solid var(--theme-border);
+  color: var(--theme-text);
+}
+
+.main-content {
+  background-color: var(--theme-bg);
+}
+
+/* ===== CORE APP SURFACES ===== */
+.header {
+  background-color: var(--theme-bg) !important;
+  border-color: var(--theme-border) !important;
+}
+
+.header-body,
+.header-title {
+  color: var(--theme-heading) !important;
+}
+
+.header-pretitle {
+  color: var(--theme-text-muted) !important;
 }
 
 .module-card:hover {
@@ -13,16 +138,81 @@ body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
+.module-card {
+  background-color: var(--theme-surface) !important;
+  border: var(--theme-border-width) solid var(--theme-border) !important;
+  color: var(--theme-text) !important;
+}
+
+.module-card .card-title {
+  color: var(--theme-heading) !important;
+}
+
+.module-card .text-muted {
+  color: var(--theme-text-muted) !important;
+}
+
+.lesson-content-card {
+  background-color: var(--theme-surface) !important;
+  border: var(--theme-border-width) solid var(--theme-border) !important;
+  color: var(--theme-text) !important;
+}
+
+.lesson-content-card__header {
+  background-color: var(--theme-surface) !important;
+  border-bottom: var(--theme-border-width) solid var(--theme-border) !important;
+  color: var(--theme-heading) !important;
+}
+
+.lesson-content-card__header h4 {
+  color: var(--theme-heading) !important;
+}
+
+.lesson-content-card__body {
+  background-color: var(--theme-surface) !important;
+  color: var(--theme-text) !important;
+}
+
+.lesson-content {
+  color: var(--theme-text);
+}
+
+.lesson-content p,
+.lesson-content li,
+.lesson-content div,
+.lesson-content strong,
+.lesson-content em,
+.lesson-content code {
+  color: inherit;
+}
+
+.lesson-status-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: #fff;
+  z-index: 10;
+}
+
+.lesson-status-badge.is-completed {
+  background-color: #10b981;
+}
+
+.lesson-status-badge.is-started {
+  background-color: #f59e0b;
+}
+
 .module-icon {
   opacity: 0.9;
 }
 
-.lesson-card {
-  width: 240px; 
-  min-height: 180px;
-  border-radius: 12px;
-}
-
+/* ===== LEARNING AND QUIZ CONTENT ===== */
 .section-divider {
   position: relative;
   margin-top: 3rem;
@@ -32,7 +222,7 @@ body {
   content: "";
   display: block;
   width: 100%;
-  border-bottom: 1px solid #e3ebf6; 
+  border-bottom: 1px solid var(--theme-divider);
 }
 
 .lesson-content p {
@@ -104,6 +294,7 @@ body {
   color: #fff !important;
 }
 
+/* ===== HOME MODULE CARDS ===== */
 .module-clickable {
   cursor: pointer;
   border-radius: 14px;
@@ -135,6 +326,266 @@ body {
 
 .text-purple {
   color: #7c3aed;
+}
+
+/* ===== ABOUT MODAL ===== */
+.about-modal .modal-content {
+  border-radius: 16px;
+  border: var(--theme-border-width) solid var(--theme-border);
+  background-color: var(--theme-surface);
+  color: var(--theme-text);
+  box-shadow: var(--theme-shadow);
+}
+
+.about-modal .modal-header {
+  border-bottom: var(--theme-border-width) solid var(--theme-border);
+  background-color: var(--theme-surface);
+  color: var(--theme-heading);
+}
+
+.about-modal .btn-close {
+  filter: var(--theme-icon-filter);
+}
+
+.about-modal .modal-title {
+  font-weight: 700;
+  color: var(--theme-heading);
+}
+
+.about-modal__avatar {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: var(--theme-surface-soft);
+}
+
+.about-modal__avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-modal__role {
+  color: var(--theme-text-muted);
+}
+
+.about-modal__section {
+  border-top: var(--theme-border-width) solid var(--theme-border);
+}
+
+.about-modal__description {
+  color: var(--theme-text-muted);
+}
+
+/* ===== USER PAGE (INPUTS + PROGRESS) ===== */
+.user-page .form-control {
+  border-color: var(--theme-border-strong);
+  background-color: var(--theme-input-bg);
+  color: var(--theme-input-text);
+}
+
+.user-page .form-control::placeholder {
+  color: var(--theme-input-placeholder);
+}
+
+.user-page .form-control:focus {
+  border-color: var(--theme-input-focus-border);
+  background-color: var(--theme-input-bg);
+  color: var(--theme-input-text);
+  box-shadow: var(--theme-input-focus-shadow);
+}
+
+.user-page .input-group > .btn-outline-secondary {
+  border-color: var(--theme-border-strong);
+  color: var(--theme-addon-text);
+  background-color: var(--theme-addon-bg);
+}
+
+.user-page .input-group > .btn-outline-secondary:hover,
+.user-page .input-group > .btn-outline-secondary:focus {
+  border-color: var(--theme-input-focus-border);
+  color: var(--theme-addon-hover-text);
+  background-color: var(--theme-addon-hover-bg);
+}
+
+.user-page .text-muted {
+  color: var(--theme-text-muted) !important;
+}
+
+.user-page hr {
+  border-color: var(--theme-border);
+  opacity: 1;
+}
+
+.user-progress-accordion .accordion-item {
+  overflow: hidden;
+  border: var(--theme-border-width) solid var(--theme-border);
+  border-radius: 12px;
+  background-color: var(--theme-surface);
+}
+
+.user-progress-accordion .accordion-item + .accordion-item {
+  margin-top: 0.75rem;
+}
+
+.user-progress-accordion .accordion-button {
+  background-color: var(--theme-surface);
+  color: var(--theme-heading);
+}
+
+.user-progress-accordion .accordion-button:not(.collapsed) {
+  background-color: var(--theme-surface-muted);
+  color: var(--theme-heading);
+  box-shadow: none;
+}
+
+.user-progress-accordion .accordion-button:focus {
+  box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.12);
+}
+
+.user-progress-accordion .accordion-body {
+  background-color: var(--theme-surface);
+  color: var(--theme-text);
+}
+
+.user-progress-accordion .accordion-button::after {
+  filter: var(--theme-icon-filter);
+}
+
+.user-progress-theme-row {
+  border-top-color: var(--theme-border) !important;
+}
+
+.user-progress-bar {
+  background-color: var(--theme-progress-track);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.user-progress-bar .progress-bar {
+  background: var(--theme-progress-fill);
+  color: var(--theme-progress-text);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.quiz-shell .text-muted {
+  color: var(--theme-text-muted) !important;
+}
+
+.quiz-progress {
+  background-color: var(--theme-progress-track);
+  overflow: hidden;
+}
+
+.quiz-progress .progress-bar {
+  background: var(--theme-progress-fill);
+  color: var(--theme-progress-text);
+}
+
+.quiz-question-card {
+  background-color: var(--theme-surface) !important;
+  border: var(--theme-border-width) solid var(--theme-border) !important;
+  color: var(--theme-heading) !important;
+  box-shadow: var(--theme-shadow);
+}
+
+.quiz-question-title {
+  color: var(--theme-heading);
+}
+
+.quiz-answer-btn {
+  box-shadow: none;
+}
+
+.quiz-explanation,
+.quiz-summary {
+  background: var(--theme-surface-muted);
+  border: var(--theme-border-width) solid var(--theme-border);
+  border-radius: 18px;
+  color: var(--theme-text);
+}
+
+.quiz-explanation-text {
+  color: var(--theme-text-muted);
+}
+
+.bureautique-file-extension {
+  color: var(--theme-text-muted);
+}
+
+.bureautique-mobile-hint {
+  color: #6d28d9;
+}
+
+.bureautique-box-label {
+  color: var(--theme-heading);
+}
+
+.phishing-feedback {
+  border-width: var(--theme-border-width);
+}
+
+.phishing-action-button {
+  min-height: 48px;
+}
+
+/* ===== PASSWORD GAME INPUTS ===== */
+.password-game .form-control {
+  border-color: var(--theme-border-strong);
+  background-color: var(--theme-input-bg);
+  color: var(--theme-input-text);
+}
+
+.password-game .form-control::placeholder {
+  color: var(--theme-input-placeholder);
+}
+
+.password-game .form-control:focus {
+  border-color: var(--theme-input-focus-border);
+  background-color: var(--theme-input-bg);
+  color: var(--theme-input-text);
+  box-shadow: var(--theme-input-focus-shadow);
+}
+
+.password-game .input-group > .btn-outline-secondary {
+  border-color: var(--theme-border-strong);
+  color: var(--theme-addon-text);
+  background-color: var(--theme-addon-bg);
+}
+
+.password-game .input-group > .btn-outline-secondary:hover,
+.password-game .input-group > .btn-outline-secondary:focus {
+  border-color: var(--theme-input-focus-border);
+  color: var(--theme-addon-hover-text);
+  background-color: var(--theme-addon-hover-bg);
+}
+
+.password-game .form-check-label,
+.password-game .form-check-input,
+.password-game .text-muted {
+  color: var(--theme-text-muted) !important;
+}
+
+.password-game .form-check-input {
+  background-color: var(--theme-surface);
+  border-color: var(--theme-border-strong);
+}
+
+.password-game .form-check-input:checked {
+  background-color: var(--theme-input-focus-border);
+  border-color: var(--theme-input-focus-border);
+}
+
+.password-game__meter {
+  background-color: var(--theme-surface) !important;
+  border: var(--theme-border-width) solid var(--theme-border) !important;
+  color: var(--theme-text) !important;
 }
 
 .feather-lg svg {
@@ -169,7 +620,7 @@ body {
   color: #6d28d9;
 }
 
-/* ── Settings popup ────────────────────────────── */
+/* ===== SETTINGS POPUP ===== */
 .settings-popup {
   position: fixed;
   bottom: 90px;
@@ -177,10 +628,11 @@ body {
   transform: translateX(-50%);
   width: 220px;
   padding: 1rem;
-  background: #fff;
-  border: 1px solid #e3ebf6;
+  background: var(--theme-surface);
+  border: var(--theme-border-width) solid var(--theme-border);
+  color: var(--theme-text);
   border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--theme-shadow);
   z-index: 1050;
 }
 
@@ -196,122 +648,7 @@ body {
   }
 }
 
-/* ── Dark mode ─────────────────────────────────── */
-html.dark-mode {
-  color-scheme: dark;
-}
-
-html.dark-mode body {
-  background-color: #1a1d2e;
-  color: #d1d5db;
-}
-
-html.dark-mode .navbar-vertical {
-  background-color: #151827 !important;
-  border-color: #2d3148 !important;
-}
-
-html.dark-mode .navbar-vertical .nav-link,
-html.dark-mode .navbar-vertical .navbar-heading {
-  color: #a5adc6 !important;
-}
-
-html.dark-mode .navbar-vertical .nav-link.active,
-html.dark-mode .navbar-vertical .nav-link:hover {
-  color: #fff !important;
-}
-
-html.dark-mode .card {
-  background-color: #1f2237;
-  border-color: #2d3148;
-  color: #d1d5db;
-}
-
-html.dark-mode .main-content {
-  background-color: #1a1d2e;
-}
-
-html.dark-mode .settings-popup {
-  background: #1f2237;
-  border-color: #2d3148;
-  color: #d1d5db;
-}
-
-html.dark-mode .form-range::-webkit-slider-runnable-track {
-  background: #2d3148;
-}
-
-html.dark-mode .section-divider::after {
-  border-color: #2d3148;
-}
-
-html.dark-mode .header {
-  background-color: #1a1d2e !important;
-  border-color: #2d3148 !important;
-}
-
-html.dark-mode .header-body,
-html.dark-mode .header-pretitle,
-html.dark-mode .header-title {
-  color: #d1d5db !important;
-}
-
-/* ── High contrast ─────────────────────────────── */
-html.high-contrast body {
-  background-color: #000;
-  color: #fff;
-}
-
-html.high-contrast .navbar-vertical {
-  background-color: #000 !important;
-  border-color: #fff !important;
-}
-
-html.high-contrast .navbar-vertical .nav-link,
-html.high-contrast .navbar-vertical .navbar-heading {
-  color: #fff !important;
-}
-
-html.high-contrast .card {
-  background-color: #000;
-  border: 2px solid #fff;
-  color: #fff;
-}
-
-html.high-contrast .main-content {
-  background-color: #000;
-}
-
-html.high-contrast .settings-popup {
-  background: #000;
-  border: 2px solid #fff;
-  color: #fff;
-}
-
-html.high-contrast .header {
-  background-color: #000 !important;
-  border-color: #fff !important;
-}
-
-html.high-contrast .header-body,
-html.high-contrast .header-pretitle,
-html.high-contrast .header-title {
-  color: #fff !important;
-}
-
-html.high-contrast a,
-html.high-contrast .nav-link {
-  color: #ffff00 !important;
-}
-
-html.high-contrast .btn-purple {
-  background-color: #ffff00 !important;
-  border-color: #ffff00 !important;
-  color: #000 !important;
-}
-
-
-/* ── Chevron stepper ─────────────────────────────── */
+/* ===== CHEVRON STEPPER ===== */
 
 .chevron-stepper {
   display: flex;
@@ -368,8 +705,7 @@ html.high-contrast .btn-purple {
   color: #7c3aed;
 }
 
-/* ── Reactour custom styles ─────────────────────────────── */
-
+/* ===== ONBOARDING TOUR (REACTOUR) ===== */
 
 .reactour__popover {
   font-size: 17px !important;
@@ -378,6 +714,18 @@ html.high-contrast .btn-purple {
 
 .reactour__popover h4 {
   font-size: 20px !important;
+}
+
+.reactour__close-button {
+  color: #fff !important;
+}
+
+.reactour__close-button svg {
+  color: inherit !important;
+}
+
+.reactour__close-button svg path {
+  stroke: currentColor !important;
 }
 
 button[aria-label="Go to prev step"] svg,
@@ -411,11 +759,13 @@ button[aria-label="Go to next step"][disabled] svg path {
   opacity: 0 !important;
 }
 
+/* ===== PEDAGOGICAL CONTENT BOXES ===== */
 .lesson-card {
   width: 240px;
   min-height: 220px;
   border-radius: 14px;
 }
+
 /* Couleurs texte */
 .text-success-soft {
   color: #15803D;
@@ -457,7 +807,7 @@ button[aria-label="Go to next step"][disabled] svg path {
   margin: 1rem 0;
 }
 
-/* ===== BUREAUTIQUE GAME ===== */
+/* ===== MINI-GAME: BUREAUTIQUE ===== */
 
 /* Fichier à glisser */
 .bureautique-file {
@@ -516,7 +866,6 @@ button[aria-label="Go to next step"][disabled] svg path {
   width: 100%;
 }
 
-/* Animation de succès */
 @keyframes successAnimation {
   0% {
     border-color: currentColor;
@@ -531,7 +880,6 @@ button[aria-label="Go to next step"][disabled] svg path {
   }
 }
 
-/* Animation d'erreur */
 @keyframes errorAnimation {
   0% {
     border-color: #ef4444;
@@ -562,7 +910,6 @@ button[aria-label="Go to next step"][disabled] svg path {
   border-color: #ef4444 !important;
 }
 
-/* Barre de progression personnalisée */
 .bureautique-progress {
   height: 6px;
   border-radius: 3px;
@@ -611,7 +958,7 @@ button[aria-label="Go to next step"][disabled] svg path {
   }
 }
 
-/* ===== BUREAUTIQUE GAME TUTORIAL ===== */
+/* ===== MINI-GAME: BUREAUTIQUE TUTORIAL ===== */
 
 /* Modal tutoriel */
 .bureautique-tutorial-modal .modal-content {
@@ -826,7 +1173,7 @@ button[aria-label="Go to next step"][disabled] svg path {
   }
 }
 
-/* ===== PHISHING DETECTION GAME ===== */
+/* ===== MINI-GAME: PHISHING ===== */
 
 .phishing-progress {
   height: 6px;
@@ -1078,7 +1425,43 @@ button[aria-label="Go to next step"][disabled] svg path {
   }
 }
 
-/* ===== DARK MODE & HIGH CONTRAST FIXES ===== */
+/* ===== THEME FIXES: DARK MODE + HIGH CONTRAST ===== */
+
+/* ── Dark mode: global navigation and controls ────────────────────────────── */
+html.dark-mode .navbar-vertical {
+  background-color: #151827 !important;
+  border-color: #2d3148 !important;
+}
+
+html.dark-mode .navbar-vertical .nav-link,
+html.dark-mode .navbar-vertical .navbar-heading {
+  color: #a5adc6 !important;
+}
+
+html.dark-mode .navbar-vertical .nav-link.active,
+html.dark-mode .navbar-vertical .nav-link:hover {
+  color: #fff !important;
+}
+
+html.dark-mode .form-range::-webkit-slider-runnable-track {
+  background: #2d3148;
+}
+
+/* ── High contrast: global navigation and links ────────────────────────────── */
+html.high-contrast .navbar-vertical {
+  background-color: #000 !important;
+  border-color: #fff !important;
+}
+
+html.high-contrast .navbar-vertical .nav-link,
+html.high-contrast .navbar-vertical .navbar-heading {
+  color: #fff !important;
+}
+
+html.high-contrast a,
+html.high-contrast .nav-link {
+  color: #ffff00 !important;
+}
 
 /* ── Dark mode for buttons ────────────────────────────── */
 html.dark-mode .btn-purple {
@@ -1113,37 +1496,29 @@ html.dark-mode .btn-outline-primary:hover {
   color: #fff !important;
 }
 
-/* ── Dark mode for Bureautique game ────────────────────────────── */
-html.dark-mode .bureautique-box {
-  background: #2d3748 !important;
-  border-color: #4b5563 !important;
-  color: #e5e7eb !important;
+html.dark-mode .bureautique-mobile-hint {
+  color: #c4b5fd;
 }
 
+html.dark-mode .phishing-feedback.alert-success {
+  background-color: #064e3b;
+  border-color: #10b981;
+  color: #d1f5e8;
+}
+
+html.dark-mode .phishing-feedback.alert-danger {
+  background-color: #7f1d1d;
+  border-color: #fca5a5;
+  color: #fecaca;
+}
+
+html.dark-mode .password-game .form-check-input {
+  background-color: var(--theme-surface-muted);
+}
+
+/* ── Dark mode for Bureautique game ────────────────────────────── */
 html.dark-mode .bureautique-box-icon {
   color: #a78bfa;
-}
-
-html.dark-mode .bureautique-box-content {
-  color: #d1d5db;
-}
-
-html.dark-mode .bureautique-box:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
-}
-
-html.dark-mode .bureautique-box.feedback-success {
-  background: #064e3b !important;
-  border-color: #10b981 !important;
-}
-
-html.dark-mode .bureautique-box.feedback-error {
-  background: #7f1d1d !important;
-  border-color: #fca5a5 !important;
-}
-
-html.dark-mode .bureautique-progress {
-  background-color: #374151 !important;
 }
 
 html.dark-mode .bureautique-box {
@@ -1244,6 +1619,7 @@ html.dark-mode .phishing-email-container.feedback-wrong {
   border-color: #fca5a5 !important;
 }
 
+
 html.dark-mode .phishing-red-flags {
   background: #2d3748 !important;
   border-color: #4b5563 !important;
@@ -1299,6 +1675,56 @@ html.high-contrast .btn-outline-primary:hover {
   background-color: #fff !important;
   border-color: #000 !important;
   color: #000 !important;
+}
+
+html.high-contrast .lesson-status-badge {
+  border: 2px solid #fff;
+}
+
+html.high-contrast .lesson-status-badge.is-completed {
+  background-color: #000;
+  color: #00ff00;
+  border-color: #00ff00;
+}
+
+html.high-contrast .lesson-status-badge.is-started {
+  background-color: #000;
+  color: #ffff00;
+  border-color: #ffff00;
+}
+
+html.high-contrast .bureautique-mobile-hint {
+  color: #ffff00;
+}
+
+html.high-contrast .phishing-feedback {
+  background: #000 !important;
+  color: #ffff00 !important;
+  border: 2px solid #fff !important;
+}
+
+html.high-contrast .phishing-action-button {
+  background-color: #000 !important;
+  border-color: #fff !important;
+  color: #ffff00 !important;
+}
+
+html.high-contrast .phishing-action-button:hover,
+html.high-contrast .phishing-action-button:focus {
+  background-color: #ffff00 !important;
+  border-color: #ffff00 !important;
+  color: #000 !important;
+}
+
+html.high-contrast .password-game .form-check-label,
+html.high-contrast .password-game .text-muted,
+html.high-contrast .password-game__meter {
+  color: #ffff00 !important;
+}
+
+html.high-contrast .password-game .form-check-input {
+  background-color: #000 !important;
+  border-color: #fff !important;
 }
 
 /* ── High contrast mode for Bureautique game ────────────────────────────── */
@@ -1574,84 +2000,6 @@ html.high-contrast .phishing-red-flags-inline strong {
   color: #ffff00 !important;
 }
 
-/* ── High contrast mode for Phishing game ────────────────────────────── */
-html.high-contrast .phishing-progress {
-  background-color: #fff !important;
-}
-
-html.high-contrast .phishing-progress .progress-bar {
-  background: #ffff00 !important;
-}
-
-html.high-contrast .phishing-email-container {
-  background: #000 !important;
-  border: 2px solid #fff !important;
-  box-shadow: none;
-  color: #ffff00;
-}
-
-html.high-contrast .phishing-email-header {
-  background: #000 !important;
-  border: 1px solid #fff !important;
-}
-
-html.high-contrast .phishing-email-name {
-  color: #ffff00 !important;
-}
-
-html.high-contrast .phishing-email-addr {
-  color: #ffff00 !important;
-}
-
-html.high-contrast .phishing-email-time {
-  color: #ffff00 !important;
-}
-
-html.high-contrast .phishing-email-subject {
-  color: #ffff00 !important;
-  border: none;
-}
-
-html.high-contrast .phishing-email-body {
-  color: #ffff00 !important;
-  border: 1px solid #fff !important;
-  background: #000 !important;
-}
-
-html.high-contrast .phishing-avatar {
-  background: #fff !important;
-  color: #000 !important;
-}
-
-html.high-contrast .phishing-email-container.feedback-correct {
-  background: #000 !important;
-  border-color: #00ff00 !important;
-}
-
-html.high-contrast .phishing-email-container.feedback-wrong {
-  background: #000 !important;
-  border-color: #ff0000 !important;
-}
-
-html.high-contrast .phishing-red-flags {
-  background: #000 !important;
-  border: 2px solid #fff !important;
-  color: #ffff00 !important;
-}
-
-html.high-contrast .phishing-red-flags li {
-  color: #ffff00 !important;
-}
-
-html.high-contrast .phishing-red-flags-inline {
-  background: #000 !important;
-  border: 2px solid #fff !important;
-}
-
-html.high-contrast .phishing-red-flags-inline strong {
-  color: #ffff00 !important;
-}
-
 html.high-contrast .phishing-red-flags-inline li {
   color: #ffff00 !important;
 }
@@ -1676,10 +2024,6 @@ html.dark-mode .module-clickable:hover .btn-start {
   background-color: #4b5563 !important;
   border-color: #6b7280 !important;
   color: #c4b5fd !important;
-}
-
-html.dark-mode .module-card:hover {
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4) !important;
 }
 
 html.dark-mode .module-card:hover {

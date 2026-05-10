@@ -11,6 +11,7 @@ export interface GameRegistry {
 
 export const gameRegistry: GameRegistry = {
   bureautique: lazy(() => import("../components/BureautiqueGameComponent")),
+  cybersecurite: lazy(() => import("../components/PasswordGameComponent")),
   passwords: lazy(() => import("../components/PasswordGameComponent")),
   email: lazy(() => import("../components/PhishingGameComponent")),
 };

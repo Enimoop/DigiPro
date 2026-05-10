@@ -65,12 +65,12 @@ export default function QuizComponent({ questions, onFinish, onGoToGame }: Props
   const scorePercent = Math.round((correctCount / total) * 100);
 
   return (
-    <div className="mx-auto" style={{ maxWidth: 1100 }}>
+    <div className="quiz-shell mx-auto" style={{ maxWidth: 1100 }}>
       {/* PROGRESSION */}
       <div className="d-flex align-items-center justify-content-between mb-4">
         <div style={{ flex: 1, marginRight: 24 }}>
           <div className="text-muted small mb-2 fw-semibold">PROGRESSION</div>
-          <ProgressBar now={progress} style={{ height: 10, borderRadius: 999 }} />
+          <ProgressBar now={progress} className="quiz-progress" style={{ height: 10, borderRadius: 999 }} />
         </div>
         <div className="text-muted fw-semibold fs-5">
           {finished ? `${total}/${total}` : `${qIndex + 1}/${total}`}
@@ -78,9 +78,9 @@ export default function QuizComponent({ questions, onFinish, onGoToGame }: Props
       </div>
 
       {/* QUESTION */}
-      <Card className="mb-4">
+      <Card className="mb-4 quiz-question-card">
         <Card.Body className="py-4 px-5">
-          <h2 className="mb-0 fw-bold" style={{ lineHeight: 1.25 }}>
+          <h2 className="quiz-question-title mb-0 fw-bold" style={{ lineHeight: 1.25 }}>
             {current.question}
           </h2>
         </Card.Body>
@@ -93,7 +93,7 @@ export default function QuizComponent({ questions, onFinish, onGoToGame }: Props
             key={idx}
             variant={getVariant(idx)}
             onClick={() => handleSelect(idx)}
-            className="py-3 fw-semibold"
+            className="quiz-answer-btn py-3 fw-semibold"
             style={{
               minHeight: 64,
               borderRadius: 14,
@@ -107,16 +107,9 @@ export default function QuizComponent({ questions, onFinish, onGoToGame }: Props
 
       {/* EXPLICATION */}
       {validated && (
-        <div
-          className="mt-4 p-4"
-          style={{
-            background: "#EFE6FF",
-            border: "1px solid #D9C7FF",
-            borderRadius: 18,
-          }}
-        >
+        <div className="quiz-explanation mt-4 p-4">
           <div className="fw-bold mb-2 fs-5">Explication</div>
-          <div className="text-muted" style={{ fontSize: "1.05rem", lineHeight: 1.6 }}>
+          <div className="quiz-explanation-text text-muted" style={{ fontSize: "1.05rem", lineHeight: 1.6 }}>
             {current.explanation}
           </div>
         </div>
@@ -146,14 +139,7 @@ export default function QuizComponent({ questions, onFinish, onGoToGame }: Props
       )}
 
       {finished && (
-        <div
-          className="mt-4 p-4"
-          style={{
-            background: "#F6F0FF",
-            border: "1px solid #E3D6FF",
-            borderRadius: 18,
-          }}
-        >
+        <div className="quiz-summary mt-4 p-4">
           <div className="fw-bold fs-3 mb-2">Bravo 🎉</div>
           <div className="text-muted fs-5 mb-4">
             Ton score : <span className="fw-bold">{correctCount}/{total}</span> ({scorePercent}%)
