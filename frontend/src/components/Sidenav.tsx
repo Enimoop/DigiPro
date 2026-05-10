@@ -167,7 +167,7 @@ export default function Sidenav() {
         <Container fluid>
           <Navbar.Toggle data-tour="burger" />
 
-          <Navbar.Brand as={NavLink} to="/dashboard">
+          <Navbar.Brand>
             <img className="navbar-brand-img" src={logo} alt="DigiPro" />
           </Navbar.Brand>
 

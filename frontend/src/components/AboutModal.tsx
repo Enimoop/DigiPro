@@ -23,7 +23,7 @@ const contributors = [
 
 export default function AboutModal({ show, onHide }: AboutModalProps) {
   return (
-    <Modal show={show} onHide={onHide} centered size="lg">
+    <Modal show={show} onHide={onHide} centered size="lg" className="about-modal">
       <Modal.Header closeButton>
         <Modal.Title>À propos</Modal.Title>
       </Modal.Header>
@@ -32,27 +32,15 @@ export default function AboutModal({ show, onHide }: AboutModalProps) {
           {contributors.map((person) => (
             <Col xs={12} md={6} key={person.name}>
               <div className="text-center">
-                <div
-                  style={{
-                    width: 80,
-                    height: 80,
-                    backgroundColor: "#F0F1FB",
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    margin: "0 auto 12px",
-                    overflow: "hidden",
-                  }}
-                >
+                <div className="about-modal__avatar">
                   {"photo" in person && person.photo ? (
-                    <img src={person.photo} alt={person.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <img src={person.photo} alt={person.name} className="about-modal__avatar-image" />
                   ) : (
                     <FeatherIcon icon={person.icon} size={40} className="text-purple" />
                   )}
                 </div>
                 <h6 className="mb-1 fw-bold" style={{ fontSize: "1.05rem" }}>{person.name}</h6>
-                <p className="text-muted small">{person.role}</p>
+                <p className="about-modal__role small">{person.role}</p>
               </div>
             </Col>
           ))}
@@ -66,9 +54,9 @@ export default function AboutModal({ show, onHide }: AboutModalProps) {
           />
         </div>
 
-        <div className="border-top pt-4">
+        <div className="about-modal__section pt-4">
           <h5 className="fw-bold mb-3">À propos de DigiPro95</h5>
-          <p className="text-muted mb-0" style={{ fontSize: "0.95rem", lineHeight: 1.7 }}>
+          <p className="about-modal__description mb-0" style={{ fontSize: "0.95rem", lineHeight: 1.7 }}>
             DigiPro95 est une plateforme éducative conçue pour apprendre les fondamentaux de l'informatique et de la cybersécurité.
             <br />
             <br />

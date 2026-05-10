@@ -185,7 +185,7 @@ export default function UserPage() {
   };
 
   return (
-    <div className="main-content">
+    <div className="main-content user-page">
       <Container fluid>
         <Row className="justify-content-center">
           <Col xs={12}>
@@ -293,111 +293,112 @@ export default function UserPage() {
             <hr className="my-5" />
             <Header.Secondary>Mes Progrès</Header.Secondary>
 
-              {modulesLoading || progressLoading ? (
-                <div className="py-4 d-flex justify-content-center">
-                  <Spinner />
-                </div>
-              ) : (
-                <div className="mt-4">
-                  <Accordion defaultActiveKey="0">
-                    {moduleStats.map(({ module, completedCount, totalCount, progressPercent }, idx) => (
-                      <Accordion.Item eventKey={String(idx)} key={module.slug}>
-                        <Accordion.Header>
-                          <Row className="w-100 align-items-center g-3">
-                            <Col md={6}>
-                              <div className="d-flex align-items-center gap-3">
-                                <FeatherIcon icon={module.icon || "grid"} size={20} />
-                                <div>
-                                  <div className="fw-bold">{module.title}</div>
-                                  <div className="text-muted small">
-                                    {completedCount}/{totalCount} thèmes complétés
-                                  </div>
+            {modulesLoading || progressLoading ? (
+              <div className="py-4 d-flex justify-content-center">
+                <Spinner />
+              </div>
+            ) : (
+              <div className="mt-4">
+                <Accordion defaultActiveKey="0" className="user-progress-accordion">
+                  {moduleStats.map(({ module, completedCount, totalCount, progressPercent }, idx) => (
+                    <Accordion.Item eventKey={String(idx)} key={module.slug} className="user-progress-item">
+                      <Accordion.Header>
+                        <Row className="w-100 align-items-center g-3">
+                          <Col md={6}>
+                            <div className="d-flex align-items-center gap-3">
+                              <FeatherIcon icon={module.icon || "grid"} size={20} />
+                              <div>
+                                <div className="fw-bold">{module.title}</div>
+                                <div className="text-muted small">
+                                  {completedCount}/{totalCount} thèmes complétés
                                 </div>
                               </div>
-                            </Col>
-                            <Col md={6}>
-                              <ProgressBar
-                                now={progressPercent}
-                                label={`${progressPercent}%`}
-                                style={{ height: 20 }}
-                              />
-                            </Col>
-                          </Row>
-                        </Accordion.Header>
+                            </div>
+                          </Col>
+                          <Col md={6}>
+                            <ProgressBar
+                              now={progressPercent}
+                              label={`${progressPercent}%`}
+                              className="user-progress-bar"
+                              style={{ height: 20 }}
+                            />
+                          </Col>
+                        </Row>
+                      </Accordion.Header>
 
-                        <Accordion.Body>
-                          <div>
-                            {module.themes?.map((theme) => {
-                              const themeProgress = progressMap[theme.id];
+                      <Accordion.Body>
+                        <div>
+                          {module.themes?.map((theme) => {
+                            const themeProgress = progressMap[theme.id];
 
-                              return (
-                                <div
-                                  key={theme.id}
-                                  className="d-flex justify-content-between align-items-center py-2 border-top"
-                                >
-                                  <div>
-                                    <div className="fw-semibold">{theme.title}</div>
-                                    {themeProgress && (
-                                      <div className="small text-muted mt-1">
-                                        Quiz: {themeProgress.progress_pct}%
-                                      </div>
-                                    )}
-                                  </div>
-
-                                  {themeProgress?.completed ? (
-                                    <Badge bg="success" className="d-flex align-items-center gap-1">
-                                      <FeatherIcon icon="check" size={14} /> Complété
-                                    </Badge>
-                                  ) : themeProgress ? (
-                                    <Badge bg="warning" className="d-flex align-items-center gap-1">
-                                      <FeatherIcon icon="clock" size={14} /> En cours
-                                    </Badge>
-                                  ) : (
-                                    <Badge bg="secondary">Non commencé</Badge>
+                            return (
+                              <div
+                                key={theme.id}
+                                className="user-progress-theme-row d-flex justify-content-between align-items-center py-2 border-top"
+                              >
+                                <div>
+                                  <div className="fw-semibold">{theme.title}</div>
+                                  {themeProgress && (
+                                    <div className="small text-muted mt-1">
+                                      Quiz: {themeProgress.progress_pct}%
+                                    </div>
                                   )}
                                 </div>
-                              );
-                            })}
-                          </div>
-                        </Accordion.Body>
-                      </Accordion.Item>
-                    ))}
-                  </Accordion>
-                </div>
-              )}
+
+                                {themeProgress?.completed ? (
+                                  <Badge bg="success" className="d-flex align-items-center gap-1">
+                                    <FeatherIcon icon="check" size={14} /> Complété
+                                  </Badge>
+                                ) : themeProgress ? (
+                                  <Badge bg="warning" className="d-flex align-items-center gap-1">
+                                    <FeatherIcon icon="clock" size={14} /> En cours
+                                  </Badge>
+                                ) : (
+                                  <Badge bg="secondary">Non commencé</Badge>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  ))}
+                </Accordion>
+              </div>
+            )}
 
 
-              <hr className="mb-5" />
-              <Row className="justify-content-between align-items-center mb-5">
-                <Col xs={12} md={6}>
-                  <h4>Déconnexion</h4>
-                  <p className="small text-muted mb-md-0">
-                    Se déconnecter de votre session sur cet appareil.
-                  </p>
-                </Col>
-                <Col xs="auto">
-                  <Button variant="outline-secondary" onClick={() => void logout()}>
-                    Se déconnecter
-                  </Button>
-                </Col>
-              </Row>
+            <hr className="mb-5" />
+            <Row className="justify-content-between align-items-center mb-5">
+              <Col xs={12} md={6}>
+                <h4>Déconnexion</h4>
+                <p className="small text-muted mb-md-0">
+                  Se déconnecter de votre session sur cet appareil.
+                </p>
+              </Col>
+              <Col xs="auto">
+                <Button variant="outline-secondary" onClick={() => void logout()}>
+                  Se déconnecter
+                </Button>
+              </Col>
+            </Row>
 
-              <hr className="mb-5" />
-              {/* Partie sur la suppression du compte */}
-              <Row className="justify-content-between">
-                <Col xs={12} md={6} className="col-12 col-md-6">
-                  <h4>Supprimer votre compte</h4>
-                  <p className="small text-muted mb-md-0">
-                    Supprimer votre compte est une action permanente et il ne sera pas possible de le récupérer une fois supprimé.
-                  </p>
-                </Col>
-                <Col xs="auto">
-                  <Button variant="danger" onClick={handleOpenDeleteModal}>
-                    Supprimer
-                  </Button>
-                </Col>
-              </Row>
-              {deleteAccountError && <div className="text-danger mt-3">{deleteAccountError}</div>}
+            <hr className="mb-5" />
+            {/* Partie sur la suppression du compte */}
+            <Row className="justify-content-between">
+              <Col xs={12} md={6} className="col-12 col-md-6">
+                <h4>Supprimer votre compte</h4>
+                <p className="small text-muted mb-md-0">
+                  Supprimer votre compte est une action permanente et il ne sera pas possible de le récupérer une fois supprimé.
+                </p>
+              </Col>
+              <Col xs="auto">
+                <Button variant="danger" onClick={handleOpenDeleteModal}>
+                  Supprimer
+                </Button>
+              </Col>
+            </Row>
+            {deleteAccountError && <div className="text-danger mt-3">{deleteAccountError}</div>}
             <br />
             <br />
           </Col>

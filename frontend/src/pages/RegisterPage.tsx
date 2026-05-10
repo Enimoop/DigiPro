@@ -12,6 +12,8 @@ import egaliteLogo from "../assets/egalite.webp";
 import entrepriselogo from "../assets/entreprise.webp";
 import fond2 from "../assets/fond2.webp";
 
+const STRONG_PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s]).{12,}$/;
+
 export default function RegisterPage() {
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -22,12 +24,27 @@ export default function RegisterPage() {
   const [error, setError] = useState<string>("");
   const [showPwd, setShowPwd] = useState<boolean>(false);
 
+  const passwordChecks = [
+    { label: "Au moins 12 caractères", isValid: password.length >= 12 },
+    { label: "Au moins 1 majuscule", isValid: /[A-Z]/.test(password) },
+    { label: "Au moins 1 minuscule", isValid: /[a-z]/.test(password) },
+    { label: "Au moins 1 chiffre", isValid: /\d/.test(password) },
+    { label: "Au moins 1 caractère spécial", isValid: /[^A-Za-z0-9\s]/.test(password) },
+  ];
+
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
 
     if (isUnsafeInput(email) || isUnsafeInput(password) || isUnsafeInput(passwordConfirm)) {
       setError("Les champs ne doivent pas contenir de balises HTML.");
+      return;
+    }
+
+    if (!STRONG_PASSWORD_REGEX.test(password)) {
+      setError(
+        "Le mot de passe doit contenir au moins 12 caractères, avec 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial."
+      );
       return;
     }
 
@@ -51,7 +68,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div 
+    <div
       className="container-fluid d-flex align-items-center justify-content-center min-vh-100"
       style={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${fond2})`,
@@ -62,7 +79,7 @@ export default function RegisterPage() {
     >
       {/* Conteneur vertical bridé à 420px */}
       <div className="d-flex flex-column align-items-center w-100" style={{ maxWidth: 420 }}>
-        
+
         {/* Bloc central blanc */}
         <div className="w-100 bg-white p-4 p-md-5 rounded shadow-lg">
           <div className="text-center mb-4">
@@ -96,9 +113,7 @@ export default function RegisterPage() {
                   <Form.Label className="small fw-bold">Mot de passe</Form.Label>
                 </Col>
                 <Col xs="auto">
-                  <Form.Text className="small text-muted">
-                    Utilisez un mot de passe fort
-                  </Form.Text>
+                  <Form.Text className="small text-muted">Critères requis</Form.Text>
                 </Col>
               </Row>
               <InputGroup>
@@ -107,6 +122,7 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Entrez votre mot de passe"
+                  minLength={12}
                   required
                 />
                 <InputGroup.Text
@@ -116,6 +132,18 @@ export default function RegisterPage() {
                   <FeatherIcon icon={showPwd ? "eye-off" : "eye"} size="1em" />
                 </InputGroup.Text>
               </InputGroup>
+              <div className="mt-2">
+                {passwordChecks.map((check) => (
+                  <div key={check.label} className="d-flex align-items-center gap-2 mb-1 small">
+                    <FeatherIcon
+                      icon={check.isValid ? "check-circle" : "circle"}
+                      size="0.9em"
+                      style={{ color: check.isValid ? "#22c55e" : "#9ca3af" }}
+                    />
+                    <span style={{ color: check.isValid ? "#22c55e" : "#6b7280" }}>{check.label}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="form-group mb-4">
@@ -126,6 +154,7 @@ export default function RegisterPage() {
                   value={passwordConfirm}
                   onChange={(e) => setPasswordConfirm(e.target.value)}
                   placeholder="Confirmez votre mot de passe"
+                  minLength={12}
                   required
                 />
                 <InputGroup.Text
@@ -155,26 +184,26 @@ export default function RegisterPage() {
         </div>
 
         {/* Barre des logos partenaires alignée (420px) */}
-        <div 
-          className="d-flex justify-content-around align-items-center mt-4 p-3 rounded shadow-sm w-100" 
+        <div
+          className="d-flex justify-content-around align-items-center mt-4 p-3 rounded shadow-sm w-100"
           style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
         >
-          <img 
-            src={prefetlogo} 
-            alt="Préfecture du Val d'Oise" 
-            style={{ height: "55px", width: "auto" }} 
+          <img
+            src={prefetlogo}
+            alt="Préfecture du Val d'Oise"
+            style={{ height: "55px", width: "auto" }}
           />
           <div style={{ width: "1px", height: "40px", backgroundColor: "#dee2e6" }}></div>
-          <img 
-            src={egaliteLogo} 
-            alt="Egalité des chances" 
-            style={{ height: "55px", width: "auto" }} 
+          <img
+            src={egaliteLogo}
+            alt="Egalité des chances"
+            style={{ height: "55px", width: "auto" }}
           />
           <div style={{ width: "1px", height: "40px", backgroundColor: "#dee2e6" }}></div>
-          <img 
-            src={entrepriselogo} 
-            alt="Entreprises" 
-            style={{ height: "50px", width: "auto" }} 
+          <img
+            src={entrepriselogo}
+            alt="Entreprises"
+            style={{ height: "50px", width: "auto" }}
           />
         </div>
 

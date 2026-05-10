@@ -57,21 +57,9 @@ export default function LessonCard({ stepNumber, moduleIcon, theme, progress }: 
             {(isCompleted || isStarted) && (
               <div
                 title={isCompleted ? "Thème complété" : "Thème en cours"}
-                style={{
-                  position: "absolute",
-                  top: 12,
-                  left: 12,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: 28,
-                  height: 28,
-                  backgroundColor: isCompleted ? "#10B981" : "#F59E0B",
-                  borderRadius: "50%",
-                  zIndex: 10,
-                }}
+                className={`lesson-status-badge ${isCompleted ? "is-completed" : "is-started"}`}
               >
-                <FeatherIcon icon={isCompleted ? "check" : "clock"} size={16} color="white" />
+                <FeatherIcon icon={isCompleted ? "check" : "clock"} size={16} />
               </div>
             )}
             <Card.Body className="d-flex flex-column align-items-center p-4">

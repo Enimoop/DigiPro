@@ -87,7 +87,7 @@ export default function PasswordGameComponent({ onGameComplete }: Props) {
       </Header>
       <Container
         fluid
-        className="d-flex align-items-center"
+        className="password-game d-flex align-items-center"
         style={{ minHeight: "calc(100vh - 300px)" }}
       >
         <Row className="justify-content-center w-100">

@@ -107,6 +107,7 @@ export default function MaskedPasswordInput({
         ref={inputRef}
         type="text"
         value={displayValue}
+        onChange={() => { }}
         onKeyDown={handleKeyDown}
         onPaste={handlePaste}
         autoComplete="off"

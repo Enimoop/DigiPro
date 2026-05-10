@@ -154,9 +154,8 @@ export default function PhishingGameComponent({ onGameComplete }: Props) {
               <div className="phishing-email-body">{currentEmail.body}</div>
             </div>
 
-            {/* Feedback et justification */}
             {feedback && (
-              <div className={`alert alert-${feedback === "correct" ? "success" : "danger"} mt-4`}>
+              <div className={`phishing-feedback alert alert-${feedback === "correct" ? "success" : "danger"} mt-4`}>
                 <strong>
                   {feedback === "correct" ? "✅ Bonne réponse !" : "❌ Mauvaise réponse."}
                 </strong>
@@ -164,7 +163,6 @@ export default function PhishingGameComponent({ onGameComplete }: Props) {
                   {currentEmail.isPhishing ? "C'était bien du phishing" : "C'était un email légitime"}
                 </p>
 
-                {/* Red flags (indices) */}
                 {currentEmail.redFlags.length > 0 && (
                   <div className="phishing-red-flags-inline">
                     <strong className="d-block mb-2">🚩 Signaux d'alerte :</strong>
@@ -178,14 +176,13 @@ export default function PhishingGameComponent({ onGameComplete }: Props) {
               </div>
             )}
 
-            {/* Boutons d'action */}
             <Row className="g-2 mt-5">
               {!answered ? (
                 <>
                   <Col xs={6}>
                     <Button
                       variant="outline-danger"
-                      className="w-100"
+                      className="phishing-action-button w-100"
                       onClick={() => handleAnswer("phishing")}
                     >
                       Phishing
@@ -194,7 +191,7 @@ export default function PhishingGameComponent({ onGameComplete }: Props) {
                   <Col xs={6}>
                     <Button
                       variant="outline-success"
-                      className="w-100"
+                      className="phishing-action-button w-100"
                       onClick={() => handleAnswer("ok")}
                     >
                       Légitime
@@ -205,7 +202,7 @@ export default function PhishingGameComponent({ onGameComplete }: Props) {
                 <Col xs={12}>
                   <Button
                     variant="primary"
-                    className="w-100"
+                    className="phishing-action-button w-100"
                     onClick={handleContinue}
                   >
                     Prochain email

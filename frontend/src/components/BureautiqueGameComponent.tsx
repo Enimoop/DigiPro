@@ -228,9 +228,9 @@ export default function BureautiqueGameComponent({ onGameComplete }: Props) {
                 >
                   <FeatherIcon icon="file" size={56} className="mb-2" />
                   <div className="fw-bold fs-4">{currentFile.name}</div>
-                  <div className="text-muted" style={{ fontSize: "1.1rem" }}>{currentFile.extension}</div>
+                  <div className="bureautique-file-extension" style={{ fontSize: "1.1rem" }}>{currentFile.extension}</div>
                   {isMobile && (
-                    <div className="text-info-soft" style={{ fontSize: "0.9rem", marginTop: "0.5rem" }}>
+                    <div className="bureautique-mobile-hint" style={{ fontSize: "0.9rem", marginTop: "0.5rem" }}>
                       ☝️ Cliquez sur la bonne boîte ci-dessous
                     </div>
                   )}
@@ -259,7 +259,7 @@ export default function BureautiqueGameComponent({ onGameComplete }: Props) {
                   >
                     <div className="bureautique-box-content">
                       <FeatherIcon icon={box.icon} size={32} style={{ color: box.color }} />
-                      <div className="mt-2 fw-semibold text-dark">{box.label}</div>
+                      <div className="mt-2 fw-semibold bureautique-box-label">{box.label}</div>
                     </div>
                   </div>
                 </Col>

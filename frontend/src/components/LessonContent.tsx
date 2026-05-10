@@ -60,22 +60,22 @@ export default function LessonContent({ lessonData, fallbackRedirectTo }: Props)
 
   return (
     <>
-      <Card key={currentLesson.id} className="mb-4 shadow-sm">
-        <Card.Header className="d-flex justify-content-between align-items-center">
+      <Card key={currentLesson.id} className="lesson-content-card mb-4 shadow-sm">
+        <Card.Header className="lesson-content-card__header d-flex justify-content-between align-items-center">
           <h4 className="mb-0 fw-bold">{currentLesson.title}</h4>
           <small className="text-muted">
             Étape {currentStep + 1}/{lessons.length}
           </small>
         </Card.Header>
 
-          <Card.Body>
-            <div className="lesson-content">
-              <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-                {currentLesson.content}
-              </ReactMarkdown>
-            </div>
-          </Card.Body>
-        </Card>
+        <Card.Body className="lesson-content-card__body">
+          <div className="lesson-content">
+            <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+              {currentLesson.content}
+            </ReactMarkdown>
+          </div>
+        </Card.Body>
+      </Card>
 
       <div className="position-relative my-4">
         <div className="section-divider" />
@@ -86,7 +86,7 @@ export default function LessonContent({ lessonData, fallbackRedirectTo }: Props)
               Précédent
             </Button>
           )}
-          
+
           <Button size="sm" variant="purple" onClick={handleNext}>
             {isLast ? "Terminer" : "Suivant"}
           </Button>
