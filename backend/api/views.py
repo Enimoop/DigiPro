@@ -3,7 +3,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-from django.db import IntegrityError, connection, transaction
+from django.db import DataError, IntegrityError, connection, transaction
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.decorators import (
@@ -21,6 +21,10 @@ from .models import Theme, UserThemeProgress
 from .serializers import UserThemeProgressSerializer
 
 User = get_user_model()
+
+FIRST_NAME_MAX_LENGTH = User._meta.get_field("first_name").max_length or 150
+LAST_NAME_MAX_LENGTH = User._meta.get_field("last_name").max_length or 150
+EMAIL_MAX_LENGTH = User._meta.get_field("email").max_length or 254
 
 COOKIE_SECURE = getattr(settings, "AUTH_COOKIE_SECURE", True)
 COOKIE_SAMESITE = getattr(settings, "SESSION_COOKIE_SAMESITE", "Lax")
@@ -427,6 +431,24 @@ def update_profile_info(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
+    if len(first_name) > FIRST_NAME_MAX_LENGTH:
+        return Response(
+            {"first_name": [f"Le prénom ne doit pas dépasser {FIRST_NAME_MAX_LENGTH} caractères."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if len(last_name) > LAST_NAME_MAX_LENGTH:
+        return Response(
+            {"last_name": [f"Le nom ne doit pas dépasser {LAST_NAME_MAX_LENGTH} caractères."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if len(email) > EMAIL_MAX_LENGTH:
+        return Response(
+            {"email": [f"L'email ne doit pas dépasser {EMAIL_MAX_LENGTH} caractères."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
     try:
         validate_email(email)
     except ValidationError:
@@ -451,6 +473,11 @@ def update_profile_info(request):
             user.last_name = last_name
             user.email = email
             user.save(update_fields=["first_name", "last_name", "email"])
+    except DataError:
+        return Response(
+            {"detail": "Une valeur de profil dépasse la taille autorisée."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
     except IntegrityError:
         return Response({"email": ["This email is already used."]}, status=status.HTTP_400_BAD_REQUEST)
 
