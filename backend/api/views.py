@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.db import IntegrityError, connection, transaction
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.decorators import (
@@ -20,10 +21,23 @@ User = get_user_model()
 
 COOKIE_SECURE = False
 COOKIE_SAMESITE = "Lax"
+REGISTER_EMAIL_ERROR = "Impossible de creer un compte avec cet email."
 
 
 def has_html_like_content(value: str) -> bool:
     return value != strip_tags(value) or "<" in value or ">" in value
+
+
+def lock_email_address(email: str) -> None:
+    if connection.vendor != "postgresql" or not email:
+        return
+
+    # Prevent concurrent requests from creating two accounts for the same email.
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT pg_advisory_xact_lock(hashtext(%s)::bigint)",
+            [email],
+        )
 
 
 # -------------------------------------------------
@@ -71,9 +85,12 @@ def register_view(request):
         return Response(
             {"email": ["This field is required."]}, status=status.HTTP_400_BAD_REQUEST
         )
-    if User.objects.filter(email__iexact=email).exists():
+
+    try:
+        validate_email(email)
+    except ValidationError:
         return Response(
-            {"email": ["This email is already used."]},
+            {"email": ["Veuillez saisir une adresse email valide."]},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
@@ -92,7 +109,23 @@ def register_view(request):
             {"password": ["Minimum 8 characters."]}, status=status.HTTP_400_BAD_REQUEST
         )
 
-    user = User.objects.create_user(username=username, email=email, password=password)
+    try:
+        with transaction.atomic():
+            lock_email_address(email)
+
+            if User.objects.filter(email__iexact=email).exists():
+                return Response(
+                    {"email": [REGISTER_EMAIL_ERROR]},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            user = User.objects.create_user(username=username, email=email, password=password)
+    except IntegrityError:
+        return Response(
+            {"email": [REGISTER_EMAIL_ERROR]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
     return Response(
         {"id": user.id, "username": user.username, "email": user.email},
         status=status.HTTP_201_CREATED,
@@ -122,6 +155,10 @@ def login_view(request):
 
     try:
         user = User.objects.get(email__iexact=email)
+    except User.MultipleObjectsReturned:
+        return Response(
+            {"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST
+        )
     except User.DoesNotExist:
         return Response(
             {"detail": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST
@@ -342,18 +379,24 @@ def update_profile_info(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    email_in_use = (
-        User.objects.filter(email__iexact=email)
-        .exclude(pk=user.pk)
-        .exists()
-    )
-    if email_in_use:
-        return Response({"email": ["This email is already used."]}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        with transaction.atomic():
+            lock_email_address(email)
 
-    user.first_name = first_name
-    user.last_name = last_name
-    user.email = email
-    user.save(update_fields=["first_name", "last_name", "email"])
+            email_in_use = (
+                User.objects.filter(email__iexact=email)
+                .exclude(pk=user.pk)
+                .exists()
+            )
+            if email_in_use:
+                return Response({"email": ["This email is already used."]}, status=status.HTTP_400_BAD_REQUEST)
+
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.save(update_fields=["first_name", "last_name", "email"])
+    except IntegrityError:
+        return Response({"email": ["This email is already used."]}, status=status.HTTP_400_BAD_REQUEST)
 
     return Response(
         {

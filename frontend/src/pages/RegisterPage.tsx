@@ -11,8 +11,37 @@ import prefetlogo from "../assets/prefetvaldoise.webp";
 import egaliteLogo from "../assets/egalite.webp";
 import entrepriselogo from "../assets/entreprise.webp";
 import fond2 from "../assets/fond2.webp";
-
 const STRONG_PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s]).{12,}$/;
+
+function getRegisterErrorMessage(error: any): string {
+  const data = error?.response?.data;
+
+  const firstValue = (value: unknown): string | null => {
+    if (typeof value === "string") return value;
+    if (Array.isArray(value) && typeof value[0] === "string") return value[0];
+    return null;
+  };
+
+  const apiMessage =
+    firstValue(data?.email) ||
+    firstValue(data?.detail) ||
+    firstValue(data?.non_field_errors) ||
+    (typeof data === "string" ? data : null);
+
+  if (!apiMessage) {
+    return error?.message || "Erreur";
+  }
+
+  if (
+    apiMessage === "Impossible de creer un compte avec cet email." ||
+    apiMessage.toLowerCase().includes("already used") ||
+    apiMessage.toLowerCase().includes("deja utilise")
+  ) {
+    return "Impossible de créer le compte avec cet email.";
+  }
+
+  return apiMessage;
+}
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -57,13 +86,7 @@ export default function RegisterPage() {
       await register(email, password);
       navigate("/home");
     } catch (e: any) {
-      setError(
-        e?.response?.data
-          ? typeof e.response.data === "string"
-            ? e.response.data
-            : JSON.stringify(e.response.data)
-          : e?.message || "Erreur"
-      );
+      setError(getRegisterErrorMessage(e));
     }
   }
 
