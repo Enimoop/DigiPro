@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.password_validation import validate_password
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.db import IntegrityError, connection, transaction
@@ -21,8 +22,8 @@ from .serializers import UserThemeProgressSerializer
 
 User = get_user_model()
 
-COOKIE_SECURE = False
-COOKIE_SAMESITE = "Lax"
+COOKIE_SECURE = getattr(settings, "AUTH_COOKIE_SECURE", True)
+COOKIE_SAMESITE = getattr(settings, "SESSION_COOKIE_SAMESITE", "Lax")
 REGISTER_EMAIL_ERROR = "Impossible de creer un compte avec cet email."
 
 
