@@ -13,6 +13,8 @@ from rest_framework.decorators import (
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Theme, UserThemeProgress
 from .serializers import UserThemeProgressSerializer
@@ -246,9 +248,11 @@ def refresh_view(request):
         )
 
     try:
-        refresh = RefreshToken(refresh_token)
-        access = str(refresh.access_token)
-    except Exception:
+        serializer = TokenRefreshSerializer(data={"refresh": refresh_token})
+        serializer.is_valid(raise_exception=True)
+        access = serializer.validated_data["access"]
+        new_refresh = serializer.validated_data.get("refresh")
+    except (InvalidToken, TokenError):
         return Response(
             {"detail": "Invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED
         )
@@ -262,6 +266,17 @@ def refresh_view(request):
         samesite=COOKIE_SAMESITE,
         path="/",
     )
+
+    if new_refresh:
+        res.set_cookie(
+            "refresh_token",
+            new_refresh,
+            httponly=True,
+            secure=COOKIE_SECURE,
+            samesite=COOKIE_SAMESITE,
+            path="/api/auth/refresh/",
+        )
+
     return res
 
 
