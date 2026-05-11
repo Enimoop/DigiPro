@@ -127,9 +127,17 @@ REST_FRAMEWORK = {
 def env_list(key: str, default=""):
     return [v.strip() for v in os.getenv(key, default).split(",") if v.strip()]
 
-CORS_ALLOWED_ORIGINS = env_list("CORS_ALLOWED_ORIGINS")
+LOCAL_DEV_ORIGINS = "http://localhost:5173,http://127.0.0.1:5173"
+
+CORS_ALLOWED_ORIGINS = env_list(
+    "CORS_ALLOWED_ORIGINS",
+    LOCAL_DEV_ORIGINS if DEBUG else "",
+)
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
+CSRF_TRUSTED_ORIGINS = env_list(
+    "CSRF_TRUSTED_ORIGINS",
+    LOCAL_DEV_ORIGINS if DEBUG else "",
+)
 
 
 # En dev on garde les cookies “standard” (HTTP). En prod HTTPS, on ajustera.
