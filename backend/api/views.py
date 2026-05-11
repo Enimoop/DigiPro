@@ -406,73 +406,96 @@ def theme_progress_detail(request, theme_id):
 def update_profile_info(request):
     user = request.user
 
-    first_name = (request.data.get("first_name") or "").strip()
-    last_name = (request.data.get("last_name") or "").strip()
-    email = (request.data.get("email") or "").strip().lower()
+    has_first_name = "first_name" in request.data
+    has_last_name = "last_name" in request.data
+    has_email = "email" in request.data
 
-    if not email:
-        return Response({"email": ["This field is required."]}, status=status.HTTP_400_BAD_REQUEST)
-
-    if first_name != strip_tags(first_name) or "<" in first_name or ">" in first_name:
+    if not (has_first_name or has_last_name or has_email):
         return Response(
-            {"first_name": ["Le prénom ne doit pas contenir de balises HTML."]},
+            {"detail": "Aucun champ à mettre à jour."},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    if last_name != strip_tags(last_name) or "<" in last_name or ">" in last_name:
-        return Response(
-            {"last_name": ["Le nom ne doit pas contenir de balises HTML."]},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+    first_name = None
+    last_name = None
+    email = None
 
-    if email != strip_tags(email) or "<" in email or ">" in email:
-        return Response(
-            {"email": ["L'email ne doit pas contenir de balises HTML."]},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+    if has_first_name:
+        first_name = (request.data.get("first_name") or "").strip()
+        if first_name != strip_tags(first_name) or "<" in first_name or ">" in first_name:
+            return Response(
+                {"first_name": ["Le prénom ne doit pas contenir de balises HTML."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if len(first_name) > FIRST_NAME_MAX_LENGTH:
+            return Response(
+                {"first_name": [f"Le prénom ne doit pas dépasser {FIRST_NAME_MAX_LENGTH} caractères."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-    if len(first_name) > FIRST_NAME_MAX_LENGTH:
-        return Response(
-            {"first_name": [f"Le prénom ne doit pas dépasser {FIRST_NAME_MAX_LENGTH} caractères."]},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+    if has_last_name:
+        last_name = (request.data.get("last_name") or "").strip()
+        if last_name != strip_tags(last_name) or "<" in last_name or ">" in last_name:
+            return Response(
+                {"last_name": ["Le nom ne doit pas contenir de balises HTML."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if len(last_name) > LAST_NAME_MAX_LENGTH:
+            return Response(
+                {"last_name": [f"Le nom ne doit pas dépasser {LAST_NAME_MAX_LENGTH} caractères."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-    if len(last_name) > LAST_NAME_MAX_LENGTH:
-        return Response(
-            {"last_name": [f"Le nom ne doit pas dépasser {LAST_NAME_MAX_LENGTH} caractères."]},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-    if len(email) > EMAIL_MAX_LENGTH:
-        return Response(
-            {"email": [f"L'email ne doit pas dépasser {EMAIL_MAX_LENGTH} caractères."]},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-    try:
-        validate_email(email)
-    except ValidationError:
-        return Response(
-            {"email": ["Veuillez saisir une adresse email valide."]},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+    if has_email:
+        email = (request.data.get("email") or "").strip().lower()
+        if not email:
+            return Response(
+                {"email": ["This field is required."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if email != strip_tags(email) or "<" in email or ">" in email:
+            return Response(
+                {"email": ["L'email ne doit pas contenir de balises HTML."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if len(email) > EMAIL_MAX_LENGTH:
+            return Response(
+                {"email": [f"L'email ne doit pas dépasser {EMAIL_MAX_LENGTH} caractères."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            validate_email(email)
+        except ValidationError:
+            return Response(
+                {"email": ["Veuillez saisir une adresse email valide."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
     try:
         with transaction.atomic():
-            lock_email_address(email)
+            update_fields = []
 
-            email_in_use = (
-                User.objects.filter(email__iexact=email)
-                .exclude(pk=user.pk)
-                .exists()
-            )
-            if email_in_use:
-                return Response({"email": ["This email is already used."]}, status=status.HTTP_400_BAD_REQUEST)
+            if has_email:
+                lock_email_address(email)
+                email_in_use = (
+                    User.objects.filter(email__iexact=email)
+                    .exclude(pk=user.pk)
+                    .exists()
+                )
+                if email_in_use:
+                    return Response({"email": ["This email is already used."]}, status=status.HTTP_400_BAD_REQUEST)
+                user.email = email
+                update_fields.append("email")
 
-            user.first_name = first_name
-            user.last_name = last_name
-            user.email = email
-            user.save(update_fields=["first_name", "last_name", "email"])
+            if has_first_name:
+                user.first_name = first_name
+                update_fields.append("first_name")
+
+            if has_last_name:
+                user.last_name = last_name
+                update_fields.append("last_name")
+
+            user.save(update_fields=update_fields)
     except DataError:
         return Response(
             {"detail": "Une valeur de profil dépasse la taille autorisée."},
