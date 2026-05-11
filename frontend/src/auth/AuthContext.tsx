@@ -32,7 +32,7 @@ type AuthContextType = {
   dismissOnboarding: () => Promise<void>;
 
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string, confirmPassword: string) => Promise<void>;
   logout: () => Promise<void>;
   deleteAccount: () => Promise<void>;
 };
@@ -81,9 +81,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await loadMe();
   }
 
-  async function register(email: string, password: string): Promise<void> {
+  async function register(email: string, password: string, confirmPassword: string): Promise<void> {
     await api.get("/api/csrf/");
-    await api.post("/api/auth/register/", { email, password });
+    await api.post("/api/auth/register/", {
+      email,
+      password,
+      confirm_password: confirmPassword,
+    });
     await login(email, password);
   }
 

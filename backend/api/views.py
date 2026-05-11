@@ -62,6 +62,30 @@ def register_view(request):
     ).strip()  # optionnel, mais on peut le garder
     email = (request.data.get("email") or "").strip().lower()
     password = request.data.get("password") or ""
+    confirm_password_input = request.data.get("confirm_password")
+    password_confirm_input = request.data.get("password_confirm")
+
+    if confirm_password_input is None and password_confirm_input is None:
+        return Response(
+            {"confirm_password": ["This field is required."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if (
+        confirm_password_input is not None
+        and password_confirm_input is not None
+        and confirm_password_input != password_confirm_input
+    ):
+        return Response(
+            {"confirm_password": ["Les mots de passe ne correspondent pas."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    confirm_password = (
+        confirm_password_input
+        if confirm_password_input is not None
+        else password_confirm_input
+    ) or ""
 
     if has_html_like_content(email):
         return Response(
@@ -72,6 +96,12 @@ def register_view(request):
     if has_html_like_content(password):
         return Response(
             {"password": ["Le mot de passe ne doit pas contenir de balises HTML."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if has_html_like_content(confirm_password):
+        return Response(
+            {"confirm_password": ["Le mot de passe de confirmation ne doit pas contenir de balises HTML."]},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
@@ -107,6 +137,12 @@ def register_view(request):
     if len(password) < 8:
         return Response(
             {"password": ["Minimum 8 characters."]}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+    if password != confirm_password:
+        return Response(
+            {"confirm_password": ["Les mots de passe ne correspondent pas."]},
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
     try:

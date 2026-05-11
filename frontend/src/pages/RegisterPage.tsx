@@ -83,7 +83,7 @@ export default function RegisterPage() {
     }
 
     try {
-      await register(email, password);
+      await register(email, password, passwordConfirm);
       navigate("/home");
     } catch (e: any) {
       setError(getRegisterErrorMessage(e));
