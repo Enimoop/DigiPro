@@ -134,14 +134,18 @@ def register_view(request):
             candidate = f"{base}{i}"
         username = candidate
 
-    if len(password) < 8:
-        return Response(
-            {"password": ["Minimum 8 characters."]}, status=status.HTTP_400_BAD_REQUEST
-        )
-
     if password != confirm_password:
         return Response(
             {"confirm_password": ["Les mots de passe ne correspondent pas."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    try:
+        # Reuse Django's standard password policy at signup as well.
+        validate_password(password, user=User(username=username, email=email))
+    except ValidationError as exc:
+        return Response(
+            {"password": list(exc.messages)},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
