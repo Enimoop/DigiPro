@@ -16,6 +16,11 @@ DEBUG = os.getenv("DJANGO_DEBUG", "0") == "1"
 # Dev / Docker
 ALLOWED_HOSTS = ["*"]
 
+# Trust reverse-proxy headers to build absolute URLs correctly (e.g. APPEND_SLASH redirects).
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 # -------------------------------------------------
 # APPLICATIONS
 # -------------------------------------------------
@@ -30,6 +35,7 @@ INSTALLED_APPS = [
     # Third-party
     "rest_framework",
     "corsheaders",
+    "rest_framework_simplejwt.token_blacklist",
 
     # Local
 
@@ -89,7 +95,10 @@ DATABASES = {
 # -------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {"min_length": 12},
+    },
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
@@ -117,6 +126,11 @@ REST_FRAMEWORK = {
     ),
 }
 
+SIMPLE_JWT = {
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+}
+
 
 # -------------------------------------------------
 # CORS + CSRF (REACT SPA)
@@ -124,9 +138,40 @@ REST_FRAMEWORK = {
 def env_list(key: str, default=""):
     return [v.strip() for v in os.getenv(key, default).split(",") if v.strip()]
 
-CORS_ALLOWED_ORIGINS = env_list("CORS_ALLOWED_ORIGINS")
+
+def env_bool(key: str, default: bool) -> bool:
+    value = os.getenv(key)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+LOCAL_DEV_ORIGINS = "http://localhost:5173,http://127.0.0.1:5173"
+
+CORS_ALLOWED_ORIGINS = env_list(
+    "CORS_ALLOWED_ORIGINS",
+    LOCAL_DEV_ORIGINS if DEBUG else "",
+)
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS")
+CSRF_TRUSTED_ORIGINS = env_list(
+    "CSRF_TRUSTED_ORIGINS",
+    LOCAL_DEV_ORIGINS if DEBUG else "",
+)
+
+# -------------------------------------------------
+# COOKIE + HTTPS SECURITY
+# -------------------------------------------------
+SESSION_COOKIE_SECURE = env_bool("SESSION_COOKIE_SECURE", not DEBUG)
+CSRF_COOKIE_SECURE = env_bool("CSRF_COOKIE_SECURE", not DEBUG)
+AUTH_COOKIE_SECURE = env_bool("AUTH_COOKIE_SECURE", SESSION_COOKIE_SECURE)
+
+# Keep Lax as baseline for SPA login/logout flows.
+SESSION_COOKIE_SAMESITE = os.getenv("SESSION_COOKIE_SAMESITE", "Lax")
+CSRF_COOKIE_SAMESITE = os.getenv("CSRF_COOKIE_SAMESITE", "Lax")
+
+# HSTS is enabled by default outside debug and can be overridden by env.
+SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "0" if DEBUG else "31536000"))
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env_bool("SECURE_HSTS_INCLUDE_SUBDOMAINS", not DEBUG)
+SECURE_HSTS_PRELOAD = env_bool("SECURE_HSTS_PRELOAD", not DEBUG)
 
 
 # En dev on garde les cookies “standard” (HTTP). En prod HTTPS, on ajustera.

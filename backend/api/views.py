@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.password_validation import validate_password
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-from django.db import IntegrityError, connection, transaction
+from django.db import DataError, IntegrityError, connection, transaction
 from django.utils.html import strip_tags
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.decorators import (
@@ -13,14 +14,20 @@ from rest_framework.decorators import (
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Theme, UserThemeProgress
 from .serializers import UserThemeProgressSerializer
 
 User = get_user_model()
 
-COOKIE_SECURE = False
-COOKIE_SAMESITE = "Lax"
+FIRST_NAME_MAX_LENGTH = User._meta.get_field("first_name").max_length or 150
+LAST_NAME_MAX_LENGTH = User._meta.get_field("last_name").max_length or 150
+EMAIL_MAX_LENGTH = User._meta.get_field("email").max_length or 254
+
+COOKIE_SECURE = getattr(settings, "AUTH_COOKIE_SECURE", True)
+COOKIE_SAMESITE = getattr(settings, "SESSION_COOKIE_SAMESITE", "Lax")
 REGISTER_EMAIL_ERROR = "Impossible de creer un compte avec cet email."
 
 
@@ -62,6 +69,30 @@ def register_view(request):
     ).strip()  # optionnel, mais on peut le garder
     email = (request.data.get("email") or "").strip().lower()
     password = request.data.get("password") or ""
+    confirm_password_input = request.data.get("confirm_password")
+    password_confirm_input = request.data.get("password_confirm")
+
+    if confirm_password_input is None and password_confirm_input is None:
+        return Response(
+            {"confirm_password": ["This field is required."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if (
+        confirm_password_input is not None
+        and password_confirm_input is not None
+        and confirm_password_input != password_confirm_input
+    ):
+        return Response(
+            {"confirm_password": ["Les mots de passe ne correspondent pas."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    confirm_password = (
+        confirm_password_input
+        if confirm_password_input is not None
+        else password_confirm_input
+    ) or ""
 
     if has_html_like_content(email):
         return Response(
@@ -72,6 +103,12 @@ def register_view(request):
     if has_html_like_content(password):
         return Response(
             {"password": ["Le mot de passe ne doit pas contenir de balises HTML."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    if has_html_like_content(confirm_password):
+        return Response(
+            {"confirm_password": ["Le mot de passe de confirmation ne doit pas contenir de balises HTML."]},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
@@ -104,9 +141,19 @@ def register_view(request):
             candidate = f"{base}{i}"
         username = candidate
 
-    if len(password) < 8:
+    if password != confirm_password:
         return Response(
-            {"password": ["Minimum 8 characters."]}, status=status.HTTP_400_BAD_REQUEST
+            {"confirm_password": ["Les mots de passe ne correspondent pas."]},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    try:
+        # Reuse Django's standard password policy at signup as well.
+        validate_password(password, user=User(username=username, email=email))
+    except ValidationError as exc:
+        return Response(
+            {"password": list(exc.messages)},
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
     try:
@@ -206,9 +253,11 @@ def refresh_view(request):
         )
 
     try:
-        refresh = RefreshToken(refresh_token)
-        access = str(refresh.access_token)
-    except Exception:
+        serializer = TokenRefreshSerializer(data={"refresh": refresh_token})
+        serializer.is_valid(raise_exception=True)
+        access = serializer.validated_data["access"]
+        new_refresh = serializer.validated_data.get("refresh")
+    except (InvalidToken, TokenError):
         return Response(
             {"detail": "Invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED
         )
@@ -222,6 +271,17 @@ def refresh_view(request):
         samesite=COOKIE_SAMESITE,
         path="/",
     )
+
+    if new_refresh:
+        res.set_cookie(
+            "refresh_token",
+            new_refresh,
+            httponly=True,
+            secure=COOKIE_SECURE,
+            samesite=COOKIE_SAMESITE,
+            path="/api/auth/refresh/",
+        )
+
     return res
 
 
@@ -346,55 +406,101 @@ def theme_progress_detail(request, theme_id):
 def update_profile_info(request):
     user = request.user
 
-    first_name = (request.data.get("first_name") or "").strip()
-    last_name = (request.data.get("last_name") or "").strip()
-    email = (request.data.get("email") or "").strip().lower()
+    has_first_name = "first_name" in request.data
+    has_last_name = "last_name" in request.data
+    has_email = "email" in request.data
 
-    if not email:
-        return Response({"email": ["This field is required."]}, status=status.HTTP_400_BAD_REQUEST)
-
-    if first_name != strip_tags(first_name) or "<" in first_name or ">" in first_name:
+    if not (has_first_name or has_last_name or has_email):
         return Response(
-            {"first_name": ["Le prénom ne doit pas contenir de balises HTML."]},
+            {"detail": "Aucun champ à mettre à jour."},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    if last_name != strip_tags(last_name) or "<" in last_name or ">" in last_name:
-        return Response(
-            {"last_name": ["Le nom ne doit pas contenir de balises HTML."]},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+    first_name = None
+    last_name = None
+    email = None
 
-    if email != strip_tags(email) or "<" in email or ">" in email:
-        return Response(
-            {"email": ["L'email ne doit pas contenir de balises HTML."]},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+    if has_first_name:
+        first_name = (request.data.get("first_name") or "").strip()
+        if first_name != strip_tags(first_name) or "<" in first_name or ">" in first_name:
+            return Response(
+                {"first_name": ["Le prénom ne doit pas contenir de balises HTML."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if len(first_name) > FIRST_NAME_MAX_LENGTH:
+            return Response(
+                {"first_name": [f"Le prénom ne doit pas dépasser {FIRST_NAME_MAX_LENGTH} caractères."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-    try:
-        validate_email(email)
-    except ValidationError:
-        return Response(
-            {"email": ["Veuillez saisir une adresse email valide."]},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+    if has_last_name:
+        last_name = (request.data.get("last_name") or "").strip()
+        if last_name != strip_tags(last_name) or "<" in last_name or ">" in last_name:
+            return Response(
+                {"last_name": ["Le nom ne doit pas contenir de balises HTML."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if len(last_name) > LAST_NAME_MAX_LENGTH:
+            return Response(
+                {"last_name": [f"Le nom ne doit pas dépasser {LAST_NAME_MAX_LENGTH} caractères."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+    if has_email:
+        email = (request.data.get("email") or "").strip().lower()
+        if not email:
+            return Response(
+                {"email": ["This field is required."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if email != strip_tags(email) or "<" in email or ">" in email:
+            return Response(
+                {"email": ["L'email ne doit pas contenir de balises HTML."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if len(email) > EMAIL_MAX_LENGTH:
+            return Response(
+                {"email": [f"L'email ne doit pas dépasser {EMAIL_MAX_LENGTH} caractères."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            validate_email(email)
+        except ValidationError:
+            return Response(
+                {"email": ["Veuillez saisir une adresse email valide."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
     try:
         with transaction.atomic():
-            lock_email_address(email)
+            update_fields = []
 
-            email_in_use = (
-                User.objects.filter(email__iexact=email)
-                .exclude(pk=user.pk)
-                .exists()
-            )
-            if email_in_use:
-                return Response({"email": ["This email is already used."]}, status=status.HTTP_400_BAD_REQUEST)
+            if has_email:
+                lock_email_address(email)
+                email_in_use = (
+                    User.objects.filter(email__iexact=email)
+                    .exclude(pk=user.pk)
+                    .exists()
+                )
+                if email_in_use:
+                    return Response({"email": ["This email is already used."]}, status=status.HTTP_400_BAD_REQUEST)
+                user.email = email
+                update_fields.append("email")
 
-            user.first_name = first_name
-            user.last_name = last_name
-            user.email = email
-            user.save(update_fields=["first_name", "last_name", "email"])
+            if has_first_name:
+                user.first_name = first_name
+                update_fields.append("first_name")
+
+            if has_last_name:
+                user.last_name = last_name
+                update_fields.append("last_name")
+
+            user.save(update_fields=update_fields)
+    except DataError:
+        return Response(
+            {"detail": "Une valeur de profil dépasse la taille autorisée."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
     except IntegrityError:
         return Response({"email": ["This email is already used."]}, status=status.HTTP_400_BAD_REQUEST)
 

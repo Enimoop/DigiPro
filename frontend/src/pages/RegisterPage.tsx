@@ -11,7 +11,7 @@ import prefetlogo from "../assets/prefetvaldoise.webp";
 import egaliteLogo from "../assets/egalite.webp";
 import entrepriselogo from "../assets/entreprise.webp";
 import fond2 from "../assets/fond2.webp";
-const STRONG_PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s]).{12,}$/;
+const MIN_PASSWORD_LENGTH = 12;
 
 function getRegisterErrorMessage(error: any): string {
   const data = error?.response?.data;
@@ -53,14 +53,6 @@ export default function RegisterPage() {
   const [error, setError] = useState<string>("");
   const [showPwd, setShowPwd] = useState<boolean>(false);
 
-  const passwordChecks = [
-    { label: "Au moins 12 caractères", isValid: password.length >= 12 },
-    { label: "Au moins 1 majuscule", isValid: /[A-Z]/.test(password) },
-    { label: "Au moins 1 minuscule", isValid: /[a-z]/.test(password) },
-    { label: "Au moins 1 chiffre", isValid: /\d/.test(password) },
-    { label: "Au moins 1 caractère spécial", isValid: /[^A-Za-z0-9\s]/.test(password) },
-  ];
-
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
@@ -70,10 +62,8 @@ export default function RegisterPage() {
       return;
     }
 
-    if (!STRONG_PASSWORD_REGEX.test(password)) {
-      setError(
-        "Le mot de passe doit contenir au moins 12 caractères, avec 1 majuscule, 1 minuscule, 1 chiffre et 1 caractère spécial."
-      );
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      setError("Le mot de passe doit contenir au moins 12 caractères.");
       return;
     }
 
@@ -83,7 +73,7 @@ export default function RegisterPage() {
     }
 
     try {
-      await register(email, password);
+      await register(email, password, passwordConfirm);
       navigate("/home");
     } catch (e: any) {
       setError(getRegisterErrorMessage(e));
@@ -136,7 +126,7 @@ export default function RegisterPage() {
                   <Form.Label className="small fw-bold">Mot de passe</Form.Label>
                 </Col>
                 <Col xs="auto">
-                  <Form.Text className="small text-muted">Critères requis</Form.Text>
+                  <Form.Text className="small text-muted">12 caractères minimum</Form.Text>
                 </Col>
               </Row>
               <InputGroup>
@@ -145,7 +135,7 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Entrez votre mot de passe"
-                  minLength={12}
+                  minLength={MIN_PASSWORD_LENGTH}
                   required
                 />
                 <InputGroup.Text
@@ -155,18 +145,6 @@ export default function RegisterPage() {
                   <FeatherIcon icon={showPwd ? "eye-off" : "eye"} size="1em" />
                 </InputGroup.Text>
               </InputGroup>
-              <div className="mt-2">
-                {passwordChecks.map((check) => (
-                  <div key={check.label} className="d-flex align-items-center gap-2 mb-1 small">
-                    <FeatherIcon
-                      icon={check.isValid ? "check-circle" : "circle"}
-                      size="0.9em"
-                      style={{ color: check.isValid ? "#22c55e" : "#9ca3af" }}
-                    />
-                    <span style={{ color: check.isValid ? "#22c55e" : "#6b7280" }}>{check.label}</span>
-                  </div>
-                ))}
-              </div>
             </div>
 
             <div className="form-group mb-4">
@@ -177,7 +155,7 @@ export default function RegisterPage() {
                   value={passwordConfirm}
                   onChange={(e) => setPasswordConfirm(e.target.value)}
                   placeholder="Confirmez votre mot de passe"
-                  minLength={12}
+                  minLength={MIN_PASSWORD_LENGTH}
                   required
                 />
                 <InputGroup.Text
