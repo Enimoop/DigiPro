@@ -8,6 +8,12 @@ const PasswordResetPage = lazy(() => import("./pages/PasswordResetPage"));
 const HomePage = lazy(() => import("./pages/HomePage"));
 const AppLayout = lazy(() => import("./layouts/AppLayouts"));
 const UserPage = lazy(() => import("./pages/UserPage"));
+const PublicResourcesPage = lazy(() => import("./pages/PublicResourcesPage"));
+const PublicTestIndexPage = lazy(() => import("./pages/PublicTestIndexPage.tsx"));
+const PublicTestProfilePage = lazy(() => import("./pages/PublicTestProfilePage.tsx"));
+const PublicTestGamePage = lazy(() => import("./pages/PublicTestGamePage.tsx"));
+const PublicTestLessonPage = lazy(() => import("./pages/PublicTestLessonPage.tsx"));
+const PublicTestQuizPage = lazy(() => import("./pages/PublicTestQuizPage.tsx"));
 const LessonPage = lazy(() => import("./pages/LessonPage"));
 const ModulePage = lazy(() => import("./pages/ModulePage"));
 const QuizPage = lazy(() => import("./pages/QuizPage"));
@@ -23,6 +29,12 @@ export default function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/reset-password" element={<PasswordResetPage />} />
         <Route element={<AppLayout />}>
+          <Route path="/public-resources" element={<PublicResourcesPage />} />
+          <Route path="/public-test" element={<PublicTestIndexPage />} />
+          <Route path="/public-test/lesson" element={<PublicTestLessonPage />} />
+          <Route path="/public-test/quiz" element={<PublicTestQuizPage />} />
+          <Route path="/public-test/profile" element={<PublicTestProfilePage />} />
+          <Route path="/public-test/game" element={<PublicTestGamePage />} />
           <Route
             path="/home"
             element={
